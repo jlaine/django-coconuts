@@ -1,20 +1,16 @@
-from django.conf.urls.defaults import *
-from django.conf import settings
+from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
     # accounts
-    (r'^accounts/login/$', 'django.contrib.auth.views.login'),
-    (r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login', ),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
 
     # admin interface
-    (r'^admin/(.*)', admin.site.root),
-
-    # static content
-    (r'^public/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    url(r'^admin/', include(admin.site.urls)),
 
     # folders
-    (r'', include('coconuts.urls')),
+    url(r'', include('coconuts.urls')),
 )
 
