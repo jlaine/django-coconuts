@@ -22,9 +22,9 @@
 {% block subrelated %}
 <div class="module">
 <h2>
-{% if nav.previous %}<a href="{{ nav.previous.url }}"><img alt="Previous" title="Previous photo" src="{% coconuts_media "img/previous.png" %}"/></a>{% else %}<img src="{% coconuts_media "img/blank.png" %}"/>{% endif %}
+{% if nav.previous %}<a href="{{ nav.previous.url }}"><img alt="Previous" title="Previous photo" src="{% coconuts_static "img/previous.png" %}"/></a>{% else %}<img src="{% coconuts_static "img/blank.png" %}"/>{% endif %}
 Photo {{ nav.number }} / {{ nav.total }}
-{% if nav.next %}<a href="{{ nav.next.url }}"><img alt="Next" title="Next photo" src="{% coconuts_media "img/next.png" %}"/></a>{% else %}<img src="{% coconuts_media "img/blank.png" %}"/>{% endif %}
+{% if nav.next %}<a href="{{ nav.next.url }}"><img alt="Next" title="Next photo" src="{% coconuts_static "img/next.png" %}"/></a>{% else %}<img src="{% coconuts_static "img/blank.png" %}"/>{% endif %}
 </h2>
 <ul>
 {% if zoom.next %}
@@ -41,7 +41,7 @@ Photo {{ nav.number }} / {{ nav.total }}
 </div>
 
 <div class="module">
-<h2><img src="{% coconuts_media "img/information.png" %}"/> {% trans "Information" %}</h2>
+<h2><img src="{% coconuts_static "img/information.png" %}"/> {% trans "Information" %}</h2>
 <ul>
   <li class="image-size" title="{% trans "The size of the original picture" %}">{% imagesize photo.size %}</li>
 {% if photo.camera %}

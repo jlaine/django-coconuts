@@ -18,10 +18,10 @@
 {% else %}
 {% for dir in children %}
 <div class="file" title="{{ dir.filedate }}">
-  <div class="filename"><a href="{{ dir.url }}"><img src="{% coconuts_media "img/folder.png" %}"/>{{ dir }}</a></div>
+  <div class="filename"><a href="{{ dir.url }}"><img src="{% coconuts_static "img/folder.png" %}"/>{{ dir }}</a></div>
   <div class="filesize"></div>
 {% if can_write %}
-  <div class="fileactions" title="{% trans "Delete this folder" %}"><a href="{% url coconuts.views.delete dir.path %}?back={{ folder.url|urlencode }}&amp;next={{ folder.url|urlencode }}"><img src="{% coconuts_media "img/delete.png" %}"/>{% trans "Delete" %}</a></div>
+  <div class="fileactions" title="{% trans "Delete this folder" %}"><a href="{% url coconuts.views.delete dir.path %}?back={{ folder.url|urlencode }}&amp;next={{ folder.url|urlencode }}"><img src="{% coconuts_static "img/delete.png" %}"/>{% trans "Delete" %}</a></div>
 {% endif %}
 </div>
 {% endfor %}
@@ -39,7 +39,7 @@
 <div class="filename"><a href="{{ file.url }}"><img src="{% coconuts_mimeicon file.name %}"/>{{ file }}</a></div>
 <div class="filesize">{% filesize file.filesize %}</div>
 {% if can_write %}
-<div class="fileactions" title="{% trans "Delete this file" %}"><a href="{% url coconuts.views.delete file.path %}?back={{ folder.url|urlencode }}&amp;next={{ folder.url|urlencode }}"><img src="{% coconuts_media "img/delete.png" %}"/>{% trans "Delete" %}</a></div>
+<div class="fileactions" title="{% trans "Delete this file" %}"><a href="{% url coconuts.views.delete file.path %}?back={{ folder.url|urlencode }}&amp;next={{ folder.url|urlencode }}"><img src="{% coconuts_static "img/delete.png" %}"/>{% trans "Delete" %}</a></div>
 {% endif %}
 </div>
 {% endfor %}

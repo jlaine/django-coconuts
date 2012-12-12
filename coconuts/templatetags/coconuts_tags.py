@@ -71,16 +71,16 @@ def coconuts_mimeicon(file):
         img = "img/mimetypes/%s.png" % type.replace('/', '-')
         dir = os.path.join(os.path.dirname(__file__), "../static/coconuts", img)
         if os.path.exists(dir):
-            return coconuts_media(img)
-    return coconuts_media("img/mimetypes/unknown.png")
+            return coconuts_static(img)
+    return coconuts_static("img/mimetypes/unknown.png")
 register.simple_tag(coconuts_mimeicon)
     
-def coconuts_media(medium):
+def coconuts_static(medium):
     """
     Returns the path to static media.
     """
     return settings.STATIC_URL + 'coconuts/' + medium
-register.simple_tag(coconuts_media)
+register.simple_tag(coconuts_static)
 
 def filesize(size):
     size = int(size)
