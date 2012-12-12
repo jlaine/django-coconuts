@@ -79,14 +79,7 @@ def coconuts_media(medium):
     """
     Returns the path to static media.
     """
-    try:
-        prefix = settings.COCONUTS_MEDIA_PREFIX
-    except:
-        try:
-            prefix = os.path.join(settings.STATIC_URL, 'coconuts')
-        except:
-            prefix = os.path.join(settings.MEDIA_URL, 'coconuts')
-    return os.path.join(prefix, medium)
+    return settings.STATIC_URL + 'coconuts/' + medium
 register.simple_tag(coconuts_media)
 
 def filesize(size):
