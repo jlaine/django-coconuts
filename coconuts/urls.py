@@ -16,18 +16,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
     # files
-    (r'^images/delete/(?P<path>.*)$', 'coconuts.views.delete'),
-    (r'^images/download/(?P<path>.*)$', 'coconuts.views.download'),
-    (r'^images/manage/(?P<path>.*)$', 'coconuts.views.manage'),
-    (r'^images/photos/(?P<size>\d+)/(?P<path>.*)$', 'coconuts.views.photos'),
-    (r'^images/thumbnails/(?P<path>.*)$', 'coconuts.views.thumbnails'),
-    (r'^images/rss/(?P<path>.*)$', 'coconuts.views.rss'),
+    url(r'^images/delete/(?P<path>.*)$', 'coconuts.views.delete'),
+    url(r'^images/download/(?P<path>.*)$', 'coconuts.views.download'),
+    url(r'^images/manage/(?P<path>.*)$', 'coconuts.views.manage'),
+    url(r'^images/photos/(?P<size>\d+)/(?P<path>.*)$', 'coconuts.views.photos'),
+    url(r'^images/thumbnails/(?P<path>.*)$', 'coconuts.views.thumbnails'),
+    url(r'^images/rss/(?P<path>.*)$', 'coconuts.views.rss'),
 
     # folders
-    (r'^(?P<path>.*)$', 'coconuts.views.browse'),
+    url(r'^(?P<path>.*)$', 'coconuts.views.browse'),
 )
 
