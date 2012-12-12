@@ -44,6 +44,15 @@ ORIENTATIONS = {
     8: [ False, False, 90 ], # Rotated 90 CCW
 }
 
+def urljoin(base, entry):
+    if base:
+        return base + '/' + entry
+    else:
+        return entry
+
+def url2path(url):
+    return url.replace('/', os.path.sep)
+
 class OtherManager:
     def all(self):
         return self
@@ -177,7 +186,7 @@ class Folder:
     @classmethod
     def create(klass, path):
         """Create the folder."""
-        filepath = os.path.join(settings.COCONUTS_DATA_ROOT, path)
+        filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
         if not os.path.exists(filepath):
             os.mkdir(filepath)
         return klass(path)
@@ -192,7 +201,7 @@ class Folder:
 
     def filepath(self):
         """Get the folder's full path."""
-        return os.path.join(settings.COCONUTS_DATA_ROOT, self.path)
+        return os.path.join(settings.COCONUTS_DATA_ROOT, url2path(self.path))
 
     def list(self):
         folders = []
@@ -204,13 +213,14 @@ class Folder:
         entries.sort()
         for entry in entries:
             node = os.path.join(directory, entry)
+            path = urljoin(self.path, entry)
             if os.path.isdir(node):
-                folders.append(Folder(os.path.join(self.path, entry)))
+                folders.append(Folder(path))
             else:
-                file = File(os.path.join(self.path, entry))
+                file = File(path)
                 files.append(file)
                 if file.is_image():
-                    photos.append(Photo(os.path.join(self.path, entry)))
+                    photos.append(Photo(path))
                 else:
                     mode = 'files'
         return folders, files, photos, mode
@@ -239,7 +249,7 @@ class Folder:
         if path:
             path += '/'
         try:
-            return iri_to_uri(os.path.join(settings.COCONUTS_WEBDAV_URL, urllib.quote(path)))
+            return urljoin(settings.COCONUTS_WEBDAV_URL, path)
         except:
             return None
 
@@ -270,7 +280,7 @@ class File:
 
     @classmethod
     def isdir(self, path):
-        filepath = os.path.join(settings.COCONUTS_DATA_ROOT, path)
+        filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
         return os.path.isdir(filepath)
 
     def delete(self):
@@ -283,7 +293,7 @@ class File:
 
     def filepath(self):
         """Get the file's full path."""
-        return os.path.join(settings.COCONUTS_DATA_ROOT, self.path)
+        return os.path.join(settings.COCONUTS_DATA_ROOT, url2path(self.path))
 
     def filesize(self):
         """Get the file's size."""
@@ -321,7 +331,7 @@ class Photo(File):
     def cache(self, size):
         """Get a resized version of the photo."""
         cachesize = size, int(size * 0.75)
-        cachepath = os.path.join(str(size), self.path)
+        cachepath = os.path.join(str(size), url2path(self.path))
         cachefile = os.path.join(settings.COCONUTS_CACHE_ROOT, cachepath)
         cachedir = os.path.dirname(cachefile)
         if not os.path.exists(cachefile):
