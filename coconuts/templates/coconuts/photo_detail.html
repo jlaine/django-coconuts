@@ -35,7 +35,7 @@ Photo {{ nav.number }} / {{ nav.total }}
 {% endif %}
   <li class="image-download" title="{% trans "Download original picture" %} ({% imagesize photo.size %})"><a href="{% url coconuts.views.download photo.path %}">{% trans "Download" %} ({% filesize photo.filesize %})</a></li>
 {% if can_write %}
-  <li class="image-delete" title="{% trans "Delete this picture" %}"><a href="{% url coconuts.views.delete photo.path %}?back={% url coconuts.views.browse photo.path %}&amp;next={% if nav.next %}{{ nav.next.url }}{% else %}{{ folder.url }}{% endif %}">{% trans "Delete" %}</a></li>
+  <li class="image-delete" title="{% trans "Delete this picture" %}"><a href="{% url coconuts.views.delete photo.path %}?back={{ photo.url|urlencode }}&amp;next={% if nav.next %}{{ nav.next.url|urlencode }}{% else %}{{ folder.url|urlencode }}{% endif %}">{% trans "Delete" %}</a></li>
 {% endif %}
 </ul>
 </div>
