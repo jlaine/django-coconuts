@@ -1,0 +1,66 @@
+{% extends "coconuts/base.html" %}
+{% load coconuts_tags %}
+{% load i18n %}
+
+{% block subtitle %}{{ folder }}{% endblock %}
+
+{% block breadcrumbs %}{% coconuts_crumbs folder.path %}{% endblock %}
+
+{% block rssfeeds %}
+<link rel="alternate" href="{% url coconuts.views.rss folder.quoted_path %}" type="application/rss+xml" title="" id="gallery" />
+{% endblock %}
+
+{% block content %}
+<h1>{{ folder }}</h1>
+
+{% if not children and not files %}
+<p>{% trans "There are no files in this folder." %}</p>
+{% else %}
+{% for dir in children %}
+<div class="file" title="{{ dir.filedate }}">
+  <div class="filename"><a href="{{ dir.url }}"><img src="{% coconuts_media "img/folder.png" %}"/>{{ dir }}</a></div>
+  <div class="filesize"></div>
+{% if can_write %}
+  <div class="fileactions" title="{% trans "Delete this folder" %}"><a href="{% url coconuts.views.delete dir.quoted_path %}?back={{ folder.url }}&amp;next={{ folder.url }}"><img src="{% coconuts_media "img/delete.png" %}"/>{% trans "Delete" %}</a></div>
+{% endif %}
+</div>
+{% endfor %}
+
+{% ifequal mode "photos" %}
+
+{% for photo in photos %}
+<a href="{{ photo.url }}"><img src="{% url coconuts.views.thumbnails photo.quoted_path %}" alt="{{ photo }}"/></a>
+{% endfor %}
+
+{% else %}
+
+{% for file in files %}
+<div class="file" title="{{ file.filedate }}">
+<div class="filename"><a href="{{ file.url }}"><img src="{% coconuts_mimeicon file.name %}"/>{{ file }}</a></div>
+<div class="filesize">{% filesize file.filesize %}</div>
+{% if can_write %}
+<div class="fileactions" title="{% trans "Delete this file" %}"><a href="{% url coconuts.views.delete file.quoted_path %}?back={{ folder.url }}&amp;next={{ folder.url }}"><img src="{% coconuts_media "img/delete.png" %}"/>{% trans "Delete" %}</a></div>
+{% endif %}
+</div>
+{% endfor %}
+
+{% endifequal %}
+
+{% endif %}
+
+{% if can_write %}
+<br/>
+{% include "coconuts/folder_operations.html" %}
+{% endif %}
+
+{% if folder.webdav_url %}
+<br/>
+{% include "coconuts/folder_webdav.html" %}
+{% endif %}
+
+{% if not folder.path %}
+<br/>
+{% include "coconuts/quote.html" %}
+{% endif %}
+
+{% endblock %}

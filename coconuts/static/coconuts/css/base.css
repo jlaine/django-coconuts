@@ -1,0 +1,197 @@
+/* redefinition */
+a:hover {
+  color: #003366;
+}
+
+a:link, a:visited {
+  color: #5b80b2;
+  text-decoration: none;
+}
+
+body {
+  background: #eeeeee;
+  font-family:"Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+  font-size: 0.8em;
+  margin: 0px;
+  padding: 0px;
+}
+
+button {
+  border:1px solid #ccc;
+}
+
+h1, h2, h3, h4 {
+  color:#007cc3;
+}
+
+img {
+  border: none;
+}
+
+input {
+  border:1px solid #ccc;
+}
+
+/* header */
+#header {
+  background: white;
+  height: 72px; 
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+}
+
+#branding {
+  height: 100%;
+  float:left;
+}
+
+#logo {
+  float: left;
+  width: 180px;
+}
+
+#user-tools {
+  font-size:11px;
+  padding:1.2em 10px;
+  position:absolute;
+  right:0;
+  text-align:right;
+  top:0;
+}
+
+/* content blocks */
+#content {
+  padding: 3px 4px;
+}
+
+#content-wrapper {
+  float: left;
+  width: 100%;
+}
+
+#content-main {
+  background: white;
+  margin-left: 205px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+#content-main h1 {
+  margin: 0.4em;
+  padding: 2px;
+  font-size: 1.4em;
+  border-bottom: 1px solid #007cc3;
+}
+
+#content-main h2 {
+  margin: 0.4em;
+  padding: 2px;
+  font-size:1em;
+  border-bottom:1px dotted #007CC3;
+}
+
+#content-related {
+  float: left;
+  margin-left:-100%;
+  width: 200px;
+}
+
+#content-related ul {
+  padding: 0px;
+  margin: 10px;
+}
+
+#content-related li {
+  list-style: none;
+  line-height: 24px;
+  padding-left: 29px;
+  background-repeat: no-repeat;
+}
+
+#content-related li img {
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/* login */
+.login-form #id_username,
+.login-form #id_password {
+  margin: 2px;
+  width:14em;
+}
+
+.login-form label {
+  float: left;
+  text-align: right;
+  width: 10em;
+  padding-right: 5px;
+}
+
+/* various */
+
+.breadcrumbs {
+  background: #f8f8f8;
+  background: -moz-linear-gradient(top, #f4f4f4, #fff);
+  background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#fff));
+  border-bottom:1px solid #ccc;
+  border-top:1px solid white;
+  color:#999999;
+  font-size:11px;
+  padding:2px 8px 3px;
+  text-align:left;
+}
+
+.module {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 0;
+  margin-bottom: 3px;
+  width: 100%;
+}
+
+.module h2, .module caption {
+  background: #7ca0c7;
+  background: -moz-linear-gradient(top, #bcd2e9, #7ba0c6);
+  background: -webkit-gradient(linear, left top, left bottom, from(#bcd2e9), to(#7ba0c6));
+  color:white;
+  font-size:1em;
+  font-weight:normal;
+  margin:0;
+  padding:2px 4px;
+  text-align:center;
+}
+
+.module ul {
+  list-style:square inside;
+  padding: 0px;
+  margin: 0px;
+}
+
+.module p, h4 {
+  margin: 10px;
+}
+
+.message {
+    background: #9f9;
+    padding: 0.5em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    border: 1px solid #555;
+    font-weight: bold;
+}
+
+.error {
+    background: #f99;
+    padding: 0.5em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    border: 1px solid #555;
+    font-weight: bold;
+}
+
+.box {
+    background: #eee;
+    border: 1px solid black;
+    padding: 1em;
+}
+

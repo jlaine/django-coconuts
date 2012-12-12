@@ -1,0 +1,3 @@
+{% for link in links %}
+<li{% if link.class %} class="{{ link.class }}"{% endif %}{% if link.title %} title="{{ link.title }}"{% endif %}><a href="{{ link.url }}">{{ link.text }}</a></li>
+{% endfor %}

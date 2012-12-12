@@ -1,0 +1,44 @@
+{% load i18n %}
+
+<div class="module">
+<h2>{% trans "Operations" %}</h2>
+
+{% for message in messages %}
+<div class="message">{{ message|escape }}</div>
+{% endfor %}
+
+{% for error in errors %}
+<div class="error">{{ error|escape }}</div>
+{% endfor %}
+
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<table>
+<tr>
+<td>
+  {% trans "Add a file to this folder" %}
+</td>
+<td>
+  <input type="file" name="upload"/>
+</td>
+</tr>
+
+<tr>
+<td>
+  {% trans "Create a new subfolder" %}
+</td>
+<td>
+  <input type="text" name="newfolder"/>
+</td>
+</tr>
+
+<tr>
+<td>&nbsp;</td>
+<td>
+  <input type="submit" value="{% trans "Submit changes" %}">
+</td>
+</tr>
+
+</table>
+</form>
+</div>

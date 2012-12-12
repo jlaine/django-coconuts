@@ -1,0 +1,8 @@
+{% load i18n %}
+{% blocktrans %}{{ full_name }} has just shared some new photos with you.{% endblocktrans %}
+
+{% blocktrans %}You can see the photos at the following address:{% endblocktrans %}
+
+{{ protocol }}://{{ domain }}{{ folder.url }}
+
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %}

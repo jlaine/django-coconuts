@@ -1,0 +1,135 @@
+/* various */
+
+.quote-text {
+  margin: 5px;
+  font-size: 10px;
+}
+
+.quote-author {
+  font-size: 10px;
+  margin-left: 25em;
+}
+
+.ui-app {
+  font-style: italic;
+  font-weight: bold;
+}
+
+.ui-entry {
+  border-bottom: 1px dashed #777;
+  font-style: italic;
+}
+
+.url {
+  font-weight: bold;
+}
+
+/* files */
+
+.file {
+  display: table-row;
+  padding: 2px;
+  font-size: 12px;
+}
+
+.file img {
+  border: 0px;
+  padding: 2px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.file a:hover img {
+  border: 0px;
+}
+
+.filename {
+  display: table-cell;
+  padding-right: 10px;
+}
+
+.filetitle {
+  display: table-cell;
+  padding: 0 5px;
+}
+
+.filesize {
+  display: table-cell;
+  padding: 0 5px;
+}
+
+.fileactions {
+  display: table-cell;
+  padding: 0 5px;
+}
+
+/* picture header */
+.download {
+  float: right;
+}
+
+.pagination {
+  float:left;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin:0;
+  padding:0;
+}
+
+.pagination li {
+  display: inline;
+  float: left;
+  margin-right: 5px;
+}
+
+/* sidebar */
+
+.image-camera {
+  background: url(../img/camera.png);
+}
+
+.image-delete {
+  background: url(../img/delete.png);
+}
+
+.image-download {
+  background: url(../img/download.png);
+}
+
+.image-manage {
+  background: url(../img/manage.png);
+}
+
+.image-settings {
+  background: url(../img/settings.png);
+}
+
+.image-show {
+  background: url(../img/show.png);
+}
+
+.image-size {
+  background: url(../img/size.png);
+}
+
+.image-upload {
+  background: url(../img/upload.png);
+}
+
+.image-users {
+  background: url(../img/users.png);
+}
+
+.image-zoom-in {
+  background: url(../img/zoom_in.png);
+}
+
+.image-zoom-out {
+  background: url(../img/zoom_out.png);
+}
+
+.module img {
+  vertical-align: middle;
+  padding-right: 5px;
+}

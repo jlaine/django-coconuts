@@ -1,0 +1,55 @@
+{% extends "coconuts/base.html" %}
+{% load coconuts_tags %}
+{% load i18n %}
+
+{% block subtitle %}{{ photo }}{% endblock %}
+
+{% block breadcrumbs %}{% coconuts_crumbs photo.path %}{% endblock %}
+
+{% block content %}
+<a href="{% if nav.next %}{{ nav.next.url }}{% else %}{{ folder.url }}{% endif %}">
+<img src="{% url coconuts.views.photos size=size,path=photo.quoted_path %}" alt="{{ photo }}"/>
+</a>
+<!-- preload previous / next images -->
+{% if nav.previous %}
+<img style="display:none" src="{% url coconuts.views.photos size=size,path=nav.previous.quoted_path %}" alt="{{ nav.previous }}"/>
+{% endif %}
+{% if nav.next %}
+<img style="display:none" src="{% url coconuts.views.photos size=size,path=nav.next.quoted_path %}" alt="{{ nav.next }}"/>
+{% endif %}
+{% endblock %}
+
+{% block subrelated %}
+<div class="module">
+<h2>
+{% if nav.previous %}<a href="{{ nav.previous.url }}"><img alt="Previous" title="Previous photo" src="{% coconuts_media "img/previous.png" %}"/></a>{% else %}<img src="{% coconuts_media "img/blank.png" %}"/>{% endif %}
+Photo {{ nav.number }} / {{ nav.total }}
+{% if nav.next %}<a href="{{ nav.next.url }}"><img alt="Next" title="Next photo" src="{% coconuts_media "img/next.png" %}"/></a>{% else %}<img src="{% coconuts_media "img/blank.png" %}"/>{% endif %}
+</h2>
+<ul>
+{% if zoom.next %}
+  <li class="image-zoom-in" title="{% trans "Zoom in" %}"><a href="{{ photo.url }}?size={{ zoom.next }}">{% trans "Zoom in" %}</a></li>
+{% endif %}
+{% if zoom.previous %}
+  <li class="image-zoom-out" title="{% trans "Zoom out" %}"><a href="{{ photo.url }}?size={{ zoom.previous }}">{% trans "Zoom out" %}</a></li>
+{% endif %}
+  <li class="image-download" title="{% trans "Download original picture" %} ({% imagesize photo.size %})"><a href="{% url coconuts.views.download photo.quoted_path %}">{% trans "Download" %} ({% filesize photo.filesize %})</a></li>
+{% if can_write %}
+  <li class="image-delete" title="{% trans "Delete this picture" %}"><a href="{% url coconuts.views.delete photo.quoted_path %}?back={% url coconuts.views.browse photo.quoted_path %}&amp;next={% if nav.next %}{{ nav.next.url }}{% else %}{{ folder.url }}{% endif %}">{% trans "Delete" %}</a></li>
+{% endif %}
+</ul>
+</div>
+
+<div class="module">
+<h2><img src="{% coconuts_media "img/information.png" %}"/> {% trans "Information" %}</h2>
+<ul>
+  <li class="image-size" title="{% trans "The size of the original picture" %}">{% imagesize photo.size %}</li>
+{% if photo.camera %}
+  <li class="image-camera" title="{% trans "The camera used to take this picture" %}">{{ photo.camera }}</li>
+{% endif %}
+{% if photo.settings %}
+  <li class="image-settings" title="{% trans "The aperture and exposure time for this picture" %}">{{ photo.settings }}</li>
+{% endif %}
+</ul>
+</div>
+{% endblock %}

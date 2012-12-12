@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<title>{{ folder }}</title>
+<link>{{ folder.url }}</link>
+<description>{{ folder }}</description>
+{% for photo in photos %}
+<item>
+    <title>{{ photo }}</title>
+    <media:description>{{ photo }}</media:description>
+    <description>{{ photo }}</description>
+    <guid>{{ photo }}</guid>
+    <link>{{ photo.url }}</link>
+    <media:thumbnail url="{% url coconuts.views.thumbnails photo.quoted_path %}"/>
+    <media:content url="{% url coconuts.views.download photo.quoted_path %}"/>
+</item>
+{% endfor %}
+</channel>
+</rss>

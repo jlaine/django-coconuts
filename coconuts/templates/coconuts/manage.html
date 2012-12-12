@@ -1,0 +1,38 @@
+{% extends "coconuts/base.html" %}
+{% load coconuts_tags i18n %}
+
+{% block subtitle %}{% blocktrans with share.name as name %}Manage {{ name }}{% endblocktrans %}{% endblock %}
+
+{% block breadcrumbs %}{% coconuts_crumbs folder.path %}{% endblock %}
+
+{% block content %}
+<h1>{% blocktrans with share.name as name %}Manage {{ name }}{% endblocktrans %}</h1>
+
+<form action="" method="POST">
+{% csrf_token %}
+<div class="module">
+  <div class="module-text">
+  {{ shareform.as_p }}
+  </div>
+</div>
+
+<br/>
+
+<div class="module">
+  <h2>{% trans "Permissions" %}</h2>
+  <table class="module-text">
+    {{ formset.management_form }}
+    <tr>{% for field in formset.forms.0 %}<th>{{ field.label }}</th>{% endfor %}</tr>
+    {% for form in formset.forms %}
+    <tr>{% for field in form %}<td>{{ field }}</td>{% endfor %}</tr>
+    {% endfor %}
+  </table>
+</div>
+<br/>
+<input type="submit" value="{% trans "Update" %}" />
+
+</form>
+
+<p><a href="{{ folder.url }}">{% blocktrans with folder.name as name %}Go back to {{ name }}{% endblocktrans %}</a></p>
+
+{% endblock %}

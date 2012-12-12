@@ -1,0 +1,42 @@
+{% extends "coconuts/base.html" %}
+{% load coconuts_tags %}
+{% load i18n %}
+
+{% block subtitle %}{% blocktrans %}Really delete "{{ target }}"?{% endblocktrans %}{% endblock %}
+
+{% block breadcrumbs %}{% coconuts_crumbs target.path %}{% endblock %}
+
+{% block content %}
+<div class="module">
+  <h2>{% blocktrans %}Really delete "{{ target }}"?{% endblocktrans %}</h2>
+  <table class="module-text">
+    <tr>
+{% if target.is_image %}
+      <td>
+         <img src="{% url coconuts.views.thumbnails target.quoted_path %}" alt="{{ target }}" style="vertical-align: top; display: inline"/>
+      </td>
+{% endif %}
+      <td>
+        <form action="" method="POST">
+        {% csrf_token %}
+{%if is_folder %}
+{% blocktrans %}Are you sure you want to delete the folder "{{ target }}" and all its contents?{% endblocktrans%}
+{% else %}
+{% blocktrans %}Are you sure you want to delete the file "{{ target }}"?{% endblocktrans%}
+{% endif %}
+        <br/>
+        <input type="hidden" name="post" value="yes" />
+        <input type="hidden" name="next" value="{{ next }}" />
+        <input type="submit" value="{% trans "Yes, I'm sure" %}" />
+        </form>
+        <form action="" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="post" value="no" />
+        <input type="hidden" name="back" value="{{ back }}" />
+        <input type="submit" value="{% trans "No, I'm not sure" %}" />
+        </form>
+      </td>
+    </tr>
+  </table>
+</div>
+{% endblock %}

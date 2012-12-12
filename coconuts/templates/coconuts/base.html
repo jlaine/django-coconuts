@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load coconuts_tags %}
+{% load i18n %}
+
+{% block title %}{% block subtitle %}{% endblock %} | Coconuts{% endblock %}
+
+{% block headextra %}
+<link rel="stylesheet" type="text/css" href="{% coconuts_media "css/coconuts.css" %}" />
+{% block rssfeeds %}{% endblock %}
+{% endblock %}
+
+{% block branding %}<h1 id="site-name">{% coconuts_version %}</h1>{% endblock %}
+
+{% block related %}
+{% if can_manage %}
+      <div class="module">
+        <h2>{% coconuts_title %}</h2>
+        <ul>
+          <li class="image-manage" title="{% trans "Manage this share's permissions" %}"><a href="{{ folder.share.manage_url }}">{% trans "Manage permissions" %}</a></li>
+{% if user.is_staff %}
+          <li class="image-users" title="{% trans "Manage user accounts" %}"><a href="/admin/auth/user/">{% trans "Manage user accounts" %}</a></li>
+{% endif %}
+          {% coconuts_links user %}
+        </ul>
+      </div>
+{% endif %}
+      {% block subrelated %}{% endblock %}
+{% endblock %}
+
