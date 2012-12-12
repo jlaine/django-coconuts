@@ -68,13 +68,6 @@ def browse(request, path):
         return photo_detail(request, path)
 
 @login_required
-def index(request):
-    folder = Folder('')
-    children, files, photos, mode = folder.list()
-    shares = [ x.share for x in children if x.has_perm('can_read', request.user) ]
-    return render_to_response('coconuts/index.html', FolderContext(request, folder, {'shares': shares}))
-
-@login_required
 def photo_list(request, path):
     """Show the list of photos for the given folder."""
     try:
