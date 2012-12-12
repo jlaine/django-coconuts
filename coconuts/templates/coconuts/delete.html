@@ -13,7 +13,7 @@
     <tr>
 {% if target.is_image %}
       <td>
-         <img src="{% url coconuts.views.thumbnails target.quoted_path %}" alt="{{ target }}" style="vertical-align: top; display: inline"/>
+         <img src="{% url coconuts.views.thumbnails target.path %}" alt="{{ target }}" style="vertical-align: top; display: inline"/>
       </td>
 {% endif %}
       <td>

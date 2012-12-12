@@ -7,7 +7,7 @@
 {% block breadcrumbs %}{% coconuts_crumbs folder.path %}{% endblock %}
 
 {% block rssfeeds %}
-<link rel="alternate" href="{% url coconuts.views.rss folder.quoted_path %}" type="application/rss+xml" title="" id="gallery" />
+<link rel="alternate" href="{% url coconuts.views.rss folder.path %}" type="application/rss+xml" title="" id="gallery" />
 {% endblock %}
 
 {% block content %}
@@ -21,7 +21,7 @@
   <div class="filename"><a href="{{ dir.url }}"><img src="{% coconuts_media "img/folder.png" %}"/>{{ dir }}</a></div>
   <div class="filesize"></div>
 {% if can_write %}
-  <div class="fileactions" title="{% trans "Delete this folder" %}"><a href="{% url coconuts.views.delete dir.quoted_path %}?back={{ folder.url }}&amp;next={{ folder.url }}"><img src="{% coconuts_media "img/delete.png" %}"/>{% trans "Delete" %}</a></div>
+  <div class="fileactions" title="{% trans "Delete this folder" %}"><a href="{% url coconuts.views.delete dir.path %}?back={{ folder.url }}&amp;next={{ folder.url }}"><img src="{% coconuts_media "img/delete.png" %}"/>{% trans "Delete" %}</a></div>
 {% endif %}
 </div>
 {% endfor %}
@@ -29,7 +29,7 @@
 {% ifequal mode "photos" %}
 
 {% for photo in photos %}
-<a href="{{ photo.url }}"><img src="{% url coconuts.views.thumbnails photo.quoted_path %}" alt="{{ photo }}"/></a>
+<a href="{{ photo.url }}"><img src="{% url coconuts.views.thumbnails photo.path %}" alt="{{ photo }}"/></a>
 {% endfor %}
 
 {% else %}
@@ -39,7 +39,7 @@
 <div class="filename"><a href="{{ file.url }}"><img src="{% coconuts_mimeicon file.name %}"/>{{ file }}</a></div>
 <div class="filesize">{% filesize file.filesize %}</div>
 {% if can_write %}
-<div class="fileactions" title="{% trans "Delete this file" %}"><a href="{% url coconuts.views.delete file.quoted_path %}?back={{ folder.url }}&amp;next={{ folder.url }}"><img src="{% coconuts_media "img/delete.png" %}"/>{% trans "Delete" %}</a></div>
+<div class="fileactions" title="{% trans "Delete this file" %}"><a href="{% url coconuts.views.delete file.path %}?back={{ folder.url }}&amp;next={{ folder.url }}"><img src="{% coconuts_media "img/delete.png" %}"/>{% trans "Delete" %}</a></div>
 {% endif %}
 </div>
 {% endfor %}

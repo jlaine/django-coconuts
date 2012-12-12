@@ -11,8 +11,8 @@
     <description>{{ photo }}</description>
     <guid>{{ photo }}</guid>
     <link>{{ photo.url }}</link>
-    <media:thumbnail url="{% url coconuts.views.thumbnails photo.quoted_path %}"/>
-    <media:content url="{% url coconuts.views.download photo.quoted_path %}"/>
+    <media:thumbnail url="{% url coconuts.views.thumbnails photo.path %}"/>
+    <media:content url="{% url coconuts.views.download photo.path %}"/>
 </item>
 {% endfor %}
 </channel>

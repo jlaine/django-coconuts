@@ -20,7 +20,6 @@ import datetime
 import mimetypes
 import os
 import shutil
-import urllib
 
 from django.db import models
 from django.conf import settings
@@ -233,12 +232,9 @@ class Folder:
         """Check whether a user has a given permission."""
         return self.share.has_perm(perm, user)
 
-    def quoted_path(self):
-        return urllib.quote(self.path.encode("utf-8"))
-
     def url(self):
         """Get the URL at which the folder can be viewed."""
-        path = self.quoted_path()
+        path = self.path
         if path:
             path += '/'
         return reverse('coconuts.views.browse', args=[path])
@@ -307,12 +303,9 @@ class File:
         """Get the file's name."""
         return os.path.basename(self.path)
 
-    def quoted_path(self):
-        return urllib.quote(self.path.encode("utf-8"))
-
     def url(self):
         """Get the URL at which the file can be downloaded."""
-        return reverse('coconuts.views.download', args=[self.quoted_path()])
+        return reverse('coconuts.views.download', args=[self.path])
 
 class Photo(File):
     def __init__(self, path):
@@ -386,5 +379,5 @@ class Photo(File):
 
     def url(self):
         """Get the URL at which the photo can be viewed."""
-        return reverse('coconuts.views.browse', args=[self.quoted_path()])
+        return reverse('coconuts.views.browse', args=[self.path])
 

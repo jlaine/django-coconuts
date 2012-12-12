@@ -8,14 +8,14 @@
 
 {% block content %}
 <a href="{% if nav.next %}{{ nav.next.url }}{% else %}{{ folder.url }}{% endif %}">
-<img src="{% url coconuts.views.photos size=size,path=photo.quoted_path %}" alt="{{ photo }}"/>
+<img src="{% url coconuts.views.photos size=size,path=photo.path %}" alt="{{ photo }}"/>
 </a>
 <!-- preload previous / next images -->
 {% if nav.previous %}
-<img style="display:none" src="{% url coconuts.views.photos size=size,path=nav.previous.quoted_path %}" alt="{{ nav.previous }}"/>
+<img style="display:none" src="{% url coconuts.views.photos size=size,path=nav.previous.path %}" alt="{{ nav.previous }}"/>
 {% endif %}
 {% if nav.next %}
-<img style="display:none" src="{% url coconuts.views.photos size=size,path=nav.next.quoted_path %}" alt="{{ nav.next }}"/>
+<img style="display:none" src="{% url coconuts.views.photos size=size,path=nav.next.path %}" alt="{{ nav.next }}"/>
 {% endif %}
 {% endblock %}
 
@@ -33,9 +33,9 @@ Photo {{ nav.number }} / {{ nav.total }}
 {% if zoom.previous %}
   <li class="image-zoom-out" title="{% trans "Zoom out" %}"><a href="{{ photo.url }}?size={{ zoom.previous }}">{% trans "Zoom out" %}</a></li>
 {% endif %}
-  <li class="image-download" title="{% trans "Download original picture" %} ({% imagesize photo.size %})"><a href="{% url coconuts.views.download photo.quoted_path %}">{% trans "Download" %} ({% filesize photo.filesize %})</a></li>
+  <li class="image-download" title="{% trans "Download original picture" %} ({% imagesize photo.size %})"><a href="{% url coconuts.views.download photo.path %}">{% trans "Download" %} ({% filesize photo.filesize %})</a></li>
 {% if can_write %}
-  <li class="image-delete" title="{% trans "Delete this picture" %}"><a href="{% url coconuts.views.delete photo.quoted_path %}?back={% url coconuts.views.browse photo.quoted_path %}&amp;next={% if nav.next %}{{ nav.next.url }}{% else %}{{ folder.url }}{% endif %}">{% trans "Delete" %}</a></li>
+  <li class="image-delete" title="{% trans "Delete this picture" %}"><a href="{% url coconuts.views.delete photo.path %}?back={% url coconuts.views.browse photo.path %}&amp;next={% if nav.next %}{{ nav.next.url }}{% else %}{{ folder.url }}{% endif %}">{% trans "Delete" %}</a></li>
 {% endif %}
 </ul>
 </div>
