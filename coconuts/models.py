@@ -57,7 +57,7 @@ class Other:
     def __init__(self, name):
         self.name = name
 
-    def __str__(self):
+    def __unicode__(self):
         return self.name
 
 USERS_DIR = 'users'
@@ -81,7 +81,7 @@ class NamedAcl:
     def __init__(self, acl):
         self.type, self.name, self.permissions = acl.split(':')
 
-    def __str__(self):
+    def __unicode__(self):
         return "%s:%s:%s" % (self.type, self.name, self.permissions)
 
     def add_perm(self, perm):
@@ -265,7 +265,7 @@ class File:
         else:
             return NotImplemented
 
-    def __str__(self):
+    def __unicode__(self):
         return self.name()
 
     @classmethod
@@ -295,7 +295,7 @@ class File:
 
     def name(self):
         """Get the file's name."""
-        return os.path.basename(self.path).encode("utf-8")
+        return os.path.basename(self.path)
 
     def quoted_path(self):
         return urllib.quote(self.path.encode("utf-8"))
