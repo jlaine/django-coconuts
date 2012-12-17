@@ -24,6 +24,16 @@ from django.utils.translation import ugettext_lazy as _
 
 from coconuts.models import Share, OWNERS, PERMISSIONS, PERMISSION_NAMES
 
+class PhotoForm(forms.Form):
+    SIZE_CHOICES = (
+        (128, '128'),
+        (800, '800'),
+        (1024, '1024'),
+        (1280, '1280'),
+    )
+
+    size = forms.TypedChoiceField(choices=SIZE_CHOICES, coerce=int)
+
 class OwnerField(forms.ChoiceField):
     def __init__(self, **kwargs):
         choices = [('', '')]

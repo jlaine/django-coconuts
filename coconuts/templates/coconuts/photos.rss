@@ -11,7 +11,7 @@
     <description>{{ photo }}</description>
     <guid>{{ photo }}</guid>
     <link>{{ photo.url }}</link>
-    <media:thumbnail url="{% url coconuts.views.thumbnails photo.path %}"/>
+    <media:thumbnail url="{% url coconuts.views.render photo.path %}?size=128"/>
     <media:content url="{% url coconuts.views.download photo.path %}"/>
 </item>
 {% endfor %}

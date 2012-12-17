@@ -8,14 +8,14 @@
 
 {% block content %}
 <a href="{% if nav.next %}{{ nav.next.url }}{% else %}{{ folder.url }}{% endif %}">
-<img src="{% url coconuts.views.photos size=size,path=photo.path %}" alt="{{ photo }}"/>
+<img src="{% url coconuts.views.render photo.path %}?size={{ size }}" alt="{{ photo }}"/>
 </a>
 <!-- preload previous / next images -->
 {% if nav.previous %}
-<img style="display:none" src="{% url coconuts.views.photos size=size,path=nav.previous.path %}" alt="{{ nav.previous }}"/>
+<img style="display:none" src="{% url coconuts.views.render nav.previous.path %}?size={{ size }}" alt="{{ nav.previous }}"/>
 {% endif %}
 {% if nav.next %}
-<img style="display:none" src="{% url coconuts.views.photos size=size,path=nav.next.path %}" alt="{{ nav.next }}"/>
+<img style="display:none" src="{% url coconuts.views.render nav.next.path %}?size={{ size }}" alt="{{ nav.next }}"/>
 {% endif %}
 {% endblock %}
 

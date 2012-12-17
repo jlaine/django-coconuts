@@ -21,7 +21,7 @@ import time
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.http import http_date, urlquote
@@ -29,7 +29,7 @@ from django.views.generic.simple import redirect_to
 import django.views.static
 
 from coconuts import notifications
-from coconuts.forms import ShareForm, ShareAccessFormSet
+from coconuts.forms import PhotoForm, ShareForm, ShareAccessFormSet
 from coconuts.models import File, Folder, Photo, NamedAcl, PERMISSIONS
 
 PHOTO_SIZES = [ 800, 1024, 1280 ]
@@ -285,7 +285,7 @@ def manage(request, path):
         }))
 
 @login_required
-def photos(request, path, size):
+def render(request, path):
     """Return a resized version of the given photo."""
     folder = Folder(os.path.dirname(path))
 
@@ -294,12 +294,10 @@ def photos(request, path, size):
         return forbidden(request)
 
     # check the size is legitimate
-    size = int(size)
-    try:
-        if size != THUMB_SIZE:
-            idx = PHOTO_SIZES.index(size)
-    except:
-        return forbidden(request)
+    form = PhotoForm(request.GET)
+    if not form.is_valid():
+        return HttpResponseBadRequest()
+    size = form.cleaned_data['size']
 
     # serve the photo
     photo = Photo(path)
@@ -308,9 +306,3 @@ def photos(request, path, size):
         document_root=settings.COCONUTS_CACHE_ROOT)
     response["Expires"] = http_date(time.time() + 3600 * 24 * 365)
     return response
-
-@login_required
-def thumbnails(request, path):
-    """Return a thumbnail version of the given photo."""
-    return photos(request, path, THUMB_SIZE)
-

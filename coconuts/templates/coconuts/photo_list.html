@@ -29,7 +29,7 @@
 {% ifequal mode "photos" %}
 
 {% for photo in photos %}
-<a href="{{ photo.url }}"><img src="{% url coconuts.views.thumbnails photo.path %}" alt="{{ photo }}"/></a>
+<a href="{{ photo.url }}"><img src="{% url coconuts.views.render photo.path %}?size=128" alt="{{ photo }}"/></a>
 {% endfor %}
 
 {% else %}
