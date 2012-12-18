@@ -19,7 +19,7 @@
 {% endif %}
 {% endblock %}
 
-{% block subrelated %}
+{% block related %}
 <div class="module">
 <h2>
 {% if nav.previous %}<a href="{{ nav.previous.url }}"><img alt="Previous" title="Previous photo" src="{% coconuts_static "img/previous.png" %}"/></a>{% else %}<img src="{% coconuts_static "img/blank.png" %}"/>{% endif %}
@@ -52,4 +52,6 @@ Photo {{ nav.number }} / {{ nav.total }}
 {% endif %}
 </ul>
 </div>
+
+{{ block.super }}
 {% endblock %}

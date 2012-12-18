@@ -44,6 +44,8 @@ ORIENTATIONS = {
 }
 
 def urljoin(base, entry):
+    if base.endswith('/'):
+        base = base[0:-1]
     if base:
         return base + '/' + entry
     else:
