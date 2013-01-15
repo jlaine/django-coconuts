@@ -10,9 +10,11 @@
 <div id="photo-wrapper">
 
 <div id="photo-main">
-<a class="thumbnail" href="{% if nav.next %}{{ nav.next.url }}{% else %}{{ folder.url }}{% endif %}">
+<div class="thumbnail" style="position: relative">
 <img src="{% url coconuts.views.render photo.path %}?size={{ size }}" alt="{{ photo }}"/>
-</a>
+{% if nav.previous %}<a class="left carousel-control" href="{{ nav.previous.url }}">&lsaquo;</a>{% endif %}
+{% if nav.next %}<a class="right carousel-control" href="{{ nav.next.url }}">&rsaquo;</a>{% endif %}
+</div>
 <!-- preload previous / next images -->
 {% if nav.previous %}
 <img style="display:none" src="{% url coconuts.views.render nav.previous.path %}?size={{ size }}" alt="{{ nav.previous }}"/>
@@ -24,11 +26,6 @@
 </div>
 
 <div id="photo-related">
-<p>
-{% if nav.previous %}<a href="{{ nav.previous.url }}"><i class="icon-caret-left icon-large"></i></a>{% else %}<i class="icon-large">&nbsp;</i>{% endif %}
-Photo {{ nav.number }} / {{ nav.total }}
-{% if nav.next %}<a href="{{ nav.next.url }}"><i class="icon-caret-right icon-large"></i></a>{% endif %}
-</p>
 <ul class="nav nav-tabs nav-stacked">
 {% if zoom.next %}
   <li><a href="{{ photo.url }}?size={{ zoom.next }}"><i class="icon-zoom-in"></i> {% trans "Zoom in" %}</a></li>

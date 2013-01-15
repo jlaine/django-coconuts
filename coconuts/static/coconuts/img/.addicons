@@ -3,14 +3,10 @@
 'width': 24,
 'source': '/usr/share/icons/oxygen/scalable',
 'icons': {
-    'delete': 'actions/edit-delete.svgz',
     'folder': 'places/folder.svgz',
-    'information': 'actions/help-about.svgz',
     'next': 'actions/go-next.svgz',
     'manage': 'actions/view-process-users.svgz',
     'previous': 'actions/go-previous.svgz',
-    'settings': 'categories/preferences-other.svgz',
-    'tip': 'apps/ktip.svgz',
     'users': 'apps/system-users.svgz',
 
     'mimetypes/application-octet-stream': 'mimetypes/application-octet-stream.svgz',
