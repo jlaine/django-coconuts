@@ -21,16 +21,18 @@
   <div class="filename"><a href="{{ dir.url }}"><img src="{% coconuts_static "img/folder.png" %}"/>{{ dir }}</a></div>
   <div class="filesize"></div>
 {% if can_write %}
-  <div class="fileactions" title="{% trans "Delete this folder" %}"><a href="{% url coconuts.views.delete dir.path %}?back={{ folder.url|urlencode }}&amp;next={{ folder.url|urlencode }}"><img src="{% coconuts_static "img/delete.png" %}"/>{% trans "Delete" %}</a></div>
+  <div class="fileactions" title="{% trans "Delete this folder" %}"><a href="{% url coconuts.views.delete dir.path %}?back={{ folder.url|urlencode }}&amp;next={{ folder.url|urlencode }}"><i class="icon-remove"></i> {% trans "Delete" %}</a></div>
 {% endif %}
 </div>
 {% endfor %}
 
 {% ifequal mode "photos" %}
 
+<ul class="thumbnails">
 {% for photo in photos %}
-<a href="{{ photo.url }}"><img src="{% url coconuts.views.render photo.path %}?size=128" alt="{{ photo }}"/></a>
+<li><a class="thumbnail" href="{{ photo.url }}"><img src="{% url coconuts.views.render photo.path %}?size=128" alt="{{ photo }}"/></a></li>
 {% endfor %}
+</ul>
 
 {% else %}
 
@@ -39,7 +41,7 @@
 <div class="filename"><a href="{{ file.url }}"><img src="{% coconuts_mimeicon file.name %}"/>{{ file }}</a></div>
 <div class="filesize">{% filesize file.filesize %}</div>
 {% if can_write %}
-<div class="fileactions" title="{% trans "Delete this file" %}"><a href="{% url coconuts.views.delete file.path %}?back={{ folder.url|urlencode }}&amp;next={{ folder.url|urlencode }}"><img src="{% coconuts_static "img/delete.png" %}"/>{% trans "Delete" %}</a></div>
+<div class="fileactions" title="{% trans "Delete this file" %}"><a href="{% url coconuts.views.delete file.path %}?back={{ folder.url|urlencode }}&amp;next={{ folder.url|urlencode }}"><i class="icon-remove"></i> {% trans "Delete" %}</a></div>
 {% endif %}
 </div>
 {% endfor %}
@@ -61,6 +63,7 @@
 {% endblock %}
 
 {% block footer %}
+{{ block.super }}
 <script type="text/javascript">
 $('input[name=upload]').change(function() {
  $('#upload-fake').val($(this).val());

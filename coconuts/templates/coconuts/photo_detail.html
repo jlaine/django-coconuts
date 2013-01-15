@@ -7,10 +7,10 @@
 {% block breadcrumbs %}{% coconuts_crumbs photo.path %}{% endblock %}
 
 {% block content %}
-<div id="content-wrapper">
+<div id="photo-wrapper">
 
-<div id="content-main">
-<a href="{% if nav.next %}{{ nav.next.url }}{% else %}{{ folder.url }}{% endif %}">
+<div id="photo-main">
+<a class="thumbnail" href="{% if nav.next %}{{ nav.next.url }}{% else %}{{ folder.url }}{% endif %}">
 <img src="{% url coconuts.views.render photo.path %}?size={{ size }}" alt="{{ photo }}"/>
 </a>
 <!-- preload previous / next images -->
@@ -23,36 +23,37 @@
 </div>
 </div>
 
-<div id="content-related">
-<div class="module">
-<h2>
+<div id="photo-related">
+<p>
 {% if nav.previous %}<a href="{{ nav.previous.url }}"><img alt="Previous" title="Previous photo" src="{% coconuts_static "img/previous.png" %}"/></a>{% else %}<img src="{% coconuts_static "img/blank.png" %}"/>{% endif %}
 Photo {{ nav.number }} / {{ nav.total }}
 {% if nav.next %}<a href="{{ nav.next.url }}"><img alt="Next" title="Next photo" src="{% coconuts_static "img/next.png" %}"/></a>{% else %}<img src="{% coconuts_static "img/blank.png" %}"/>{% endif %}
-</h2>
-<ul>
+</p>
+<ul class="nav nav-tabs nav-stacked">
 {% if zoom.next %}
-  <li class="image-zoom-in" title="{% trans "Zoom in" %}"><a href="{{ photo.url }}?size={{ zoom.next }}">{% trans "Zoom in" %}</a></li>
+  <li><a href="{{ photo.url }}?size={{ zoom.next }}"><i class="icon-zoom-in"></i> {% trans "Zoom in" %}</a></li>
+{% else %}
+  <li class="disabled"><a href="#"><i class="icon-zoom-in"></i> {% trans "Zoom in" %}</a></li>
 {% endif %}
 {% if zoom.previous %}
-  <li class="image-zoom-out" title="{% trans "Zoom out" %}"><a href="{{ photo.url }}?size={{ zoom.previous }}">{% trans "Zoom out" %}</a></li>
+  <li><a href="{{ photo.url }}?size={{ zoom.previous }}"><i class="icon-zoom-out"></i> {% trans "Zoom out" %}</a></li>
+{% else %}
+  <li class="disabled"><a href="#"><i class="icon-zoom-out"></i> {% trans "Zoom out" %}</a></li>
 {% endif %}
-  <li class="image-download" title="{% trans "Download original picture" %} ({% imagesize photo.size %})"><a href="{% url coconuts.views.download photo.path %}">{% trans "Download" %} ({% filesize photo.filesize %})</a></li>
+  <li title="{% trans "Download original picture" %} ({% imagesize photo.size %})"><a href="{% url coconuts.views.download photo.path %}"><i class="icon-download"></i> {% trans "Download" %} ({% filesize photo.filesize %})</a></li>
 {% if can_write %}
-  <li class="image-delete" title="{% trans "Delete this picture" %}"><a href="{% url coconuts.views.delete photo.path %}?back={{ photo.url|urlencode }}&amp;next={% if nav.next %}{{ nav.next.url|urlencode }}{% else %}{{ folder.url|urlencode }}{% endif %}">{% trans "Delete" %}</a></li>
+  <li title="{% trans "Delete this picture" %}"><a href="{% url coconuts.views.delete photo.path %}?back={{ photo.url|urlencode }}&amp;next={% if nav.next %}{{ nav.next.url|urlencode }}{% else %}{{ folder.url|urlencode }}{% endif %}"><i class="icon-remove"></i> {% trans "Delete" %}</a></li>
 {% endif %}
 </ul>
-</div>
 
-<div class="module">
-<h2><img src="{% coconuts_static "img/information.png" %}"/> {% trans "Information" %}</h2>
+<b>{% trans "Information" %}</b>
 <ul>
-  <li class="image-size" title="{% trans "The size of the original picture" %}">{% imagesize photo.size %}</li>
+  <li title="{% trans "The size of the original picture" %}"><i class="icon-resize-full"></i> {% imagesize photo.size %}</li>
 {% if photo.camera %}
-  <li class="image-camera" title="{% trans "The camera used to take this picture" %}">{{ photo.camera }}</li>
+  <li title="{% trans "The camera used to take this picture" %}"><i class="icon-camera"></i> {{ photo.camera }}</li>
 {% endif %}
 {% if photo.settings %}
-  <li class="image-settings" title="{% trans "The aperture and exposure time for this picture" %}">{{ photo.settings }}</li>
+  <li title="{% trans "The aperture and exposure time for this picture" %}"><i class="icon-wrench"></i> {{ photo.settings }}</li>
 {% endif %}
 </ul>
 </div>

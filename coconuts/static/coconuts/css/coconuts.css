@@ -1,52 +1,18 @@
 /* blocks */
 
-#content-wrapper {
+#photo-wrapper {
   float: left;
   width: 100%;
 }
 
-#content-main {
-  background: white;
+#photo-main {
   margin-left: 205px;
-  padding: 10px;
-  border: 1px solid #ccc;
 }
 
-#content-main h1 {
-  margin: 0.4em;
-  padding: 2px;
-  font-size: 1.4em;
-  border-bottom: 1px solid #007cc3;
-}
-
-#content-main h2 {
-  margin: 0.4em;
-  padding: 2px;
-  font-size:1em;
-  border-bottom:1px dotted #007CC3;
-}
-
-#content-related {
+#photo-related {
   float: left;
   margin-left:-100%;
   width: 200px;
-}
-
-#content-related ul {
-  padding: 0px;
-  margin: 10px;
-}
-
-#content-related li {
-  list-style: none;
-  line-height: 24px;
-  padding-left: 29px;
-  background-repeat: no-repeat;
-}
-
-#content-related li img {
-  margin-right: 5px;
-  vertical-align: middle;
 }
 
 /* various */
