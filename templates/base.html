@@ -23,12 +23,7 @@
 </div>
 <div class="breadcrumbs">{% block breadcrumbs %}{% endblock %}</div>
 <div id="content">
-    <div id="content-wrapper">
-        <div id="content-main">{% block content %}{% endblock %}</div>
-    </div>
-    <div id="content-related">
-{% block related %}{%endblock %}
-    </div>
+    {% block content %}{% endblock %}
 </div>
 <div id="footer">{% block footer %}{% endblock %}</div>
 </body>
