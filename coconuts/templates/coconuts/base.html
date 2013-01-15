@@ -5,7 +5,7 @@
 {% block title %}{% block subtitle %}{% endblock %} | Coconuts{% endblock %}
 
 {% block headextra %}
-<link rel="stylesheet" type="text/css" href="{% coconuts_static "css/coconuts.css" %}" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/coconuts.css"/>
 {% block rssfeeds %}{% endblock %}
 {% endblock %}
 

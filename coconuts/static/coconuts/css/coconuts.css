@@ -133,53 +133,12 @@
 
 /* sidebar */
 
-.image-camera {
-  background: url(../img/camera.png) no-repeat;
-}
-
-.image-delete {
-  background: url(../img/delete.png) no-repeat;
-}
-
-.image-download {
-  background: url(../img/download.png) no-repeat;
-}
-
 .image-manage {
   background: url(../img/manage.png) no-repeat;
   padding-left: 29px;
 }
 
-.image-settings {
-  background: url(../img/settings.png) no-repeat;
-}
-
-.image-show {
-  background: url(../img/show.png) no-repeat;
-}
-
-.image-size {
-  background: url(../img/size.png) no-repeat;
-}
-
-.image-upload {
-  background: url(../img/upload.png) no-repeat;
-}
-
 .image-users {
   background: url(../img/users.png) no-repeat;
   padding-left: 29px;
-}
-
-.image-zoom-in {
-  background: url(../img/zoom_in.png) no-repeat;
-}
-
-.image-zoom-out {
-  background: url(../img/zoom_out.png) no-repeat;
-}
-
-.module img {
-  vertical-align: middle;
-  padding-right: 5px;
 }
