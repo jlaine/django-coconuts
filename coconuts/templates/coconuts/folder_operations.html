@@ -11,6 +11,14 @@
 <div class="error">{{ error|escape }}</div>
 {% endfor %}
 
+{% if can_manage %}
+<p class="image-manage"><a href="{{ folder.share.manage_url }}">{% trans "Manage this share's permissions" %}</a></p>
+{% endif %}
+
+{% if user.is_staff %}
+<p class="image-users"><a href="/admin/auth/user/">{% trans "Manage user accounts" %}</a><p>
+{% endif %}
+
 <form method="post" enctype="multipart/form-data">
 {% csrf_token %}
 <table>

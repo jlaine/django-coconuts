@@ -7,6 +7,9 @@
 {% block breadcrumbs %}{% coconuts_crumbs photo.path %}{% endblock %}
 
 {% block content %}
+<div id="content-wrapper">
+
+<div id="content-main">
 <a href="{% if nav.next %}{{ nav.next.url }}{% else %}{{ folder.url }}{% endif %}">
 <img src="{% url coconuts.views.render photo.path %}?size={{ size }}" alt="{{ photo }}"/>
 </a>
@@ -17,9 +20,10 @@
 {% if nav.next %}
 <img style="display:none" src="{% url coconuts.views.render nav.next.path %}?size={{ size }}" alt="{{ nav.next }}"/>
 {% endif %}
-{% endblock %}
+</div>
+</div>
 
-{% block related %}
+<div id="content-related">
 <div class="module">
 <h2>
 {% if nav.previous %}<a href="{{ nav.previous.url }}"><img alt="Previous" title="Previous photo" src="{% coconuts_static "img/previous.png" %}"/></a>{% else %}<img src="{% coconuts_static "img/blank.png" %}"/>{% endif %}
@@ -53,5 +57,5 @@ Photo {{ nav.number }} / {{ nav.total }}
 </ul>
 </div>
 
-{{ block.super }}
+</div>
 {% endblock %}

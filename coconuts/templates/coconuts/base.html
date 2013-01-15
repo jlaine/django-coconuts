@@ -11,19 +11,7 @@
 
 {% block branding %}<h1 id="site-name">{% coconuts_version %}</h1>{% endblock %}
 
-{% block related %}
-{% if can_manage %}
-      <div class="module">
-        <h2>{% coconuts_title %}</h2>
-        <ul>
-          <li class="image-manage" title="{% trans "Manage this share's permissions" %}"><a href="{{ folder.share.manage_url }}">{% trans "Manage permissions" %}</a></li>
-{% if user.is_staff %}
-          <li class="image-users" title="{% trans "Manage user accounts" %}"><a href="/admin/auth/user/">{% trans "Manage user accounts" %}</a></li>
-{% endif %}
-        </ul>
-      </div>
-{% endif %}
-{% endblock %}
+{% block related %}{% endblock %}
 
 {% block footer %}
 <script type="text/javascript">
