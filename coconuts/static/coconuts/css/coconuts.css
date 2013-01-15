@@ -1,5 +1,9 @@
 /* blocks */
 
+#header {
+    display: none;
+}
+
 #photo-wrapper {
   float: left;
   width: 100%;
