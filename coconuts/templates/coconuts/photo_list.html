@@ -59,3 +59,11 @@
 {% endif %}
 
 {% endblock %}
+
+{% block footer %}
+<script type="text/javascript">
+$('input[name=upload]').change(function() {
+ $('#upload-fake').val($(this).val());
+});
+</script>
+{% endblock footer %}

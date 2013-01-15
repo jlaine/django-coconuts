@@ -27,7 +27,11 @@
   {% trans "Add a file to this folder" %}
 </td>
 <td>
-  <input type="file" name="upload"/>
+  <input type="file" name="upload" style="display: none"/>
+  <div class="input-append">
+     <input id="upload-fake" class="input-large" type="text"/>
+     <a class="btn" onclick="$('input[name=upload]').click();">Browse</a>
+  </div>
 </td>
 </tr>
 
@@ -43,7 +47,7 @@
 <tr>
 <td>&nbsp;</td>
 <td>
-  <input type="submit" value="{% trans "Submit changes" %}">
+  <input class="btn" type="submit" value="{% trans "Submit changes" %}">
 </td>
 </tr>
 
