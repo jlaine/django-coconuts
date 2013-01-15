@@ -8,10 +8,6 @@ a:link, a:visited {
   text-decoration: none;
 }
 
-img {
-  border: none;
-}
-
 /* header */
 #header {
   background: white;
@@ -42,20 +38,6 @@ img {
 /* content blocks */
 #content {
   padding: 3px 4px;
-}
-
-/* login */
-.login-form #id_username,
-.login-form #id_password {
-  margin: 2px;
-  width:14em;
-}
-
-.login-form label {
-  float: left;
-  text-align: right;
-  width: 10em;
-  padding-right: 5px;
 }
 
 /* various */
@@ -89,10 +71,3 @@ img {
     border: 1px solid #555;
     font-weight: bold;
 }
-
-.box {
-    background: #eee;
-    border: 1px solid black;
-    padding: 1em;
-}
-
