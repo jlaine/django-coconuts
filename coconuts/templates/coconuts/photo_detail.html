@@ -25,9 +25,9 @@
 
 <div id="photo-related">
 <p>
-{% if nav.previous %}<a href="{{ nav.previous.url }}"><img alt="Previous" title="Previous photo" src="{% coconuts_static "img/previous.png" %}"/></a>{% else %}<img src="{% coconuts_static "img/blank.png" %}"/>{% endif %}
+{% if nav.previous %}<a href="{{ nav.previous.url }}"><i class="icon-caret-left icon-large"></i></a>{% else %}<i class="icon-large">&nbsp;</i>{% endif %}
 Photo {{ nav.number }} / {{ nav.total }}
-{% if nav.next %}<a href="{{ nav.next.url }}"><img alt="Next" title="Next photo" src="{% coconuts_static "img/next.png" %}"/></a>{% else %}<img src="{% coconuts_static "img/blank.png" %}"/>{% endif %}
+{% if nav.next %}<a href="{{ nav.next.url }}"><i class="icon-caret-right icon-large"></i></a>{% endif %}
 </p>
 <ul class="nav nav-tabs nav-stacked">
 {% if zoom.next %}
@@ -47,7 +47,7 @@ Photo {{ nav.number }} / {{ nav.total }}
 </ul>
 
 <b>{% trans "Information" %}</b>
-<ul>
+<ul class="nav nav-tabs nav-stacked">
   <li title="{% trans "The size of the original picture" %}"><i class="icon-resize-full"></i> {% imagesize photo.size %}</li>
 {% if photo.camera %}
   <li title="{% trans "The camera used to take this picture" %}"><i class="icon-camera"></i> {{ photo.camera }}</li>
