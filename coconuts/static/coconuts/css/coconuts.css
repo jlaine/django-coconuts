@@ -130,15 +130,3 @@
   float: left;
   margin-right: 5px;
 }
-
-/* sidebar */
-
-.image-manage {
-  background: url(../img/manage.png) no-repeat;
-  padding-left: 29px;
-}
-
-.image-users {
-  background: url(../img/users.png) no-repeat;
-  padding-left: 29px;
-}

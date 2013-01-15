@@ -4,8 +4,6 @@
 'source': '/usr/share/icons/oxygen/scalable',
 'icons': {
     'folder': 'places/folder.svgz',
-    'manage': 'actions/view-process-users.svgz',
-    'users': 'apps/system-users.svgz',
 
     'mimetypes/application-octet-stream': 'mimetypes/application-octet-stream.svgz',
     'mimetypes/application-msword': 'mimetypes/application-msword.svgz',
