@@ -52,19 +52,6 @@ def coconuts_crumbs(path):
     return { 'crumbs': crumbs }
 register.inclusion_tag("coconuts/crumbs.html")(coconuts_crumbs)
 
-def coconuts_links(user):
-    """
-    Returns extra links for the coconuts menu.
-    """
-    links = ()
-    if user.is_staff:
-        try:
-            links = settings.COCONUTS_STAFF_LINKS
-        except:
-            pass
-    return { 'links': links }
-register.inclusion_tag("coconuts/links.html")(coconuts_links)
-
 def coconuts_mimeicon(file):
     (type, encoding) = mimetypes.guess_type(file)
     if type:
