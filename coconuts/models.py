@@ -241,23 +241,6 @@ class Folder:
             path += '/'
         return reverse('coconuts.views.browse', args=[path])
 
-    def webdav_url(self):
-        """Get the URL at which the folder can be accessed via WebDAV."""
-        path = self.path
-        if path:
-            path += '/'
-        try:
-            return urljoin(settings.COCONUTS_WEBDAV_URL, path)
-        except:
-            return None
-
-    def webdav_konqurl(self):
-        """Get the URL at which the folder can be accessed via WebDAV for Konqueror."""
-        url = self.webdav_url()
-        if url:
-            url = url.replace('http://', 'webdav://').replace('https://', 'webdavs://')
-        return url
-
 class File:
     class DoesNotExist(Exception):
         pass
