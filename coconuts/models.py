@@ -117,7 +117,7 @@ class Share(models.Model):
 
     def set_acls(self, acls):
         """Set the ACLs associated with this share."""
-        self.access = ",".join([str(x) for x in acls])
+        self.access = ",".join([unicode(x) for x in acls])
 
     def name(self):
         """Get the share's friendly name."""
