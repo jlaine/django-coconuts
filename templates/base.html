@@ -5,11 +5,13 @@
 {% load i18n %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/base.css"/>
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/bootstrap-responsive.min.css"/>
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/font-awesome.min.css"/>
 {% block headextra %}{% endblock %}
 </head>
 
 <body>
+<div class="container">
 <div id="header">
     <div id="logo">&nbsp;</div>
     <div id="branding">{% block branding %}{% endblock %}</div>
@@ -26,7 +28,9 @@
 <div id="content">{% block content %}{% endblock %}</div>
 <div id="footer">
     <script src="{{ STATIC_URL }}coconuts/js/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}coconuts/js/bootstrap.min.js"></script>
     {% block footer %}{% endblock %}
+</div>
 </div>
 </body>
 </html>
