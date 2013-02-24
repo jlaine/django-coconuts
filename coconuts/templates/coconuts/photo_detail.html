@@ -27,16 +27,6 @@
 
 <div id="photo-related">
 <ul class="nav nav-tabs nav-stacked">
-{% if zoom.next %}
-  <li><a href="{{ photo.url }}?size={{ zoom.next }}"><i class="icon-zoom-in"></i> {% trans "Zoom in" %}</a></li>
-{% else %}
-  <li class="disabled"><a href="#"><i class="icon-zoom-in"></i> {% trans "Zoom in" %}</a></li>
-{% endif %}
-{% if zoom.previous %}
-  <li><a href="{{ photo.url }}?size={{ zoom.previous }}"><i class="icon-zoom-out"></i> {% trans "Zoom out" %}</a></li>
-{% else %}
-  <li class="disabled"><a href="#"><i class="icon-zoom-out"></i> {% trans "Zoom out" %}</a></li>
-{% endif %}
   <li title="{% trans "Download original picture" %} ({% imagesize photo.size %})"><a href="{% url coconuts.views.download photo.path %}"><i class="icon-download"></i> {% trans "Download" %} ({% filesize photo.filesize %})</a></li>
 {% if can_write %}
   <li title="{% trans "Delete this picture" %}"><a href="{% url coconuts.views.delete photo.path %}?back={{ photo.url|urlencode }}&amp;next={% if nav.next %}{{ nav.next.url|urlencode }}{% else %}{{ folder.url|urlencode }}{% endif %}"><i class="icon-remove"></i> {% trans "Delete" %}</a></li>
@@ -46,6 +36,7 @@
 <b>{% trans "Information" %}</b>
 <ul class="nav nav-tabs nav-stacked">
   <li title="{% trans "The size of the original picture" %}"><i class="icon-resize-full"></i> {% imagesize photo.size %}</li>
+  <li title="{% trans "The size of the original picture" %}"><i class="icon-resize-full"></i> {% filesize photo.filesize %}</li>
 {% if photo.camera %}
   <li title="{% trans "The camera used to take this picture" %}"><i class="icon-camera"></i> {{ photo.camera }}</li>
 {% endif %}

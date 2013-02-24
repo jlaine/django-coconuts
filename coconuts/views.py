@@ -35,7 +35,7 @@ from coconuts import notifications
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
 from coconuts.models import File, Folder, Photo, NamedAcl, PERMISSIONS
 
-PHOTO_SIZES = [ 800, 1024, 1280 ]
+PHOTO_SIZE = 1024
 THUMB_SIZE = 128
 
 def FolderContext(request, folder, args):
@@ -181,24 +181,12 @@ def photo_detail(request,path):
     if not folder.has_perm('can_read', request.user):
         return forbidden(request)
 
-    # set size
-    if request.GET.has_key('size'):
-        size = int(request.GET['size'])
-    elif request.session.get('photo_size'):
-        size = int(request.session['photo_size'])
-    try:
-        PHOTO_SIZES.index(size)
-        request.session['photo_size'] = size
-    except:
-        size = PHOTO_SIZES[0]
-
     # navigation
     children, files, photos, mode = folder.list()
     return render_to_response('coconuts/photo_detail.html', FolderContext(request, folder, {
         'photo': photo,
-        'size': size,
+        'size': PHOTO_SIZE,
         'nav': make_nav(photo, photos),
-        'zoom': make_nav(size, PHOTO_SIZES),
         }))
  
 @login_required
