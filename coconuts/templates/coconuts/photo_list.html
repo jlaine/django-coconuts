@@ -11,7 +11,32 @@
 {% endblock %}
 
 {% block content %}
-<h1>{{ folder }}</h1>
+<h1 style="display: inline-block">{{ folder }}</h1>
+
+{% if can_write %}
+<div class="btn-group">
+<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+{% trans "Operations" %}
+<span class="caret"></span>
+</a>
+<ul class="dropdown-menu">
+{% if can_write %}
+    <li><a href="{% url coconuts.views.add_file folder.path %}"><i class="icon-plus"></i> {% trans "Add a file to this folder" %}</a></li>
+    <li><a href="{% url coconuts.views.add_folder folder.path %}"><i class="icon-plus"></i> {% trans "Create a new subfolder" %}</a></li>
+{% endif %}
+{% if can_manage %}
+    <li><a href="{{ folder.share.manage_url }}"><i class="icon-key"></i> {% trans "Manage this share's permissions" %}</a></li>
+{% endif %}
+{% if user.is_staff %}
+    <li><a href="/admin/auth/user/"><i class="icon-user"></i> {% trans "Manage user accounts" %}</a></li>
+{% endif %}
+</ul>
+</div>
+{% endif %}
+
+{% for message in messages %}
+<div class="message">{{ message|escape }}</div>
+{% endfor %}
 
 {% if not children and not files %}
 <p>{% trans "There are no files in this folder." %}</p>
@@ -48,11 +73,6 @@
 
 {% endifequal %}
 
-{% endif %}
-
-{% if can_write %}
-<br/>
-{% include "coconuts/folder_operations.html" %}
 {% endif %}
 
 {% endblock %}

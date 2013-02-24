@@ -42,12 +42,6 @@
   text-align:center;
 }
 
-.module ul {
-  list-style:square inside;
-  padding: 0px;
-  margin: 0px;
-}
-
 .module p, h4 {
   margin: 10px;
 }
@@ -80,8 +74,6 @@
 
 .file {
   display: table-row;
-  padding: 2px;
-  font-size: 12px;
 }
 
 .file img {
@@ -98,6 +90,7 @@
 .filename {
   display: table-cell;
   padding-right: 10px;
+  min-width: 10em;
 }
 
 .filetitle {
