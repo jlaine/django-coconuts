@@ -90,7 +90,7 @@ def add_file(request, path):
                     messages.info(request, "Uploaded file '%s'." % filename)
                 except:
                     messages.warning(request, "Failed to upload file '%s'." % filename)
-            return redirect_to(request, reverse(browse, args=[path]))
+            return redirect_to(request, folder.url())
     else:
         form = AddFileForm()
     return render_to_response('coconuts/add_file.html', FolderContext(request, folder, {
@@ -117,7 +117,7 @@ def add_folder(request, path):
                 messages.info(request, "Created folder '%s'." % foldername)
             except:
                 messages.warning(request, "Failed to create folder '%s'." % foldername)
-            return redirect_to(request, reverse(browse, args=[path]))
+            return redirect_to(request, folder.url())
     else:
         form = AddFolderForm()
     return render_to_response('coconuts/add_folder.html', FolderContext(request, folder, {
