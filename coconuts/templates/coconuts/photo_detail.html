@@ -7,9 +7,6 @@
 {% block breadcrumbs %}{% coconuts_crumbs photo.path %}{% endblock %}
 
 {% block content %}
-<div id="photo-wrapper">
-
-<div id="photo-main">
 <div class="thumbnail" style="position: relative">
 <img src="{% url coconuts.views.render photo.path %}?size={{ size }}" alt="{{ photo }}"/>
 {% if nav.previous %}<a class="left carousel-control" href="{{ nav.previous.url }}">&lsaquo;</a>{% endif %}
@@ -23,9 +20,8 @@
 <img style="display:none" src="{% url coconuts.views.render nav.next.path %}?size={{ size }}" alt="{{ nav.next }}"/>
 {% endif %}
 </div>
-</div>
 
-<div id="photo-related">
+<div class="well">
 <b>{% trans "Information" %}</b>
 <ul class="nav nav-tabs nav-stacked">
   <li title="{% trans "The size of the original picture" %}"><i class="icon-resize-full"></i> {% imagesize photo.size %}</li>
@@ -42,7 +38,5 @@
 {% if can_write %}
 <a class="btn btn-danger" href="{% url coconuts.views.delete photo.path %}?back={{ photo.url|urlencode }}&amp;next={% if nav.next %}{{ nav.next.url|urlencode }}{% else %}{{ folder.url|urlencode }}{% endif %}"><i class="icon-remove"></i> {% trans "Delete" %}</a>
 {% endif %}
-</div>
-
 </div>
 {% endblock %}
