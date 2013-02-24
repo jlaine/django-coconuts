@@ -11,17 +11,16 @@
 <div class="error">{{ error|escape }}</div>
 {% endfor %}
 
+<ul>
 {% if can_manage %}
-<p>
-<a href="{{ folder.share.manage_url }}"><i class="icon-key"></i> {% trans "Manage this share's permissions" %}</a>
-</p>
+    <li><a href="{{ folder.share.manage_url }}"><i class="icon-key"></i> {% trans "Manage this share's permissions" %}</a></li>
+    <li><a href="{% url coconuts.views.add_folder folder.path %}"><i class="icon-plus"></i> {% trans "Create a new subfolder" %}</a></li>
 {% endif %}
 
 {% if user.is_staff %}
-<p>
-<a href="/admin/auth/user/"><i class="icon-user"></i> {% trans "Manage user accounts" %}</a>
-</p>
+<li><a href="/admin/auth/user/"><i class="icon-user"></i> {% trans "Manage user accounts" %}</a></li>
 {% endif %}
+</ul>
 
 <form method="post" enctype="multipart/form-data">
 {% csrf_token %}
@@ -38,23 +37,12 @@
   </div>
 </td>
 </tr>
-
-<tr>
-<td>
-  {% trans "Create a new subfolder" %}
-</td>
-<td>
-  <input type="text" name="newfolder"/>
-</td>
-</tr>
-
 <tr>
 <td>&nbsp;</td>
 <td>
   <input class="btn" type="submit" value="{% trans "Submit changes" %}">
 </td>
 </tr>
-
 </table>
 </form>
 </div>

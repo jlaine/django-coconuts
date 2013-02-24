@@ -1,0 +1,18 @@
+{% extends "coconuts/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<form class="modal form-inline" {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.module_name }}_form">
+{% csrf_token %}
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>{{ title }}</h3>
+</div>
+<div class="modal-body">
+    {{ form }}
+</div>
+<div class="modal-footer">
+    <input type="submit" name="_save" class="btn btn-primary" value="{% trans "Save" %}">
+</div>
+</form>
+{% endblock %}

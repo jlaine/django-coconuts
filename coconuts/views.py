@@ -20,16 +20,19 @@ import os
 import time
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.http import http_date, urlquote
+from django.utils.translation import ugettext as _
 from django.views.generic.simple import redirect_to
 import django.views.static
 
 from coconuts import notifications
-from coconuts.forms import PhotoForm, ShareForm, ShareAccessFormSet
+from coconuts.forms import AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
 from coconuts.models import File, Folder, Photo, NamedAcl, PERMISSIONS
 
 PHOTO_SIZES = [ 800, 1024, 1280 ]
@@ -61,6 +64,29 @@ def make_nav(item, collection):
         nav['next'] = None
     return nav
 
+def add_folder(request, path):
+    try:
+        folder = Folder(os.path.dirname(path))
+    except Folder.DoesNotExist:
+        raise Http404
+
+    if request.method == 'POST':
+        form = AddFolderForm(request.POST)
+        if form.is_valid():
+            foldername = form.cleaned_data['name']
+            try:
+                subfolder = Folder.create(os.path.join(folder.path, foldername))
+                notifications.create_folder(request.user, subfolder)
+                messages.info(request, "Created folder '%s'." % foldername)
+            except:
+                messages.warning(request, "Failed to create folder '%s'." % foldername)
+            return redirect_to(request, reverse(browse, args=[path]))
+    else:
+        form = AddFolderForm()
+    return render_to_response('coconuts/add_folder.html', FolderContext(request, folder, {
+        'form': form,
+        'title': _('Add a folder')}))
+
 def browse(request, path):
     if not path or path.endswith('/'):
         return photo_list(request, path)
@@ -81,7 +107,7 @@ def photo_list(request, path):
 
     # handle operations
     errors = []
-    messages = []
+    message_list = []
     if request.method == 'POST':
         if not folder.has_perm('can_write', request.user):
             return forbidden(request)
@@ -98,19 +124,9 @@ def photo_list(request, path):
                     for chunk in request.FILES['upload'].chunks():
                         fp.write(chunk)
                     fp.close()
-                    messages.append("Uploaded file '%s'." % filename)
+                    message_list.append("Uploaded file '%s'." % filename)
                 except:
                     errors.append("Failed to upload file '%s'." % filename)
-
-        # folder creation
-        if request.POST.has_key('newfolder') and request.POST['newfolder']:
-            foldername = request.POST['newfolder']
-            try:
-                subfolder = Folder.create(os.path.join(folder.path, foldername))
-                notifications.create_folder(request.user, subfolder)
-                messages.append("Created folder '%s'." % foldername)
-            except:
-                errors.append("Failed to create folder '%s'." % foldername)
 
     # list of sub-folders and photos
     children, files, photos, mode = folder.list()
@@ -120,7 +136,7 @@ def photo_list(request, path):
         'children': allowed_children,
         'errors': errors,
         'files': files,
-        'messages': messages,
+        'messages': message_list,
         'mode': mode,
         'photos': photos,
         }))
