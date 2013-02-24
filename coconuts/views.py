@@ -32,7 +32,7 @@ from django.views.generic.simple import redirect_to
 import django.views.static
 
 from coconuts import notifications
-from coconuts.forms import AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
+from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
 from coconuts.models import File, Folder, Photo, NamedAcl, PERMISSIONS
 
 PHOTO_SIZES = [ 800, 1024, 1280 ]
@@ -64,11 +64,48 @@ def make_nav(item, collection):
         nav['next'] = None
     return nav
 
-def add_folder(request, path):
+def add_file(request, path):
     try:
-        folder = Folder(os.path.dirname(path))
+        folder = Folder(path)
     except Folder.DoesNotExist:
         raise Http404
+
+    # check permissions
+    if not folder.has_perm('can_write', request.user):
+        return forbidden(request)
+
+    if request.method == 'POST':
+        form = AddFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            filename = request.FILES['upload'].name
+            filepath = os.path.join(folder.filepath(), request.FILES['upload'].name)
+            if os.path.exists(filepath):
+                messages.warning(request, "File '%s' already exists." % filename)
+            else:
+                try:
+                    fp = file(filepath, 'wb')
+                    for chunk in request.FILES['upload'].chunks():
+                        fp.write(chunk)
+                    fp.close()
+                    messages.info(request, "Uploaded file '%s'." % filename)
+                except:
+                    messages.warning(request, "Failed to upload file '%s'." % filename)
+            return redirect_to(request, reverse(browse, args=[path]))
+    else:
+        form = AddFileForm()
+    return render_to_response('coconuts/add_file.html', FolderContext(request, folder, {
+        'form': form,
+        'title': _('Add a file')}))
+
+def add_folder(request, path):
+    try:
+        folder = Folder(path)
+    except Folder.DoesNotExist:
+        raise Http404
+
+    # check permissions
+    if not folder.has_perm('can_write', request.user):
+        return forbidden(request)
 
     if request.method == 'POST':
         form = AddFolderForm(request.POST)
@@ -105,38 +142,13 @@ def photo_list(request, path):
     if not folder.has_perm('can_read', request.user):
         return forbidden(request)
 
-    # handle operations
-    errors = []
-    message_list = []
-    if request.method == 'POST':
-        if not folder.has_perm('can_write', request.user):
-            return forbidden(request)
-
-        # file upload
-        if request.FILES.has_key('upload'):
-            filename = request.FILES['upload'].name
-            filepath = os.path.join(folder.filepath(), request.FILES['upload'].name)
-            if os.path.exists(filepath):
-                errors.append("File '%s' already exists." % filename)
-            else:
-                try:
-                    fp = file(filepath, 'wb')
-                    for chunk in request.FILES['upload'].chunks():
-                        fp.write(chunk)
-                    fp.close()
-                    message_list.append("Uploaded file '%s'." % filename)
-                except:
-                    errors.append("Failed to upload file '%s'." % filename)
-
     # list of sub-folders and photos
     children, files, photos, mode = folder.list()
     # keep only the children the user is allowed to read. This is only useful in '/'
     allowed_children = [x for x in children if x.has_perm('can_read', request.user)]
     return render_to_response('coconuts/photo_list.html', FolderContext(request, folder, {
         'children': allowed_children,
-        'errors': errors,
         'files': files,
-        'messages': message_list,
         'mode': mode,
         'photos': photos,
         }))

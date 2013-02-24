@@ -7,42 +7,14 @@
 <div class="message">{{ message|escape }}</div>
 {% endfor %}
 
-{% for error in errors %}
-<div class="error">{{ error|escape }}</div>
-{% endfor %}
-
 <ul>
 {% if can_manage %}
-    <li><a href="{{ folder.share.manage_url }}"><i class="icon-key"></i> {% trans "Manage this share's permissions" %}</a></li>
+    <li><a href="{% url coconuts.views.add_file folder.path %}"><i class="icon-plus"></i> {% trans "Add a file to this folder" %}</a></li>
     <li><a href="{% url coconuts.views.add_folder folder.path %}"><i class="icon-plus"></i> {% trans "Create a new subfolder" %}</a></li>
+    <li><a href="{{ folder.share.manage_url }}"><i class="icon-key"></i> {% trans "Manage this share's permissions" %}</a></li>
 {% endif %}
-
 {% if user.is_staff %}
 <li><a href="/admin/auth/user/"><i class="icon-user"></i> {% trans "Manage user accounts" %}</a></li>
 {% endif %}
 </ul>
-
-<form method="post" enctype="multipart/form-data">
-{% csrf_token %}
-<table>
-<tr>
-<td>
-  {% trans "Add a file to this folder" %}
-</td>
-<td>
-  <input type="file" name="upload" style="display: none"/>
-  <div class="input-append">
-     <input id="upload-fake" class="input-large" type="text"/>
-     <a class="btn" onclick="$('input[name=upload]').click();">Browse</a>
-  </div>
-</td>
-</tr>
-<tr>
-<td>&nbsp;</td>
-<td>
-  <input class="btn" type="submit" value="{% trans "Submit changes" %}">
-</td>
-</tr>
-</table>
-</form>
 </div>

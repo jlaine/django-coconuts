@@ -20,6 +20,7 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
     # files
+    url(r'^images/add_file/(?P<path>.*)$', 'coconuts.views.add_file'),
     url(r'^images/add_folder/(?P<path>.*)$', 'coconuts.views.add_folder'),
     url(r'^images/delete/(?P<path>.*)$', 'coconuts.views.delete'),
     url(r'^images/download/(?P<path>.*)$', 'coconuts.views.download'),

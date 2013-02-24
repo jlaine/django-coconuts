@@ -24,6 +24,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from coconuts.models import Share, OWNERS, PERMISSIONS, PERMISSION_NAMES
 
+class AddFileForm(forms.Form):
+    upload = forms.FileField()
+
 class AddFolderForm(forms.Form):
     name = forms.CharField()
 
