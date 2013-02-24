@@ -1,13 +1,11 @@
 {% extends "coconuts/base.html" %}
 {% load i18n %}
 
-{% block subtitle %}{% trans "Log in" %}{% endblock %}
-
 {% block content %}
 <h1>{% trans "Log in" %}</h1>
 
 {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
+<p>{% trans "Your username and password didn't match. Please try again." %}</p>
 {% endif %}
 
 <div class="login-form">
@@ -21,9 +19,8 @@
     <input type="hidden" name="next" value="{{ next }}" />
   </div>
   <div class="login-row">
-    <label>&nbsp;</label><input type="submit" value="{% trans "Log in" %}" />
+    <label>&nbsp;</label><input class="btn btn-primary" type="submit" value="{% trans "Log in" %}" />
   </div>
 </form>
 </div>
-
 {% endblock %}
