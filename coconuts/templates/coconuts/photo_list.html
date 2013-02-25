@@ -21,8 +21,8 @@
 </a>
 <ul class="dropdown-menu">
 {% if can_write %}
-    <li><a class="popup" href="{% url coconuts.views.add_file folder.path %}"><i class="icon-plus"></i> {% trans "Add a file to this folder" %}</a></li>
-    <li><a class="popup" href="{% url coconuts.views.add_folder folder.path %}"><i class="icon-plus"></i> {% trans "Create a new subfolder" %}</a></li>
+    <li><a class="popup" href="{% url coconuts.views.add_file folder.path %}"><i class="icon-picture"></i> {% trans "Add a file to this folder" %}</a></li>
+    <li><a class="popup" href="{% url coconuts.views.add_folder folder.path %}"><i class="icon-folder-close"></i> {% trans "Create a new subfolder" %}</a></li>
 {% endif %}
 {% if can_manage %}
     <li><a class="popup" href="{{ folder.share.manage_url }}"><i class="icon-key"></i> {% trans "Manage this share's permissions" %}</a></li>
@@ -74,25 +74,4 @@
 {% endifequal %}
 
 {% endif %}
-<div id="crud-dialog"></div>
 {% endblock %}
-
-{% block footer %}
-{{ block.super }}
-<script type="text/javascript">
-$('input[name=upload]').change(function() {
- $('#upload-fake').val($(this).val());
-});
-
-$('a.popup').click(function(event) {
-    event.preventDefault();
-    var url = $(this).attr('href');
-    var container = $('#crud-dialog');
-    container.load(url + ' form.modal', function() {
-        var form = container.find('form.modal');
-        form.attr('action', url);
-        form.modal();
-    });
-});
-</script>
-{% endblock footer %}

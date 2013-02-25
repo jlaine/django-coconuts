@@ -36,7 +36,7 @@
 
 <a class="btn" href="{% url coconuts.views.download photo.path %}"><i class="icon-download"></i> {% trans "Download" %}</a>
 {% if can_write %}
-<a class="btn btn-danger" href="{% url coconuts.views.delete photo.path %}?back={{ photo.url|urlencode }}&amp;next={% if nav.next %}{{ nav.next.url|urlencode }}{% else %}{{ folder.url|urlencode }}{% endif %}"><i class="icon-remove"></i> {% trans "Delete" %}</a>
+<a class="btn btn-danger popup" href="{% url coconuts.views.delete photo.path %}?back={{ photo.url|urlencode }}&amp;next={% if nav.next %}{{ nav.next.url|urlencode }}{% else %}{{ folder.url|urlencode }}{% endif %}"><i class="icon-remove"></i> {% trans "Delete" %}</a>
 {% endif %}
 </div>
 {% endblock %}
