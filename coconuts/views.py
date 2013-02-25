@@ -218,11 +218,8 @@ def delete(request, path):
 
     # delete file then redirect user
     if request.method == 'POST':
-        if request.POST['post'] == 'yes':
-            target.delete()
-            return redirect_to(request, next_url)
-        else:
-            return redirect_to(request, back_url)
+        target.delete()
+        return redirect_to(request, next_url)
 
     return render_to_response('coconuts/delete.html', FolderContext(request, folder, {
         'is_folder': is_folder,
@@ -283,6 +280,7 @@ def manage(request, path):
             if not share.has_perm('can_manage', request.user):
                 return forbidden(request)
             share.save()
+            return redirect_to(request, folder.url())
 
     # fill form from database
     data = []
