@@ -7,36 +7,34 @@
 {% block breadcrumbs %}{% coconuts_crumbs target.path %}{% endblock %}
 
 {% block content %}
-<div class="module">
-  <h2>{% blocktrans %}Really delete "{{ target }}"?{% endblocktrans %}</h2>
-  <table class="module-text">
-    <tr>
+<div class="modal">
+  <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>{% blocktrans %}Really delete "{{ target }}"?{% endblocktrans %}</h3>
+  </div>
+  <div class="modal-body module-text">
 {% if target.is_image %}
-      <td>
-         <img src="{% url coconuts.views.render target.path %}?size=128" alt="{{ target }}" style="vertical-align: top; display: inline"/>
-      </td>
+     <img src="{% url coconuts.views.render target.path %}?size=128" alt="{{ target }}" style="vertical-align: center; display: inline"/>
 {% endif %}
-      <td>
-        <form action="" method="POST">
-        {% csrf_token %}
 {%if is_folder %}
 {% blocktrans %}Are you sure you want to delete the folder "{{ target }}" and all its contents?{% endblocktrans%}
 {% else %}
 {% blocktrans %}Are you sure you want to delete the file "{{ target }}"?{% endblocktrans%}
 {% endif %}
-        <br/>
-        <input type="hidden" name="post" value="yes" />
-        <input type="hidden" name="next" value="{{ next }}" />
-        <input type="submit" value="{% trans "Yes, I'm sure" %}" />
-        </form>
-        <form action="" method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="post" value="no" />
-        <input type="hidden" name="back" value="{{ back }}" />
-        <input type="submit" value="{% trans "No, I'm not sure" %}" />
-        </form>
-      </td>
-    </tr>
-  </table>
+</div>
+<div class="modal-footer">
+    <form method="POST" style="display: inline-block">
+    {% csrf_token %}
+    <input type="hidden" name="post" value="yes" />
+    <input type="hidden" name="next" value="{{ next }}" />
+    <input class="btn" type="submit" value="{% trans "Yes, I'm sure" %}" />
+    </form>
+    <form method="POST" style="display: inline-block">
+    {% csrf_token %}
+    <input type="hidden" name="post" value="no" />
+    <input type="hidden" name="back" value="{{ back }}" />
+    <input class="btn" type="submit" value="{% trans "No, I'm not sure" %}" />
+    </form>
+</div>
 </div>
 {% endblock %}
