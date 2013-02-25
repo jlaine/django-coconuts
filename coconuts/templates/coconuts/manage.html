@@ -6,33 +6,27 @@
 {% block breadcrumbs %}{% coconuts_crumbs folder.path %}{% endblock %}
 
 {% block content %}
-<h1>{% blocktrans with share.name as name %}Manage {{ name }}{% endblocktrans %}</h1>
 
-<form action="" method="POST">
-{% csrf_token %}
-<div class="module">
-  <div class="module-text">
-  {{ shareform.as_p }}
-  </div>
+<form class="modal" action="" method="POST">
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>{% blocktrans with share.name as name %}Manage {{ name }}{% endblocktrans %}</h3>
 </div>
-
-<br/>
-
-<div class="module">
-  <h2>{% trans "Permissions" %}</h2>
-  <table class="module-text">
+<div class="modal-body">
+    {% csrf_token %}
+    {{ shareform.as_p }}
+    <label>{% trans "Permissions" %}</label>
+    <table class="module-text">
     {{ formset.management_form }}
     <tr>{% for field in formset.forms.0 %}<th>{{ field.label }}</th>{% endfor %}</tr>
     {% for form in formset.forms %}
     <tr>{% for field in form %}<td>{{ field }}</td>{% endfor %}</tr>
     {% endfor %}
-  </table>
+    </table>
 </div>
-<br/>
-<input class="btn btn-primary" type="submit" value="{% trans "Update" %}" />
-
+<div class="modal-footer">
+    <a class="btn" href="{{ folder.url }}">{% blocktrans with folder.name as name %}Go back to {{ name }}{% endblocktrans %}</a>
+    <input class="btn btn-primary" type="submit" value="{% trans "Update" %}" />
+</div>
 </form>
-
-<p><a href="{{ folder.url }}">{% blocktrans with folder.name as name %}Go back to {{ name }}{% endblocktrans %}</a></p>
-
 {% endblock %}
