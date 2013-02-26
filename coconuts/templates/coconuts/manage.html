@@ -16,17 +16,20 @@
     {% csrf_token %}
     {{ shareform.as_p }}
     <label>{% trans "Permissions" %}</label>
-    <table class="module-text">
     {{ formset.management_form }}
+    <table class="table table-bordered">
+    <thead>
     <tr>{% for field in formset.forms.0 %}<th>{{ field.label }}</th>{% endfor %}</tr>
+    </thead>
+    <tbody>
     {% for form in formset.forms %}
     <tr>{% for field in form %}<td>{{ field }}</td>{% endfor %}</tr>
     {% endfor %}
+    </tbody>
     </table>
 </div>
 <div class="modal-footer">
-    <a class="btn" href="{{ folder.url }}">{% blocktrans with folder.name as name %}Go back to {{ name }}{% endblocktrans %}</a>
-    <input class="btn btn-primary" type="submit" value="{% trans "Update" %}" />
+    <input class="btn btn-primary" type="submit" value="{% trans "Save" %}" />
 </div>
 </form>
 {% endblock %}
