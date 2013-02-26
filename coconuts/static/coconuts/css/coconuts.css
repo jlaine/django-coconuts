@@ -14,31 +14,6 @@
     position: relative;
 }
 
-.module {
-  background-color: white;
-  border: 1px solid #ccc;
-  padding: 0;
-  margin-bottom: 3px;
-  width: 100%;
-}
-
-.module h2, .module caption {
-  background: #7ca0c7;
-  background: -moz-linear-gradient(top, #bcd2e9, #7ba0c6);
-  background: -webkit-gradient(linear, left top, left bottom, from(#bcd2e9), to(#7ba0c6));
-  color:white;
-  font-size:1em;
-  font-weight:normal;
-  line-height: 20px;
-  margin:0;
-  padding:2px 4px;
-  text-align:center;
-}
-
-.module p, h4 {
-  margin: 10px;
-}
-
 /* files */
 
 .file {

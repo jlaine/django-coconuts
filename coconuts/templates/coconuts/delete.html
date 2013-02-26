@@ -12,7 +12,7 @@
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       <h3>{% blocktrans %}Really delete "{{ target }}"?{% endblocktrans %}</h3>
   </div>
-  <div class="modal-body module-text">
+  <div class="modal-body">
 {% if target.is_image %}
      <img src="{% url coconuts.views.render target.path %}?size=128" alt="{{ target }}" style="vertical-align: center; display: inline"/>
 {% endif %}
