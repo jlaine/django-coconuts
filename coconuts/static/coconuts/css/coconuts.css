@@ -76,3 +76,14 @@
   display: table-cell;
   padding: 0 5px;
 }
+
+/* photos */
+.photo-info {
+    display: inline-block;
+    margin: 0;
+}
+
+.photo-actions {
+    display: inline-block;
+    float: right;
+}
