@@ -122,7 +122,7 @@ def add_folder(request, path):
         form = AddFolderForm()
     return render_to_response('coconuts/add_folder.html', FolderContext(request, folder, {
         'form': form,
-        'title': _('Add a folder')}))
+        'title': _('Create a folder')}))
 
 def browse(request, path):
     if not path or path.endswith('/'):
