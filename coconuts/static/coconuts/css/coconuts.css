@@ -39,30 +39,6 @@
   margin: 10px;
 }
 
-.quote-text {
-  margin: 5px;
-  font-size: 10px;
-}
-
-.quote-author {
-  font-size: 10px;
-  margin-left: 25em;
-}
-
-.ui-app {
-  font-style: italic;
-  font-weight: bold;
-}
-
-.ui-entry {
-  border-bottom: 1px dashed #777;
-  font-style: italic;
-}
-
-.url {
-  font-weight: bold;
-}
-
 /* files */
 
 .file {
@@ -99,24 +75,4 @@
 .fileactions {
   display: table-cell;
   padding: 0 5px;
-}
-
-/* picture header */
-.download {
-  float: right;
-}
-
-.pagination {
-  float:left;
-  list-style-image:none;
-  list-style-position:outside;
-  list-style-type:none;
-  margin:0;
-  padding:0;
-}
-
-.pagination li {
-  display: inline;
-  float: left;
-  margin-right: 5px;
 }
