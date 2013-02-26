@@ -10,7 +10,7 @@
 <form class="modal" action="" method="POST">
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>{% blocktrans with share.name as name %}Manage {{ name }}{% endblocktrans %}</h3>
+    <h3><i class="icon-key"></i> {% blocktrans with share.name as name %}Manage {{ name }}{% endblocktrans %}</h3>
 </div>
 <div class="modal-body">
     {% csrf_token %}
