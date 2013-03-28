@@ -54,6 +54,9 @@ def urljoin(base, entry):
 def url2path(url):
     return url.replace('/', os.path.sep)
 
+def path2url(path):
+    return path.replace(os.path.sep, '/')
+
 class OtherManager:
     def all(self):
         return self
@@ -282,7 +285,7 @@ class File:
 
     def is_image(self):
         (type, encoding) = mimetypes.guess_type(self.path)
-        return type == 'image/jpeg'
+        return type == 'image/jpeg' or type == 'image/pjpeg'
 
     def name(self):
         """Get the file's name."""
@@ -321,7 +324,7 @@ class Photo(File):
                 img = img.rotate(angle)
             img.thumbnail(cachesize, Image.ANTIALIAS)
             img.save(cachefile, quality=90)
-        return cachepath
+        return path2url(cachepath)
 
     def camera(self):
         """Get the photo's camera name."""
