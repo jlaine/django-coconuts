@@ -8,9 +8,9 @@ __docformat__ = 'epytext en'
 
 __version__ = '0.2.1'
 __url__ = 'http://www.jerryweb.org/projects/coconuts/'
-__copyright__ = '(C) 2008-2012 Jeremy Lainé'
+__copyright__ = '(C) 2008-2013 Jeremy Lainé'
 __license__ = 'GPL'
 __license_long__ = """
- Copyright (C) 2008-2012 Jeremy Lainé
+ Copyright (C) 2008-2013 Jeremy Lainé
  All rights reserved."""
 

@@ -1,7 +1,7 @@
 {
 'directories': ['coconuts', 'coconuts/templatetags'],
 'exclude': 'coconuts/(templatetags/)?(__init__|EXIF)\.py',
-'license': """Copyright (C) 2008-2012 Jeremy Lainé
+'license': """Copyright (C) 2008-2013 Jeremy Lainé
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
