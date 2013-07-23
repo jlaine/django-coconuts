@@ -53,6 +53,11 @@
 }
 
 /* photos */
+
+.thumbnails > li {
+    height: 128px;
+}
+
 .photo-info {
     display: inline-block;
     margin: 0;
