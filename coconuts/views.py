@@ -24,11 +24,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseBadRequest
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.utils.http import http_date, urlquote
 from django.utils.translation import ugettext as _
-from django.views.generic.simple import redirect_to
 import django.views.static
 
 from coconuts import notifications
@@ -90,7 +89,7 @@ def add_file(request, path):
                     messages.info(request, "Uploaded file '%s'." % filename)
                 except:
                     messages.warning(request, "Failed to upload file '%s'." % filename)
-            return redirect_to(request, folder.url())
+            return redirect(folder.url())
     else:
         form = AddFileForm()
     return render_to_response('coconuts/add_file.html', FolderContext(request, folder, {
@@ -117,7 +116,7 @@ def add_folder(request, path):
                 messages.info(request, "Created folder '%s'." % foldername)
             except:
                 messages.warning(request, "Failed to create folder '%s'." % foldername)
-            return redirect_to(request, folder.url())
+            return redirect(folder.url())
     else:
         form = AddFolderForm()
     return render_to_response('coconuts/add_folder.html', FolderContext(request, folder, {
@@ -219,7 +218,7 @@ def delete(request, path):
     # delete file then redirect user
     if request.method == 'POST':
         target.delete()
-        return redirect_to(request, next_url)
+        return redirect(next_url)
 
     return render_to_response('coconuts/delete.html', FolderContext(request, folder, {
         'is_folder': is_folder,
@@ -280,7 +279,7 @@ def manage(request, path):
             if not share.has_perm('can_manage', request.user):
                 return forbidden(request)
             share.save()
-            return redirect_to(request, folder.url())
+            return redirect(folder.url())
 
     # fill form from database
     data = []
