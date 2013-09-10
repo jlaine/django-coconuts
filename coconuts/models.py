@@ -216,6 +216,8 @@ class Folder:
         entries = os.listdir(directory)
         entries.sort()
         for entry in entries:
+            if entry.startswith('.'):
+                continue
             node = os.path.join(directory, entry)
             path = urljoin(self.path, entry)
             if os.path.isdir(node):
