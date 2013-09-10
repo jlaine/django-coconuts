@@ -1,6 +1,7 @@
 {% extends "coconuts/base.html" %}
 {% load coconuts_tags %}
 {% load i18n %}
+{% load url from future %}
 
 {% block subtitle %}{{ photo }}{% endblock %}
 
@@ -8,7 +9,7 @@
 
 {% block content %}
 <div class="thumbnail" style="position: relative">
-<img src="{% url coconuts.views.render photo.path %}?size={{ size }}" alt="{{ photo }}"/>
+<img src="{% url 'coconuts.views.render' photo.path %}?size={{ size }}" alt="{{ photo }}"/>
 {% if nav.previous %}<a class="left carousel-control" href="{{ nav.previous.url }}">&lsaquo;</a>{% endif %}
 {% if nav.next %}<a class="right carousel-control" href="{{ nav.next.url }}">&rsaquo;</a>{% endif %}
 </div>

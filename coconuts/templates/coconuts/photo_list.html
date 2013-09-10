@@ -1,13 +1,14 @@
 {% extends "coconuts/base.html" %}
 {% load coconuts_tags %}
 {% load i18n %}
+{% load url from future %}
 
 {% block subtitle %}{{ folder }}{% endblock %}
 
 {% block breadcrumbs %}{% coconuts_crumbs folder.path %}{% endblock %}
 
 {% block rssfeeds %}
-<link rel="alternate" href="{% url coconuts.views.rss folder.path %}" type="application/rss+xml" title="" id="gallery" />
+<link rel="alternate" href="{% url 'coconuts.views.rss' folder.path %}" type="application/rss+xml" title="" id="gallery" />
 {% endblock %}
 
 {% block content %}

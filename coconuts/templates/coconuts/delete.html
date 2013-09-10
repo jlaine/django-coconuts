@@ -1,6 +1,7 @@
 {% extends "coconuts/base.html" %}
 {% load coconuts_tags %}
 {% load i18n %}
+{% load url from future %}
 
 {% block subtitle %}{% blocktrans %}Really delete "{{ target }}"?{% endblocktrans %}{% endblock %}
 
@@ -14,7 +15,7 @@
   </div>
   <div class="modal-body">
 {% if target.is_image %}
-     <img src="{% url coconuts.views.render target.path %}?size=128" alt="{{ target }}" style="vertical-align: center; display: inline"/>
+     <img src="{% url 'coconuts.views.render' target.path %}?size=128" alt="{{ target }}" style="vertical-align: center; display: inline"/>
 {% endif %}
 {%if is_folder %}
 {% blocktrans %}Are you sure you want to delete the folder "{{ target }}" and all its contents?{% endblocktrans%}
