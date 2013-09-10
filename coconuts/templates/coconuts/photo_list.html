@@ -22,8 +22,8 @@
 </a>
 <ul class="dropdown-menu">
 {% if can_write %}
-    <li><a class="popup" href="{% url coconuts.views.add_file folder.path %}"><i class="icon-picture"></i> {% trans "Add a file" %}</a></li>
-    <li><a class="popup" href="{% url coconuts.views.add_folder folder.path %}"><i class="icon-folder-close"></i> {% trans "Create a folder" %}</a></li>
+    <li><a class="popup" href="{% url 'coconuts.views.add_file' folder.path %}"><i class="icon-picture"></i> {% trans "Add a file" %}</a></li>
+    <li><a class="popup" href="{% url 'coconuts.views.add_folder' folder.path %}"><i class="icon-folder-close"></i> {% trans "Create a folder" %}</a></li>
 {% endif %}
 {% if can_manage %}
     <li><a class="popup" href="{{ folder.share.manage_url }}"><i class="icon-key"></i> {% trans "Manage this share's permissions" %}</a></li>
@@ -47,7 +47,7 @@
   <div class="filename"><a href="{{ dir.url }}"><img src="{% coconuts_static "img/folder.png" %}"/>{{ dir }}</a></div>
   <div class="filesize"></div>
 {% if can_write %}
-  <div class="fileactions" title="{% trans "Delete this folder" %}"><a class="popup" href="{% url coconuts.views.delete dir.path %}?back={{ folder.url|urlencode }}&amp;next={{ folder.url|urlencode }}"><i class="icon-remove"></i> {% trans "Delete" %}</a></div>
+  <div class="fileactions" title="{% trans "Delete this folder" %}"><a class="popup" href="{% url 'coconuts.views.delete' dir.path %}?back={{ folder.url|urlencode }}&amp;next={{ folder.url|urlencode }}"><i class="icon-remove"></i> {% trans "Delete" %}</a></div>
 {% endif %}
 </div>
 {% endfor %}
@@ -56,7 +56,7 @@
 
 <ul class="thumbnails">
 {% for photo in photos %}
-<li><a class="thumbnail" href="{{ photo.url }}"><img src="{% url coconuts.views.render photo.path %}?size=128" alt="{{ photo }}"/></a></li>
+<li><a class="thumbnail" href="{{ photo.url }}"><img src="{% url 'coconuts.views.render' photo.path %}?size=128" alt="{{ photo }}"/></a></li>
 {% endfor %}
 </ul>
 
@@ -67,7 +67,7 @@
 <div class="filename"><a href="{{ file.url }}"><img src="{% coconuts_mimeicon file.name %}"/>{{ file }}</a></div>
 <div class="filesize">{% filesize file.filesize %}</div>
 {% if can_write %}
-<div class="fileactions" title="{% trans "Delete this file" %}"><a class="popup" href="{% url coconuts.views.delete file.path %}?back={{ folder.url|urlencode }}&amp;next={{ folder.url|urlencode }}"><i class="icon-remove"></i> {% trans "Delete" %}</a></div>
+<div class="fileactions" title="{% trans "Delete this file" %}"><a class="popup" href="{% url 'coconuts.views.delete' file.path %}?back={{ folder.url|urlencode }}&amp;next={{ folder.url|urlencode }}"><i class="icon-remove"></i> {% trans "Delete" %}</a></div>
 {% endif %}
 </div>
 {% endfor %}
