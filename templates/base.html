@@ -3,6 +3,7 @@
 <head>
 <title>{% block title %}{% endblock %}</title>
 {% load i18n %}
+{% load url from future %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/base.css"/>
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/bootstrap.min.css"/>
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/bootstrap-responsive.min.css"/>
@@ -17,7 +18,7 @@
     <div id="branding">{% block branding %}{% endblock %}</div>
     <div id="user-tools">
 {% if user.is_authenticated %}
-<a href="{% url django.contrib.auth.views.logout %}">{% trans "Log out" %}</a>
+<a href="{% url 'django.contrib.auth.views.logout' %}">{% trans "Log out" %}</a>
 {% else %}
 {% comment %}FIXME : fix hard-coded URL{% endcomment %}
 <a href="{{ login_url }}?next=/">{% trans "Log in" %}</a>
