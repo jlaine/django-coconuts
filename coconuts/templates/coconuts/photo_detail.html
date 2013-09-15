@@ -15,10 +15,10 @@
 </div>
 <!-- preload previous / next images -->
 {% if nav.previous %}
-<img style="display:none" src="{% url coconuts.views.render nav.previous.path %}?size={{ size }}" alt="{{ nav.previous }}"/>
+<img style="display:none" src="{% url 'coconuts.views.render' nav.previous.path %}?size={{ size }}" alt="{{ nav.previous }}"/>
 {% endif %}
 {% if nav.next %}
-<img style="display:none" src="{% url coconuts.views.render nav.next.path %}?size={{ size }}" alt="{{ nav.next }}"/>
+<img style="display:none" src="{% url 'coconuts.views.render' nav.next.path %}?size={{ size }}" alt="{{ nav.next }}"/>
 {% endif %}
 
 <div class="well photo-footer">
@@ -33,9 +33,9 @@
 {% endif %}
 </ul>
 <div class="photo-actions">
-    <a class="btn" href="{% url coconuts.views.download photo.path %}"><i class="icon-download"></i> {% trans "Download" %}</a>
+    <a class="btn" href="{% url 'coconuts.views.download' photo.path %}"><i class="icon-download"></i> {% trans "Download" %}</a>
 {% if can_write %}
-    <a class="btn btn-danger popup" href="{% url coconuts.views.delete photo.path %}?back={{ photo.url|urlencode }}&amp;next={% if nav.next %}{{ nav.next.url|urlencode }}{% else %}{{ folder.url|urlencode }}{% endif %}"><i class="icon-remove"></i> {% trans "Delete" %}</a>
+    <a class="btn btn-danger popup" href="{% url 'coconuts.views.delete' photo.path %}?back={{ photo.url|urlencode }}&amp;next={% if nav.next %}{{ nav.next.url|urlencode }}{% else %}{{ folder.url|urlencode }}{% endif %}"><i class="icon-remove"></i> {% trans "Delete" %}</a>
 {% endif %}
 </div>
 {% endblock %}
