@@ -4,7 +4,7 @@ config(['$httpProvider', '$routeProvider', function($httpProvider, $routeProvide
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]).
-controller('FolderCtrl', ['$http', '$scope', 'settings', function($http, $scope, settings) {
+controller('FolderCtrl', ['$http', '$location', '$scope', 'settings', function($http, $location, $scope, settings) {
     var url = window.location.pathname;
     $scope.current = {
         url: window.location.pathname
@@ -13,6 +13,14 @@ controller('FolderCtrl', ['$http', '$scope', 'settings', function($http, $scope,
     $http.get('/images/contents' + url).success(function(contents) {
         $scope.contents = contents;
     });
+
+    $scope.viewPhoto = function(photo) {
+        console.log('view : ' + photo.path);
+        var idx = $scope.contents.photos.indexOf(photo);
+        $scope.previousPhoto = $scope.contents.photos[idx-1];
+        $scope.currentPhoto = photo;
+        $scope.nextPhoto = $scope.contents.photos[idx+1];
+    }
 }]).
 factory('settings', ['$http', function($http) {
     return {
