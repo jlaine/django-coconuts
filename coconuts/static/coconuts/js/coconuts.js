@@ -25,6 +25,10 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'settings', function($
         }
     }
 
+    $scope.promptDelete = function(obj) {
+        $scope.deleteTarget = obj;
+        $scope.deleteFolder = false;
+    };
     $scope.doDelete = function() {
         $http.post(settings.coconuts_root + 'delete/' + $scope.deleteTarget.path).success(function() {
             $scope.deleteTarget = undefined;
