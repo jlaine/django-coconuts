@@ -76,8 +76,8 @@
 <div ng-show="currentPhoto">
     <div class="thumbnail" style="position: relative" ng-show="currentPhoto">
         <img src="{{ settings.coconuts_root}}images/render/{{ currentPhoto.path }}?size=1024" alt="{{ currentPhoto.name }}"/>
-        <a class="left carousel-control" href="" ng-click="viewPhoto(previousPhoto)" ng-show="previousPhoto">&lsaquo;</a>
-        <a class="right carousel-control" href="" ng-click="viewPhoto(nextPhoto)" ng-show="nextPhoto">&rsaquo;</a>
+        <a class="left carousel-control" ng-href="#/{{ previousPhoto.path }}" ng-show="previousPhoto">&lsaquo;</a>
+        <a class="right carousel-control" ng-href="#/{{ nextPhoto.path }}" ng-show="nextPhoto">&rsaquo;</a>
     </div>
 
     <div class="well photo-footer">
@@ -88,7 +88,7 @@
             <li title="The aperture and exposure time for this picture"><i class="icon-wrench"></i> {{ currentPhoto.settings }}</li>
         </ul>
         <div class="photo-actions">
-            <a class="btn" href="{% url 'coconuts.views.download' photo.path %}"><i class="icon-download"></i> <span co-translate>Download</span></a>
+            <a class="btn" href="{{ settings.coconuts_root }}images/download/{{ currentPhoto.path }}"><i class="icon-download"></i> <span co-translate>Download</span></a>
         </div>
     </div>
 </div>

@@ -10,17 +10,32 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'settings', function($
         url: window.location.pathname
     };
     $scope.settings = settings;
+    $scope.contents = {photos: []};
+
+    function updatePhoto() {
+        var path = $location.path();
+        var photo, i;
+        for (i = 0; i < $scope.contents.photos.length; i++) {
+            photo = $scope.contents.photos[i];
+            if ('/' + photo.path == path) {
+                $scope.previousPhoto = $scope.contents.photos[i-1];
+                $scope.currentPhoto = photo;
+                $scope.nextPhoto = $scope.contents.photos[i+1];
+                return;
+            }
+            $scope.previousPhoto = undefined;
+            $scope.currentPhoto = undefined;
+            $scope.nextPhoto = undefined;
+        }
+    };
+
     $http.get('/images/contents' + url).success(function(contents) {
         $scope.contents = contents;
+        updatePhoto();
     });
 
-    $scope.viewPhoto = function(photo) {
-        console.log('view : ' + photo.path);
-        var idx = $scope.contents.photos.indexOf(photo);
-        $scope.previousPhoto = $scope.contents.photos[idx-1];
-        $scope.currentPhoto = photo;
-        $scope.nextPhoto = $scope.contents.photos[idx+1];
-    }
+    $scope.location = $location;
+    $scope.$watch('location.path()', updatePhoto);
 }]).
 factory('settings', ['$http', function($http) {
     return {
