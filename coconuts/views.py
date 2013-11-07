@@ -91,16 +91,13 @@ def add_file(request, path):
     filename = request.FILES['upload'].name
     filepath = os.path.join(folder.filepath(), request.FILES['upload'].name)
     if os.path.exists(filepath):
-        messages.warning(request, "File '%s' already exists." % filename)
-    else:
-        try:
-            fp = file(filepath, 'wb')
-            for chunk in request.FILES['upload'].chunks():
-                fp.write(chunk)
-            fp.close()
-            messages.info(request, "Uploaded file '%s'." % filename)
-        except:
-            messages.warning(request, "Failed to upload file '%s'." % filename)
+        return HttpResponseBadRequest()
+
+    fp = file(filepath, 'wb')
+    for chunk in request.FILES['upload'].chunks():
+        fp.write(chunk)
+    fp.close()
+
     return render_to_json({})
 
 @login_required
@@ -120,12 +117,9 @@ def add_folder(request, path):
         return HttpResponseBadRequest()
 
     foldername = form.cleaned_data['name']
-    try:
-        subfolder = Folder.create(os.path.join(folder.path, foldername))
-        notifications.create_folder(request.user, subfolder)
-        messages.info(request, "Created folder '%s'." % foldername)
-    except:
-        messages.warning(request, "Failed to create folder '%s'." % foldername)
+    subfolder = Folder.create(os.path.join(folder.path, foldername))
+    notifications.create_folder(request.user, subfolder)
+
     return render_to_json({})
 
 @login_required
