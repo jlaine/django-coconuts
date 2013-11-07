@@ -29,6 +29,7 @@ from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.utils.http import http_date, urlquote
 from django.utils.translation import ugettext as _
+from django.views.decorators.http import require_http_methods
 import django.views.static
 
 from coconuts import notifications
@@ -188,18 +189,11 @@ def rss(request,path):
         mimetype="application/rss+xml")
 
 @login_required
+@require_http_methods(['POST'])
 def delete(request, path):
     """Delete the given file."""
     if not path:
         return forbidden(request)
-
-    # navigation links
-    back_url = "/"
-    next_url = "/"
-    if request.REQUEST.has_key('next'):
-        next_url = request.REQUEST['next']
-    if request.REQUEST.has_key('back'):
-        back_url = request.REQUEST['back']
 
     # find target
     if File.isdir(path):
@@ -214,17 +208,9 @@ def delete(request, path):
     if not folder.has_perm('can_write', request.user):
         return forbidden(request)
 
-    # delete file then redirect user
-    if request.method == 'POST':
-        target.delete()
-        return redirect(next_url)
-
-    return render_to_response('coconuts/delete.html', FolderContext(request, folder, {
-        'is_folder': is_folder,
-        'target': target,
-        'back': back_url,
-        'next': next_url,
-    }))
+    # delete file or folder
+    target.delete()
+    return HttpResponse()
 
 @login_required
 def download(request, path):
