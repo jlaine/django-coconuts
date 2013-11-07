@@ -8,6 +8,13 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
     $scope.settings = settings;
     $scope.contents = {photos: []};
 
+    function updateList() {
+        $http.get(settings.coconuts_root + 'contents' + window.location.pathname).success(function(contents) {
+            $scope.contents = contents;
+            updatePhoto();
+        });
+    }
+
     function updatePhoto() {
         var path = $location.path();
         var photo, i;
@@ -33,6 +40,7 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
             transformRequest: function(data) { return data; }
         }).success(function() {
             $scope.addPrompt = false;
+            updateList();
         });
     };
 
@@ -44,6 +52,7 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
             transformRequest: function(data) { return data; }
         }).success(function() {
             $scope.createPrompt = false;
+            updateList();
         });
     };
 
@@ -55,16 +64,13 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
         $http.post(settings.coconuts_root + 'delete/' + $scope.deleteTarget.path).success(function() {
             $scope.deleteTarget = undefined;
             $location.path('');
+            updateList();
         });
     };
 
-    $http.get(settings.coconuts_root + 'contents' + window.location.pathname).success(function(contents) {
-        $scope.contents = contents;
-        updatePhoto();
-    });
-
     $scope.location = $location;
     $scope.$watch('location.path()', updatePhoto);
+    updateList();
 }]).
 directive('coFile', ['$parse', function($parse) {
     return {
