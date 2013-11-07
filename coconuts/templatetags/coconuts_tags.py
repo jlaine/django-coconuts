@@ -70,11 +70,10 @@ def coconuts_static(medium):
 register.simple_tag(coconuts_static)
 
 def filesize(size):
-    size = int(size)
     if size > MB:
-        return "%.1f MB" % (size / MB)
+        return "%.1f MB" % (float(size) / MB)
     elif size > KB:
-        return "%.1f kB" % (size / KB)
+        return "%.1f kB" % (float(size) / KB)
     else:
         return "%i B" % size
 register.simple_tag(filesize)
