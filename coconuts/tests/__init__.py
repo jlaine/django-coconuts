@@ -65,9 +65,16 @@ class FolderContentTest(BaseTest):
         self.client.login(username="test_user_1", password="test")
         response = self.client.get('/images/contents/')
         self.assertJson(response, {
+            'can_manage': True,
+            'can_write': True,
             'files': [],
             'folders': [
-                {'name': 'Foo', 'url': '/Foo/'},
+                {
+                    'filesize': 4096,
+                    'name': 'Foo',
+                    'path': 'Foo',
+                    'url': '/Foo/'
+                },
             ],
             'photos': [],
         })

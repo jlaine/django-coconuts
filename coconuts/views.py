@@ -53,19 +53,20 @@ def forbidden(request):
 
 def render_to_json(arg = {}):
     def encode_models(obj):
-        if isinstance(obj, File):
-            return {
+        if isinstance(obj, File) or isinstance(obj, Folder):
+            data = {
                 'filesize': obj.filesize(),
                 'name': obj.name(),
                 'path': obj.path,
                 'url': obj.url(),
             }
-        elif isinstance(obj, Folder):
-            return {
-                'name': obj.name(),
-                'path': obj.path,
-                'url': obj.url(),
-            }
+            if isinstance(obj, Photo):
+                data.update({
+                    'camera': obj.camera(),
+                    'settings': obj.settings(),
+                    'size': obj.size(),
+                })
+            return data
         raise TypeError(repr(obj) + " is not JSON serializable")
     data = json.dumps(arg, default=encode_models)
     return HttpResponse(data, content_type='application/json')

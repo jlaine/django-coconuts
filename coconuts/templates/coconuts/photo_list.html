@@ -73,14 +73,27 @@
     </div>
 </div>
 
-<div class="thumbnail" style="position: relative" ng-show="currentPhoto">
-    <img src="{{ settings.coconuts_root}}images/render/{{ currentPhoto.path }}?size=1024" alt="{{ currentPhoto.name }}"/>
-    <a class="left carousel-control" href="" ng-click="viewPhoto(previousPhoto)" ng-show="previousPhoto">&lsaquo;</a>
-    <a class="right carousel-control" href="" ng-click="viewPhoto(nextPhoto)" ng-show="nextPhoto">&rsaquo;</a>
+<div ng-show="currentPhoto">
+    <div class="thumbnail" style="position: relative" ng-show="currentPhoto">
+        <img src="{{ settings.coconuts_root}}images/render/{{ currentPhoto.path }}?size=1024" alt="{{ currentPhoto.name }}"/>
+        <a class="left carousel-control" href="" ng-click="viewPhoto(previousPhoto)" ng-show="previousPhoto">&lsaquo;</a>
+        <a class="right carousel-control" href="" ng-click="viewPhoto(nextPhoto)" ng-show="nextPhoto">&rsaquo;</a>
+    </div>
+
+    <div class="well photo-footer">
+        <ul class="nav nav-tabs nav-stacked photo-info">
+            <li title="The size of the original picture"><i class="icon-resize-full"></i> {{ currentPhoto.size[0] }} x {{ currentPhoto.size[1] }} pixels</li>
+            <li title="The size of the original picture"><i class="icon-file"></i> {{ currentPhoto.filesize | fileSize }}</li>
+            <li title="The camera used to take this picture"><i class="icon-camera"></i> {{ currentPhoto.camera }}</li>
+            <li title="The aperture and exposure time for this picture"><i class="icon-wrench"></i> {{ currentPhoto.settings }}</li>
+        </ul>
+        <div class="photo-actions">
+            <a class="btn" href="{% url 'coconuts.views.download' photo.path %}"><i class="icon-download"></i> <span co-translate>Download</span></a>
+        </div>
+    </div>
 </div>
 
 </div>
-
 {% endverbatim %}
 
 {% endif %}

@@ -207,6 +207,10 @@ class Folder:
         """Get the folder's full path."""
         return os.path.join(settings.COCONUTS_DATA_ROOT, url2path(self.path))
 
+    def filesize(self):
+        """Get the file's size."""
+        return os.path.getsize(self.filepath())
+
     def list(self):
         folders = []
         files = []
