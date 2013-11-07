@@ -72,6 +72,7 @@ def render_to_json(arg = {}):
     data = json.dumps(arg, default=encode_models)
     return HttpResponse(data, content_type='application/json')
 
+@login_required
 def add_file(request, path):
     try:
         folder = Folder(path)
@@ -105,6 +106,8 @@ def add_file(request, path):
         'form': form,
         'title': _('Add a file')}))
 
+@login_required
+@require_http_methods(['POST'])
 def add_folder(request, path):
     try:
         folder = Folder(path)
@@ -115,22 +118,18 @@ def add_folder(request, path):
     if not folder.has_perm('can_write', request.user):
         return forbidden(request)
 
-    if request.method == 'POST':
-        form = AddFolderForm(request.POST)
-        if form.is_valid():
-            foldername = form.cleaned_data['name']
-            try:
-                subfolder = Folder.create(os.path.join(folder.path, foldername))
-                notifications.create_folder(request.user, subfolder)
-                messages.info(request, "Created folder '%s'." % foldername)
-            except:
-                messages.warning(request, "Failed to create folder '%s'." % foldername)
-            return redirect(folder.url())
-    else:
-        form = AddFolderForm()
-    return render_to_response('coconuts/add_folder.html', FolderContext(request, folder, {
-        'form': form,
-        'title': _('Create a folder')}))
+    form = AddFolderForm(request.POST)
+    if not form.is_valid():
+        return HttpResponseBadRequest()
+
+    foldername = form.cleaned_data['name']
+    try:
+        subfolder = Folder.create(os.path.join(folder.path, foldername))
+        notifications.create_folder(request.user, subfolder)
+        messages.info(request, "Created folder '%s'." % foldername)
+    except:
+        messages.warning(request, "Failed to create folder '%s'." % foldername)
+    return HttpResponse()
 
 def browse(request, path):
     """Show the list of photos for the given folder."""

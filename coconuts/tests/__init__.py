@@ -126,11 +126,11 @@ class AddFolderTest(BaseTest):
         self.client.login(username="test_user_1", password="test")
 
         response = self.client.get('/images/add_folder/')
-        self.assertContains(response, 'Create a folder')
+        self.assertEquals(response.status_code, 405)
 
         # create folder
         response = self.client.post('/images/add_folder/', {'name': 'New folder'})
-        self.assertRedirects(response, '/')
+        self.assertEquals(response.status_code, 200)
 
         # check folder
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'New folder')
@@ -141,5 +141,9 @@ class AddFolderTest(BaseTest):
         Authenticated user cannot create a folder.
         """
         self.client.login(username="test_user_2", password="test")
+
         response = self.client.get('/images/add_folder/')
+        self.assertEquals(response.status_code, 405)
+
+        response = self.client.post('/images/add_folder/', {'name': 'New folder'})
         self.assertEquals(response.status_code, 403)

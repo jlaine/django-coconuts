@@ -25,6 +25,17 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'settings', function($
         }
     }
 
+    $scope.doCreate = function() {
+        var formData = new FormData();
+        formData.append('name', $scope.createName);
+        $http.post(settings.coconuts_root + 'add_folder' + window.location.pathname, formData, {
+            headers: { 'Content-Type': undefined },
+            transformRequest: function(data) { return data; }
+        }).success(function() {
+            $scope.createPrompt = false;
+        });
+    };
+
     $scope.promptDelete = function(obj) {
         $scope.deleteTarget = obj;
         $scope.deleteFolder = false;
