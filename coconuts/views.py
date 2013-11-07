@@ -71,19 +71,6 @@ def render_to_json(arg = {}):
     data = json.dumps(arg, default=encode_models)
     return HttpResponse(data, content_type='application/json')
 
-def make_nav(item, collection):
-    idx = collection.index(item)
-    nav = { 'number': idx +1, 'total': len(collection) }
-    if idx > 0:
-        nav['previous'] = collection[idx-1]
-    else:
-        nav['previous'] = None
-    if idx < len(collection) - 1:
-        nav['next'] = collection[idx+1]
-    else:
-        nav['next'] = None
-    return nav
-
 def add_file(request, path):
     try:
         folder = Folder(path)
@@ -145,13 +132,6 @@ def add_folder(request, path):
         'title': _('Create a folder')}))
 
 def browse(request, path):
-    if not path or path.endswith('/'):
-        return photo_list(request, path)
-    else:
-        return photo_detail(request, path)
-
-@login_required
-def photo_list(request, path):
     """Show the list of photos for the given folder."""
     try:
         folder = Folder(os.path.dirname(path))
@@ -162,16 +142,7 @@ def photo_list(request, path):
     if not folder.has_perm('can_read', request.user):
         return forbidden(request)
 
-    # list of sub-folders and photos
-    children, files, photos, mode = folder.list()
-    # keep only the children the user is allowed to read. This is only useful in '/'
-    allowed_children = [x for x in children if x.has_perm('can_read', request.user)]
-    return render_to_response('coconuts/photo_list.html', FolderContext(request, folder, {
-        'children': allowed_children,
-        'files': files,
-        'mode': mode,
-        'photos': photos,
-        }))
+    return render_to_response('coconuts/photo_list.html', FolderContext(request, folder, {}))
 
 @login_required
 def content_list(request, path):
@@ -216,27 +187,6 @@ def rss(request,path):
         FolderContext(request, folder, {'photos': photos}),
         mimetype="application/rss+xml")
 
-@login_required
-def photo_detail(request,path):
-    """Show the detailed view for the given photo."""
-    try:
-        folder = Folder(os.path.dirname(path))
-        photo = Photo(path)
-    except (File.DoesNotExist, Folder.DoesNotExist):
-        raise Http404
-
-    # check permissions
-    if not folder.has_perm('can_read', request.user):
-        return forbidden(request)
-
-    # navigation
-    children, files, photos, mode = folder.list()
-    return render_to_response('coconuts/photo_detail.html', FolderContext(request, folder, {
-        'photo': photo,
-        'size': PHOTO_SIZE,
-        'nav': make_nav(photo, photos),
-        }))
- 
 @login_required
 def delete(request, path):
     """Delete the given file."""
