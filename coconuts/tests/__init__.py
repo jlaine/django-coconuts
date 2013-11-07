@@ -47,14 +47,18 @@ class BaseTest(TestCase):
 class FolderContentTest(BaseTest):
     fixtures = ['test_users.json']
 
-    def test_as_anonymous(self):
+    def setUp(self):
+        super(FolderContentTest, self).setUp()
+        os.makedirs(os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo'))
+
+    def test_home_as_anonymous(self):
         """
         Anonymous users need to login.
         """
         response = self.client.get('/images/contents/')
         self.assertRedirects(response, '/accounts/login/?next=/images/contents/')
 
-    def test_as_superuser(self):
+    def test_home_as_superuser(self):
         """
         Authenticated super-user can browse the home folder.
         """
@@ -62,11 +66,13 @@ class FolderContentTest(BaseTest):
         response = self.client.get('/images/contents/')
         self.assertJson(response, {
             'files': [],
-            'folders': [],
+            'folders': [
+                {'name': 'Foo', 'url': '/Foo/'},
+            ],
             'photos': [],
         })
 
-    def test_as_user(self):
+    def test_home_as_user(self):
         """
         Authenticated user cannot browse the home folder.
         """
