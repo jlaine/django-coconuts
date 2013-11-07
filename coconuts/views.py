@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import json
 import os
 import time
 
@@ -23,7 +24,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseBadRequest
+from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.utils.http import http_date, urlquote
@@ -49,6 +50,21 @@ def forbidden(request):
     resp = render_to_response('coconuts/forbidden.html', RequestContext(request))
     resp.status_code = 403
     return resp
+
+def render_to_json(arg = {}):
+    def encode_models(obj):
+        if isinstance(obj, File):
+            return {
+                'name': obj.name(),
+            }
+        elif isinstance(obj, Folder):
+            return {
+                'name': obj.name(),
+                'url': obj.url(),
+            }
+        raise TypeError(repr(obj) + " is not JSON serializable")
+    data = json.dumps(arg, default=encode_models)
+    return HttpResponse(data, content_type='application/json')
 
 def make_nav(item, collection):
     idx = collection.index(item)
@@ -151,6 +167,28 @@ def photo_list(request, path):
         'mode': mode,
         'photos': photos,
         }))
+
+@login_required
+def content_list(request, path):
+    """Show the list of photos for the given folder."""
+    try:
+        folder = Folder(os.path.dirname(path))
+    except Folder.DoesNotExist:
+        raise Http404
+
+    # check permissions
+    if not folder.has_perm('can_read', request.user):
+        return forbidden(request)
+
+    # list of sub-folders and photos
+    children, files, photos, mode = folder.list()
+    # keep only the children the user is allowed to read. This is only useful in '/'
+    allowed_children = [x for x in children if x.has_perm('can_read', request.user)]
+    return render_to_json({
+        'files': files,
+        'folders': allowed_children,
+        'photos': photos,
+    })
 
 @login_required
 def rss(request,path):
