@@ -76,7 +76,10 @@ class FolderContentTest(BaseTest):
                     'url': '/Foo/'
                 },
             ],
+            'name': '',
             'photos': [],
+            'path': '',
+            'url': '/',
         })
 
     def test_home_as_user(self):
@@ -103,7 +106,7 @@ class HomeTest(BaseTest):
         """
         self.client.login(username="test_user_1", password="test")
         response = self.client.get('/')
-        self.assertContains(response, '<h1>Shares</h1>')
+        self.assertContains(response, '<h1>')
 
     def test_as_user(self):
         """
