@@ -5,10 +5,6 @@ config(['$httpProvider', '$routeProvider', function($httpProvider, $routeProvide
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]).
 controller('FolderCtrl', ['$http', '$location', '$scope', 'settings', function($http, $location, $scope, settings) {
-    var url = window.location.pathname;
-    $scope.current = {
-        url: window.location.pathname
-    };
     $scope.settings = settings;
     $scope.contents = {photos: []};
 
@@ -29,7 +25,7 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'settings', function($
         }
     };
 
-    $http.get('/images/contents' + url).success(function(contents) {
+    $http.get('/images/contents' + window.location.pathname).success(function(contents) {
         $scope.contents = contents;
         updatePhoto();
     });
@@ -39,7 +35,7 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'settings', function($
 }]).
 factory('settings', ['$http', function($http) {
     return {
-        coconuts_root: '/',
+        coconuts_root: '/images/',
         static_root: '/static/coconuts/'
     };
 }]).

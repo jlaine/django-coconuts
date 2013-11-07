@@ -12,70 +12,62 @@
 {% endblock %}
 
 {% block content %}
-<h1>{{ folder }}</h1>
-
-{% if can_write %}
-<div class="btn-group object-tools">
-<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-{% trans "Operations" %}
-<span class="caret"></span>
-</a>
-<ul class="dropdown-menu">
-{% if can_write %}
-    <li><a class="popup" href="{% url 'coconuts.views.add_file' folder.path %}"><i class="icon-picture"></i> {% trans "Add a file" %}</a></li>
-    <li><a class="popup" href="{% url 'coconuts.views.add_folder' folder.path %}"><i class="icon-folder-close"></i> {% trans "Create a folder" %}</a></li>
-{% endif %}
-{% if can_manage %}
-    <li><a class="popup" href="{{ folder.share.manage_url }}"><i class="icon-key"></i> {% trans "Manage this share's permissions" %}</a></li>
-{% endif %}
-{% if user.is_staff %}
-    <li><a href="/admin/auth/user/"><i class="icon-user"></i> {% trans "Manage user accounts" %}</a></li>
-{% endif %}
-</ul>
-</div>
-{% endif %}
-
 {% for message in messages %}
 <div class="message">{{ message|escape }}</div>
 {% endfor %}
 
-{% if not children and not files %}
-<p>{% trans "There are no files in this folder." %}</p>
-{% else %}
-
 {% verbatim %}
 <div ng-app="coconuts" ng-controller="FolderCtrl">
-<div class="file" title="{{ folder.filedate }}" ng-repeat="folder in contents.folders">
-    <div class="filename"><a href="{{ folder.url }}"><img src="{{ settings.static_root }}img/folder.png"/>{{ folder.name }}</a></div>
-    <div class="filesize"></div>
-    <div class="fileactions" ng-show="contents.can_write">
-        <a class="popup" href="{{ settings.coconuts_root }}images/delete/{{ folder.path }}?back={{ current.url|urlencode }}&amp;next={{ current.url|urlencode }}"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
-    </div>
+
+<h1>{{ contents.name }}</h1>
+
+<div class="btn-group object-tools" ng-show="contents.can_write && !currentPhoto">
+    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+        <span co-translate>Operations</span>
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+        <li ng-show="contents.can_write"><a class="popup" href="{{ settings.coconuts_root }}add_file/{{ contents.path }}"><i class="icon-picture"></i> <span co-translate>Add a file</span></a></li>
+        <li ng-show="contents.can_write"><a class="popup" href="{{ settings.coconuts_root }}add_folder/{{ contents.path }}"><i class="icon-folder-close"></i> <span co-translate>Create a folder</span></a></li>
+        <li ng-show="contents.can_manage"><a class="popup" href="{{ settings.coconuts_root }}manage/{{ contents.path }}"><i class="icon-key"></i> <span co-translate>Manage this share's permissions</span></a></li>
+        <li ng-show="contents.can_manage"><a href="/admin/auth/user/"><i class="icon-user"></i> <span co-translate>Manage user accounts</span></a></li>
+    </ul>
 </div>
 
-<div class ng-hide="currentPhoto" ng-switch="contents.files.length == contents.photos.length">
-    <div ng-switch-when="false">
-        <div class="file" title="{{ file.filedate }}" ng-repeat="file in contents.files">
-            <div class="filename"><a href="{{ file.url }}"><img src="{{ file.name | fileIcon }}"/>{{ file.name }}</a></div>
-            <div class="filesize">{{ file.filesize | fileSize }}</div>
-            <div class="fileactions" ng-show="contents.can_write">
-                <a class="popup" href="{{ settings.coconuts_root }}images/delete/{{ file.path }}?back={{ current.url|urlencode }}&amp;next={{ current.url|urlencode }}"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
-            </div>
+<div ng-hide="currentPhoto">
+    <p ng-show="contents.files.length == 0 && contents.folders.length == 0" co-translate>There are no files in this folder.</p>
+
+    <div class="file" title="{{ folder.filedate }}" ng-repeat="folder in contents.folders">
+        <div class="filename"><a href="{{ folder.url }}"><img ng-src="{{ settings.static_root }}img/folder.png"/>{{ folder.name }}</a></div>
+        <div class="filesize"></div>
+        <div class="fileactions" ng-show="contents.can_write">
+            <a class="popup" href="{{ settings.coconuts_root }}delete/{{ folder.path }}?back={{ contents.url|urlencode }}&amp;next={{ contents.url|urlencode }}"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
         </div>
     </div>
-    <div ng-switch-when="true">
-        <ul class="thumbnails">
-            <li ng-repeat="photo in contents.photos">
-                <a class="thumbnail" href="" ng-click="viewPhoto(photo)"><img src="{{ settings.coconuts_root }}images/render/{{ photo.path }}?size=128" alt="{{ photo.name }}"/></a>
-                <a class="thumbnail" href="{{ photo.url }}"><img src="{{ settings.coconuts_root }}images/render/{{ photo.path }}?size=128" alt="{{ photo.name }}"/></a>
-            </li>
-        </ul>
+
+    <div ng-switch="contents.files.length == contents.photos.length">
+        <div ng-switch-when="false">
+            <div class="file" title="{{ file.filedate }}" ng-repeat="file in contents.files">
+                <div class="filename"><a href="{{ file.url }}"><img ng-src="{{ file.name | fileIcon }}"/>{{ file.name }}</a></div>
+                <div class="filesize">{{ file.filesize | fileSize }}</div>
+                <div class="fileactions" ng-show="contents.can_write">
+                    <a class="popup" href="{{ settings.coconuts_root }}delete/{{ file.path }}?back={{ contents.url|urlencode }}&amp;next={{ contents.url|urlencode }}"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
+                </div>
+            </div>
+        </div>
+        <div ng-switch-when="true">
+            <ul class="thumbnails">
+                <li ng-repeat="photo in contents.photos">
+                    <a class="thumbnail" href="#/{{ photo.path }}"><img ng-src="{{ settings.coconuts_root }}render/{{ photo.path }}?size=128" alt="{{ photo.name }}"/></a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 
 <div ng-show="currentPhoto">
     <div class="thumbnail" style="position: relative" ng-show="currentPhoto">
-        <img src="{{ settings.coconuts_root}}images/render/{{ currentPhoto.path }}?size=1024" alt="{{ currentPhoto.name }}"/>
+        <img ng-src="{{ settings.coconuts_root}}render/{{ currentPhoto.path }}?size=1024" alt="{{ currentPhoto.name }}"/>
         <a class="left carousel-control" ng-href="#/{{ previousPhoto.path }}" ng-show="previousPhoto">&lsaquo;</a>
         <a class="right carousel-control" ng-href="#/{{ nextPhoto.path }}" ng-show="nextPhoto">&rsaquo;</a>
     </div>
@@ -88,7 +80,8 @@
             <li title="The aperture and exposure time for this picture"><i class="icon-wrench"></i> {{ currentPhoto.settings }}</li>
         </ul>
         <div class="photo-actions">
-            <a class="btn" href="{{ settings.coconuts_root }}images/download/{{ currentPhoto.path }}"><i class="icon-download"></i> <span co-translate>Download</span></a>
+            <a class="btn btn-danger popup" href="{{ settings.coconuts_root}}delete/{{ currentPhoto.path }}?back={{ contents.url|urlencode }}&amp;next={{ contents.url|urlencode }}" ng-show="contents.can_write"><i class="icon-remove"></i> <span co-translate>Delete</a>
+            <a class="btn" href="{{ settings.coconuts_root }}download/{{ currentPhoto.path }}"><i class="icon-download"></i> <span co-translate>Download</span></a>
         </div>
     </div>
 </div>
@@ -96,5 +89,4 @@
 </div>
 {% endverbatim %}
 
-{% endif %}
 {% endblock %}

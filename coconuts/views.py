@@ -192,6 +192,10 @@ def content_list(request, path):
     return render_to_json({
         'can_manage': folder.has_perm('can_manage', request.user),
         'can_write': folder.has_perm('can_write', request.user),
+        'name': folder.name(),
+        'path': folder.path,
+        'url': folder.url(),
+
         'files': files,
         'folders': allowed_children,
         'photos': photos,
