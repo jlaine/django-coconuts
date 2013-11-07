@@ -1,0 +1,17 @@
+{
+  "name": "coconuts",
+  "version": "0.2.1",
+  "private": true,
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.1.1",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-karma": "~0.6.1",
+    "karma": "~0.10.1",
+    "karma-coverage": "~0.1.0",
+    "karma-jasmine": "~0.1.0",
+    "karma-junit-reporter": "~0.1.0",
+    "karma-ng-scenario": "~0.1.0",
+    "karma-phantomjs-launcher": "~0.1.0"
+  }
+}

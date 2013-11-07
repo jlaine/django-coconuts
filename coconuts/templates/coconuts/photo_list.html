@@ -46,10 +46,10 @@
 {% verbatim %}
 <div ng-app="coconuts" ng-controller="FolderCtrl">
 <div class="file" title="{{ folder.filedate }}" ng-repeat="folder in contents.folders">
-    <div class="filename"><a href="{{ folder.url }}"><img src="/static/coconuts/img/folder.png"/>{{ folder.name }}</a></div>
+    <div class="filename"><a href="{{ folder.url }}"><img src="{{ settings.static_root }}img/folder.png"/>{{ folder.name }}</a></div>
     <div class="filesize"></div>
     <div class="fileactions" ng-show="contents.can_write">
-        <a class="popup" href="/images/delete/{{ folder.path }}?back={{ current.url|urlencode }}&amp;next={{ current.url|urlencode }}"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
+        <a class="popup" href="{{ settings.coconuts_root }}images/delete/{{ folder.path }}?back={{ current.url|urlencode }}&amp;next={{ current.url|urlencode }}"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
     </div>
 </div>
 
@@ -59,14 +59,14 @@
             <div class="filename"><a href="{{ file.url }}"><img src="{{ file.name | fileIcon }}"/>{{ file.name }}</a></div>
             <div class="filesize">{{ file.filesize | fileSize }}</div>
             <div class="fileactions" ng-show="contents.can_write">
-                <a class="popup" href="/images/delete/{{ file.path }}?back={{ current.url|urlencode }}&amp;next={{ current.url|urlencode }}"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
+                <a class="popup" href="{{ settings.coconuts_root }}images/delete/{{ file.path }}?back={{ current.url|urlencode }}&amp;next={{ current.url|urlencode }}"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
             </div>
         </div>
     </div>
     <div ng-switch-when="true">
         <ul class="thumbnails">
             <li ng-repeat="photo in contents.photos">
-                <a class="thumbnail" href="{{ photo.url }}"><img src="/images/render/{{ photo.path }}?size=128" alt="{{ photo.name }}"/></a>
+                <a class="thumbnail" href="{{ photo.url }}"><img src="{{ settings.coconuts_root }}images/render/{{ photo.path }}?size=128" alt="{{ photo.name }}"/></a>
             </li>
         </ul>
     </div>

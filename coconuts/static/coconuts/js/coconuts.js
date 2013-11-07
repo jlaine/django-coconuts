@@ -4,29 +4,36 @@ config(['$httpProvider', '$routeProvider', function($httpProvider, $routeProvide
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]).
-controller('FolderCtrl', ['$http', '$scope', function($http, $scope) {
+controller('FolderCtrl', ['$http', '$scope', 'settings', function($http, $scope, settings) {
     var url = window.location.pathname;
     $scope.current = {
         url: window.location.pathname
     };
+    $scope.settings = settings;
     $http.get('/images/contents' + url).success(function(contents) {
         $scope.contents = contents;
     });
 }]).
-filter('fileIcon', [function() {
-    var mimeroot = '/static/coconuts/img/mimetypes/';
+factory('settings', ['$http', function($http) {
+    return {
+        coconuts_root: '/',
+        static_root: '/static/coconuts/'
+    };
+}]).
+filter('fileIcon', ['settings', function(settings) {
+    var mime_root = settings.static_root + 'img/mimetypes/';
     return function(name) {
         var idx = name.lastIndexOf('.');
         if (idx !== -1) {
             var extension = name.slice(idx + 1, name.length).toLowerCase();
             if (extension == 'gif' || extension == 'jpg' || extension == 'jpeg' || extension == 'png') {
-                return mimeroot + 'image-jpeg.png';
+                return mime_root + 'image-jpeg.png';
             } else if (extension == 'py') {
-                return mimeroot + 'text-x-python.png';
+                return mime_root + 'text-x-python.png';
             }
         }
         return mimeroot + 'unknown.png';
-    }
+    };
 }]).
 filter('fileSize', [function() {
     var MB = 1024 * 1024;
