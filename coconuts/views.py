@@ -55,11 +55,15 @@ def render_to_json(arg = {}):
     def encode_models(obj):
         if isinstance(obj, File):
             return {
+                'filesize': obj.filesize(),
                 'name': obj.name(),
+                'path': obj.path,
+                'url': obj.url(),
             }
         elif isinstance(obj, Folder):
             return {
                 'name': obj.name(),
+                'path': obj.path,
                 'url': obj.url(),
             }
         raise TypeError(repr(obj) + " is not JSON serializable")
@@ -185,6 +189,8 @@ def content_list(request, path):
     # keep only the children the user is allowed to read. This is only useful in '/'
     allowed_children = [x for x in children if x.has_perm('can_read', request.user)]
     return render_to_json({
+        'can_manage': folder.has_perm('can_manage', request.user),
+        'can_write': folder.has_perm('can_write', request.user),
         'files': files,
         'folders': allowed_children,
         'photos': photos,

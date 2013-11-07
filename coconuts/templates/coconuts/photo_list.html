@@ -42,37 +42,37 @@
 {% if not children and not files %}
 <p>{% trans "There are no files in this folder." %}</p>
 {% else %}
-{% for dir in children %}
-<div class="file" title="{{ dir.filedate }}">
-  <div class="filename"><a href="{{ dir.url }}"><img src="{% coconuts_static "img/folder.png" %}"/>{{ dir }}</a></div>
-  <div class="filesize"></div>
-{% if can_write %}
-  <div class="fileactions" title="{% trans "Delete this folder" %}"><a class="popup" href="{% url 'coconuts.views.delete' dir.path %}?back={{ folder.url|urlencode }}&amp;next={{ folder.url|urlencode }}"><i class="icon-remove"></i> {% trans "Delete" %}</a></div>
-{% endif %}
+
+{% verbatim %}
+<div ng-app="coconuts" ng-controller="FolderCtrl">
+<div class="file" title="{{ folder.filedate }}" ng-repeat="folder in contents.folders">
+    <div class="filename"><a href="{{ folder.url }}"><img src="/static/coconuts/img/folder.png"/>{{ folder.name }}</a></div>
+    <div class="filesize"></div>
+    <div class="fileactions" ng-show="contents.can_write">
+        <a class="popup" href="/images/delete/{{ folder.path }}?back={{ current.url|urlencode }}&amp;next={{ current.url|urlencode }}"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
+    </div>
 </div>
-{% endfor %}
 
-{% ifequal mode "photos" %}
-
-<ul class="thumbnails">
-{% for photo in photos %}
-<li><a class="thumbnail" href="{{ photo.url }}"><img src="{% url 'coconuts.views.render' photo.path %}?size=128" alt="{{ photo }}"/></a></li>
-{% endfor %}
-</ul>
-
-{% else %}
-
-{% for file in files %}
-<div class="file" title="{{ file.filedate }}">
-<div class="filename"><a href="{{ file.url }}"><img src="{% coconuts_mimeicon file.name %}"/>{{ file }}</a></div>
-<div class="filesize">{% filesize file.filesize %}</div>
-{% if can_write %}
-<div class="fileactions" title="{% trans "Delete this file" %}"><a class="popup" href="{% url 'coconuts.views.delete' file.path %}?back={{ folder.url|urlencode }}&amp;next={{ folder.url|urlencode }}"><i class="icon-remove"></i> {% trans "Delete" %}</a></div>
-{% endif %}
+<div class ng-switch="contents.files.length == contents.photos.length">
+    <div ng-switch-when="false">
+        <div class="file" title="{{ file.filedate }}" ng-repeat="file in contents.files">
+            <div class="filename"><a href="{{ file.url }}"><img src="{{ file.name | fileIcon }}"/>{{ file.name }}</a></div>
+            <div class="filesize">{{ file.filesize | fileSize }}</div>
+            <div class="fileactions" ng-show="contents.can_write">
+                <a class="popup" href="/images/delete/{{ file.path }}?back={{ current.url|urlencode }}&amp;next={{ current.url|urlencode }}"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
+            </div>
+        </div>
+    </div>
+    <div ng-switch-when="true">
+        <ul class="thumbnails">
+            <li ng-repeat="photo in contents.photos">
+                <a class="thumbnail" href="{{ photo.url }}"><img src="/images/render/{{ photo.path }}?size=128" alt="{{ photo.name }}"/></a>
+            </li>
+        </ul>
+    </div>
 </div>
-{% endfor %}
-
-{% endifequal %}
+</div>
+{% endverbatim %}
 
 {% endif %}
 {% endblock %}
