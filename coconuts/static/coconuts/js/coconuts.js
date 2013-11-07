@@ -70,7 +70,7 @@ directive('coFile', ['$parse', function($parse) {
     return {
         restrict: 'A',
         link: function(scope, elm, attrs) {
-            var model = $parse(attrs.svFile);
+            var model = $parse(attrs.coFile);
             elm.bind('change', function(evt) {
                 scope.$apply(function() {
                     model.assign(scope, evt.target.files[0]);
