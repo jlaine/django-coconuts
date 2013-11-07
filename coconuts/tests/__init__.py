@@ -125,10 +125,11 @@ class AddFileTest(BaseTest):
         """
         self.client.login(username="test_user_1", password="test")
 
+        # GET fails
         response = self.client.get('/images/add_file/')
         self.assertEquals(response.status_code, 405)
 
-        # POST succeedscreate folder
+        # POST succeeds
         data_path = os.path.join(os.path.dirname(__file__), 'folder.png')
         response = self.client.post('/images/add_file/', {'upload': open(data_path, 'rb')})
         self.assertJson(response, {})
@@ -171,3 +172,46 @@ class AddFolderTest(BaseTest):
         # POST fails
         response = self.client.post('/images/add_folder/', {'name': 'New folder'})
         self.assertEquals(response.status_code, 403)
+
+class DeleteFileTest(BaseTest):
+    fixtures = ['test_users.json']
+
+    def test_as_superuser(self):
+        """
+        Authenticated super-user can create a folder.
+        """
+        self.client.login(username="test_user_1", password="test")
+
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'folder.png')
+        open(data_path, 'w').write('foo')
+
+        # GET fails
+        response = self.client.get('/images/delete/folder.png')
+        self.assertEquals(response.status_code, 405)
+
+        # POST succeeds
+        response = self.client.post('/images/delete/folder.png')
+        self.assertJson(response, {})
+
+        # check folder
+        self.assertFalse(os.path.exists(data_path))
+
+    def test_as_user(self):
+        """
+        Authenticated super-user can create a folder.
+        """
+        self.client.login(username="test_user_2", password="test")
+
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'folder.png')
+        open(data_path, 'w').write('foo')
+
+        # GET fails
+        response = self.client.get('/images/delete/folder.png')
+        self.assertEquals(response.status_code, 405)
+
+        # POST succeeds
+        response = self.client.post('/images/delete/folder.png')
+        self.assertEquals(response.status_code, 403)
+
+        # check folder
+        self.assertTrue(os.path.exists(data_path))
