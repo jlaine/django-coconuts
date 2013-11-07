@@ -4,7 +4,7 @@ config(['$httpProvider', '$routeProvider', function($httpProvider, $routeProvide
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]).
-controller('FolderCtrl', ['$http', '$location', '$scope', 'settings', function($http, $location, $scope, settings) {
+controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings', function($http, $location, $scope, FormData, settings) {
     $scope.settings = settings;
     $scope.contents = {photos: []};
 
@@ -24,6 +24,17 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'settings', function($
             $scope.nextPhoto = undefined;
         }
     }
+
+    $scope.doAdd = function() {
+        var formData = new FormData();
+        formData.append('file', $scope.addFile);
+        $http.post(settings.coconuts_root + 'add_file' + window.location.pathname, formData, {
+            headers: { 'Content-Type': undefined },
+            transformRequest: function(data) { return data; }
+        }).success(function() {
+            $scope.addPrompt = false;
+        });
+    };
 
     $scope.doCreate = function() {
         var formData = new FormData();
@@ -54,6 +65,22 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'settings', function($
 
     $scope.location = $location;
     $scope.$watch('location.path()', updatePhoto);
+}]).
+directive('coFile', ['$parse', function($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, elm, attrs) {
+            var model = $parse(attrs.svFile);
+            elm.bind('change', function(evt) {
+                scope.$apply(function() {
+                    model.assign(scope, evt.target.files[0]);
+                });
+            });
+        }
+    };
+}]).
+factory('FormData', [function() {
+    return FormData;
 }]).
 factory('settings', ['$http', function($http) {
     return {

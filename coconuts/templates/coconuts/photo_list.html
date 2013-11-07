@@ -27,7 +27,7 @@
         <span class="caret"></span>
     </a>
     <ul class="dropdown-menu">
-        <li ng-show="contents.can_write"><a class="popup" href="{{ settings.coconuts_root }}add_file/{{ contents.path }}"><i class="icon-picture"></i> <span co-translate>Add a file</span></a></li>
+        <li ng-show="contents.can_write"><a class="popup" href="" ng-click="addPrompt = true"><i class="icon-picture"></i> <span co-translate>Add a file</span></a></li>
         <li ng-show="contents.can_write"><a href="" ng-click="createPrompt = true"><i class="icon-folder-close"></i> <span co-translate>Create a folder</span></a></li>
         <li ng-show="contents.can_manage"><a class="popup" href="{{ settings.coconuts_root }}manage/{{ contents.path }}"><i class="icon-key"></i> <span co-translate>Manage this share's permissions</span></a></li>
         <li ng-show="contents.can_manage"><a href="/admin/auth/user/"><i class="icon-user"></i> <span co-translate>Manage user accounts</span></a></li>
@@ -86,35 +86,50 @@
     </div>
 </div>
 
-<div class="modal" ng-show="deleteTarget">
-  <div class="modal-header">
-      <button type="button" class="close" aria-hidden="true" ng-click="deleteTarget = undefined">&times;</button>
-      <h3 co-translate>Really delete "{{ deleteTarget.name }}"?</h3>
-  </div>
-  <div class="modal-body">
-    <img ng-src="{{ settings.coconuts_root }}render/{{ deleteTarget.path }}?size=128" alt="{{ deleteTarget.name }}" style="vertical-align: center; display: inline"/>
-    <p co-translate ng-show="deleteFolder">Are you sure you want to delete the folder "{{ deleteTarget.name }}" and all its contents?</p>
-    <p co-translate ng-hide="deleteFolder">Are you sure you want to delete the file "{{ deleteTarget.name }}"?</p>
-</div>
-<div class="modal-footer">
-    <a class="btn btn-danger" href="" ng-click="doDelete()" co-translate>Yes, I'm sure</button>
-    <a class="btn" href="" ng-click="deleteTarget = undefined" co-translate>No, I'm not sure</a>
-</div>
+
+<div class="modal form-inline" ng-show="addPrompt">
+    <div class="modal-header">
+        <button type="button" class="close" aria-hidden="true" ng-click="addPrompt = false">&times;</button>
+        <h3><i class="icon-picture"></i> <span co-translate>Add a file</span></h3>
+    </div>
+    <div class="modal-body">
+        <label for="id_upload">Upload:</label>
+        <input id="id_upload" type="file" co-file="addFile">
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="doAdd()" co-translate>Save</button>
+    </div>
 </div>
 
-<form class="modal form-inline" method="post" ng-show="createPrompt">
-<div class="modal-header">
-    <button type="button" class="close" aria-hidden="true" ng-click="createPrompt = false">&times;</button>
-    <h3><i class="icon-folder-close"></i> <span co-translate>Create a folder</span></h3>
+<div class="modal form-inline" ng-show="createPrompt">
+    <div class="modal-header">
+        <button type="button" class="close" aria-hidden="true" ng-click="createPrompt = false">&times;</button>
+        <h3><i class="icon-folder-close"></i> <span co-translate>Create a folder</span></h3>
+    </div>
+    <div class="modal-body">
+        <label for="id_name">Name:</label>
+        <input id="id_name" name="name" type="text" ng-model="createName">
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="doCreate()" co-translate>Save</button>
+    </div>
 </div>
-<div class="modal-body">
-    <label for="id_name">Name:</label>
-    <input id="id_name" name="name" type="text" ng-model="createName">
+
+<div class="modal form-inline" ng-show="deleteTarget">
+    <div class="modal-header">
+        <button type="button" class="close" aria-hidden="true" ng-click="deleteTarget = undefined">&times;</button>
+        <h3 co-translate>Really delete "{{ deleteTarget.name }}"?</h3>
+    </div>
+    <div class="modal-body">
+        <img ng-src="{{ settings.coconuts_root }}render/{{ deleteTarget.path }}?size=128" alt="{{ deleteTarget.name }}" style="vertical-align: center; display: inline"/>
+        <p co-translate ng-show="deleteFolder">Are you sure you want to delete the folder "{{ deleteTarget.name }}" and all its contents?</p>
+        <p co-translate ng-hide="deleteFolder">Are you sure you want to delete the file "{{ deleteTarget.name }}"?</p>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-danger" href="" ng-click="doDelete()" co-translate>Yes, I'm sure</button>
+        <a class="btn" href="" ng-click="deleteTarget = undefined" co-translate>No, I'm not sure</a>
+    </div>
 </div>
-<div class="modal-footer">
-    <button class="btn btn-primary" ng-click="doCreate()">Save</button>
-</div>
-</form>
 
 </div>
 {% endverbatim %}
