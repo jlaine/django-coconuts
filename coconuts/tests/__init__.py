@@ -116,6 +116,27 @@ class HomeTest(BaseTest):
         response = self.client.get('/')
         self.assertEquals(response.status_code, 403)
 
+class AddFileTest(BaseTest):
+    fixtures = ['test_users.json']
+
+    def test_as_superuser(self):
+        """
+        Authenticated super-user can create a folder.
+        """
+        self.client.login(username="test_user_1", password="test")
+
+        response = self.client.get('/images/add_file/')
+        self.assertEquals(response.status_code, 405)
+
+        # POST succeedscreate folder
+        data_path = os.path.join(os.path.dirname(__file__), 'folder.png')
+        response = self.client.post('/images/add_file/', {'upload': open(data_path, 'rb')})
+        self.assertJson(response, {})
+
+        # check folder
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'folder.png')
+        self.assertTrue(os.path.exists(data_path))
+
 class AddFolderTest(BaseTest):
     fixtures = ['test_users.json']
 
@@ -125,12 +146,13 @@ class AddFolderTest(BaseTest):
         """
         self.client.login(username="test_user_1", password="test")
 
+        # GET fails
         response = self.client.get('/images/add_folder/')
         self.assertEquals(response.status_code, 405)
 
-        # create folder
+        # POST succeeds
         response = self.client.post('/images/add_folder/', {'name': 'New folder'})
-        self.assertEquals(response.status_code, 200)
+        self.assertJson(response, {})
 
         # check folder
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'New folder')
@@ -142,8 +164,10 @@ class AddFolderTest(BaseTest):
         """
         self.client.login(username="test_user_2", password="test")
 
+        # GET fails
         response = self.client.get('/images/add_folder/')
         self.assertEquals(response.status_code, 405)
 
+        # POST fails
         response = self.client.post('/images/add_folder/', {'name': 'New folder'})
         self.assertEquals(response.status_code, 403)

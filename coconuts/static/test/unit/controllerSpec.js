@@ -50,7 +50,7 @@ describe('Controllers', function() {
         it('should add file', function() {
             $httpBackend.expect('POST', '/images/add_file/context.html', function(data) {
                 return angular.equals(data, {
-                    file: {name: 'New file.jpg'}
+                    upload: {name: 'New file.jpg'}
                 }, true);
             }).respond({
             });

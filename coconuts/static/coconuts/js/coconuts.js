@@ -27,7 +27,7 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
 
     $scope.doAdd = function() {
         var formData = new FormData();
-        formData.append('file', $scope.addFile);
+        formData.append('upload', $scope.addFile);
         $http.post(settings.coconuts_root + 'add_file' + window.location.pathname, formData, {
             headers: { 'Content-Type': undefined },
             transformRequest: function(data) { return data; }

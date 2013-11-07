@@ -73,6 +73,7 @@ def render_to_json(arg = {}):
     return HttpResponse(data, content_type='application/json')
 
 @login_required
+@require_http_methods(['POST'])
 def add_file(request, path):
     try:
         folder = Folder(path)
@@ -83,28 +84,24 @@ def add_file(request, path):
     if not folder.has_perm('can_write', request.user):
         return forbidden(request)
 
-    if request.method == 'POST':
-        form = AddFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            filename = request.FILES['upload'].name
-            filepath = os.path.join(folder.filepath(), request.FILES['upload'].name)
-            if os.path.exists(filepath):
-                messages.warning(request, "File '%s' already exists." % filename)
-            else:
-                try:
-                    fp = file(filepath, 'wb')
-                    for chunk in request.FILES['upload'].chunks():
-                        fp.write(chunk)
-                    fp.close()
-                    messages.info(request, "Uploaded file '%s'." % filename)
-                except:
-                    messages.warning(request, "Failed to upload file '%s'." % filename)
-            return redirect(folder.url())
+    form = AddFileForm(request.POST, request.FILES)
+    if not form.is_valid():
+        return HttpResponseBadRequest()
+
+    filename = request.FILES['upload'].name
+    filepath = os.path.join(folder.filepath(), request.FILES['upload'].name)
+    if os.path.exists(filepath):
+        messages.warning(request, "File '%s' already exists." % filename)
     else:
-        form = AddFileForm()
-    return render_to_response('coconuts/add_file.html', FolderContext(request, folder, {
-        'form': form,
-        'title': _('Add a file')}))
+        try:
+            fp = file(filepath, 'wb')
+            for chunk in request.FILES['upload'].chunks():
+                fp.write(chunk)
+            fp.close()
+            messages.info(request, "Uploaded file '%s'." % filename)
+        except:
+            messages.warning(request, "Failed to upload file '%s'." % filename)
+    return render_to_json({})
 
 @login_required
 @require_http_methods(['POST'])
@@ -129,8 +126,9 @@ def add_folder(request, path):
         messages.info(request, "Created folder '%s'." % foldername)
     except:
         messages.warning(request, "Failed to create folder '%s'." % foldername)
-    return HttpResponse()
+    return render_to_json({})
 
+@login_required
 def browse(request, path):
     """Show the list of photos for the given folder."""
     try:
@@ -209,7 +207,7 @@ def delete(request, path):
 
     # delete file or folder
     target.delete()
-    return HttpResponse()
+    return render_to_json({})
 
 @login_required
 def download(request, path):
