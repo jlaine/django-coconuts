@@ -41,7 +41,7 @@
         <div class="filename"><a href="{{ folder.url }}"><img ng-src="{{ settings.static_root }}img/folder.png"/>{{ folder.name }}</a></div>
         <div class="filesize"></div>
         <div class="fileactions" ng-show="contents.can_write">
-            <a class="popup" href="{{ settings.coconuts_root }}delete/{{ folder.path }}?back={{ contents.url|urlencode }}&amp;next={{ contents.url|urlencode }}"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
+            <a href="" ng-click="deleteTarget = folder; deleteFolder = true"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
         </div>
     </div>
 
@@ -51,7 +51,7 @@
                 <div class="filename"><a href="{{ file.url }}"><img ng-src="{{ file.name | fileIcon }}"/>{{ file.name }}</a></div>
                 <div class="filesize">{{ file.filesize | fileSize }}</div>
                 <div class="fileactions" ng-show="contents.can_write">
-                    <a class="popup" href="{{ settings.coconuts_root }}delete/{{ file.path }}?back={{ contents.url|urlencode }}&amp;next={{ contents.url|urlencode }}"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
+                    <a href="" ng-click="deleteTarget = file; deleteFolder = false"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
                 </div>
             </div>
         </div>
@@ -80,11 +80,29 @@
             <li title="The aperture and exposure time for this picture"><i class="icon-wrench"></i> {{ currentPhoto.settings }}</li>
         </ul>
         <div class="photo-actions">
-            <a class="btn btn-danger popup" href="{{ settings.coconuts_root}}delete/{{ currentPhoto.path }}?back={{ contents.url|urlencode }}&amp;next={{ contents.url|urlencode }}" ng-show="contents.can_write"><i class="icon-remove"></i> <span co-translate>Delete</a>
+            <a class="btn btn-danger" href="" ng-click="deleteTarget = currentPhoto; deleteFolder = false" ng-show="contents.can_write"><i class="icon-remove"></i> <span co-translate>Delete</a>
             <a class="btn" href="{{ settings.coconuts_root }}download/{{ currentPhoto.path }}"><i class="icon-download"></i> <span co-translate>Download</span></a>
         </div>
     </div>
 </div>
+
+<form class="modal" method="POST" ng-show="deleteTarget">
+  <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3 co-translate>Really delete "{{ deleteTarget.name }}"?</h3>
+  </div>
+  <div class="modal-body">
+    <img ng-src="{{ settings.coconuts_root }}render/{{ deleteTarget.path }}?size=128" alt="{{ deleteTarget.name }}" style="vertical-align: center; display: inline"/>
+    <p co-translate ng-show="deleteFolder">Are you sure you want to delete the folder "{{ deleteTarget.name }}" and all its contents?</p>
+    <p co-translate ng-hide="deleteFolder">Are you sure you want to delete the file "{{ deleteTarget.name }}"?</p>
+</div>
+<div class="modal-footer">
+    <input type="hidden" name="post" value="yes" />
+    <input type="hidden" name="next" value="{{ next }}" />
+    <a class="btn btn-danger" href="" ng-click="doDelete()" co-translate>Yes, I'm sure</button>
+    <a class="btn" href="" ng-click="deleteTarget = undefined" co-translate>No, I'm not sure</a>
+</div>
+</form>
 
 </div>
 {% endverbatim %}

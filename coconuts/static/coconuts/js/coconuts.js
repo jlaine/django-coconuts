@@ -23,9 +23,16 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'settings', function($
             $scope.currentPhoto = undefined;
             $scope.nextPhoto = undefined;
         }
+    }
+
+    $scope.doDelete = function() {
+        $http.post(settings.coconuts_root + 'delete/' + $scope.deleteTarget.path).success(function() {
+            $scope.deleteTarget = undefined;
+            $location.path('');
+        });
     };
 
-    $http.get('/images/contents' + window.location.pathname).success(function(contents) {
+    $http.get(settings.coconuts_root + 'contents' + window.location.pathname).success(function(contents) {
         $scope.contents = contents;
         updatePhoto();
     });
