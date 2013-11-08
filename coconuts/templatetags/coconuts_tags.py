@@ -27,17 +27,6 @@ import coconuts
 
 register = Library()
 
-def coconuts_title():
-    try:
-        return settings.COCONUTS_TITLE
-    except:
-        return _("Shares")
-register.simple_tag(coconuts_title)
-
-def coconuts_version():
-    return "<a href=\"%s\" title=\"Coconuts %s\">%s</a>" % (coconuts.__url__, coconuts.__version__, coconuts_title())
-register.simple_tag(coconuts_version)
-
 def coconuts_crumbs(path):
     # breadcrumbs
     crumbs = [ coconuts.models.Folder('') ]

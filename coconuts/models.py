@@ -29,7 +29,6 @@ from django.utils.translation import ugettext_lazy as _
 import Image
 
 import coconuts.EXIF as EXIF
-from coconuts.templatetags.coconuts_tags import coconuts_title
 
 ORIENTATIONS = {
     1: [ False, False, 0   ], # Horizontal (normal)
@@ -178,13 +177,7 @@ class Folder:
             return NotImplemented
 
     def __unicode__(self):
-        """Get the folder's description."""
-        if not self.path:
-            return coconuts_title()
-        if self.share.path == self.path and self.share.description:
-            return self.share.description
-        else:
-            return self.name()
+        return self.name()
 
     @classmethod
     def create(klass, path):
@@ -236,7 +229,15 @@ class Folder:
 
     def name(self):
         """Get the folder's name."""
-        return os.path.basename(self.path)
+        if self.share.path == self.path and self.share.description:
+            return self.share.description
+        elif not self.path:
+            try:
+                return settings.COCONUTS_TITLE
+            except:
+                return _("Shares")
+        else:
+            return os.path.basename(self.path)
 
     def has_perm(self, perm, user):
         """Check whether a user has a given permission."""
