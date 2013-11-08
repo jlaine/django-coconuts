@@ -49,11 +49,9 @@ def render_to_json(arg = {}):
             data = {
                 'filesize': obj.filesize(),
                 'name': obj.name(),
-                'path': obj.path,
+                'path': '/' + obj.path,
             }
-            if isinstance(obj, Folder):
-                data['url'] = obj.url()
-            elif isinstance(obj, Photo):
+            if isinstance(obj, Photo):
                 data.update({
                     'camera': obj.camera(),
                     'settings': obj.settings(),
@@ -140,8 +138,7 @@ def content_list(request, path):
         'can_manage': folder.has_perm('can_manage', request.user),
         'can_write': folder.has_perm('can_write', request.user),
         'name': folder.name(),
-        'path': folder.path,
-        'url': folder.url(),
+        'path': '/' + folder.path,
 
         'files': files,
         'folders': allowed_children,

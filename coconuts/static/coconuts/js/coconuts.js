@@ -73,6 +73,15 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
     $scope.location = $location;
     $scope.$watch('location.path()', function(path) {
         if (path == '') path = '/';
+        var bits = path.split('/');
+        var crumbs = [];
+        var crumbPath = '';
+        for (var i = 1; i < bits.length - 1; i++) {
+            crumbPath += '/' + bits[i] + '/';
+            crumbs.push({name: bits[i], path: crumbPath});
+        }
+        $scope.crumbs = crumbs;
+        console.log(crumbs);
         $http.get(settings.coconuts_root + 'contents' + path).success(function(contents) {
             $scope.contents = contents;
             updatePhoto();

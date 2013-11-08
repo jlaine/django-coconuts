@@ -72,14 +72,12 @@ class FolderContentTest(BaseTest):
                 {
                     'filesize': 4096,
                     'name': 'Foo',
-                    'path': 'Foo',
-                    'url': '/Foo/'
+                    'path': '/Foo',
                 },
             ],
             'name': 'Shares',
             'photos': [],
-            'path': '',
-            'url': '/',
+            'path': '/',
         })
 
     def test_home_as_user(self):
@@ -146,14 +144,13 @@ class AddFileTest(BaseTest):
                 {
                     'filesize': 548,
                     'name': 'folder.png',
-                    'path': 'folder.png',
+                    'path': '/folder.png',
                 }
              ],
             'folders': [],
             'name': 'Shares',
             'photos': [],
-            'path': '',
-            'url': '/',
+            'path': '/',
         })
 
         # check folder
@@ -183,14 +180,12 @@ class AddFolderTest(BaseTest):
                 {
                     'filesize': 4096,
                     'name': 'New folder',
-                    'path': 'New folder',
-                    'url': '/New%20folder/'
+                    'path': '/New folder',
                 },
             ],
             'name': 'Shares',
             'photos': [],
-            'path': '',
-            'url': '/',
+            'path': '/',
         })
 
         # check folder
@@ -236,8 +231,7 @@ class DeleteFileTest(BaseTest):
             'folders': [],
             'name': 'Shares',
             'photos': [],
-            'path': '',
-            'url': '/',
+            'path': '/',
         })
 
         # check folder
