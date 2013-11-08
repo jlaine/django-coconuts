@@ -24,15 +24,14 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
     }
 
     $scope.swipeLeft = function() {
-        console.log('swipe left');
-        if ($scope.previousPhoto) {
-            $location.path($scope.previousPhoto.path);
+        if ($scope.nextPhoto) {
+            $location.path($scope.nextPhoto.path);
         }
     };
 
     $scope.swipeRight = function() {
-        if ($scope.nextPhoto) {
-            $location.path($scope.nextPhoto.path);
+        if ($scope.previousPhoto) {
+            $location.path($scope.previousPhoto.path);
         }
     };
 
