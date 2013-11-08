@@ -54,7 +54,7 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
         $scope.deleteFolder = false;
     };
     $scope.doDelete = function() {
-        $http.post(settings.coconuts_root + 'delete/' + $scope.deleteTarget.path).success(function(currentFolder) {
+        $http.post(settings.coconuts_root + 'delete' + $scope.deleteTarget.path).success(function(currentFolder) {
             $scope.deleteTarget = undefined;
             $scope.currentFolder = currentFolder;
             $location.path(currentFolder.path);

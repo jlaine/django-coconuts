@@ -111,5 +111,22 @@ describe('Controllers', function() {
             $httpBackend.flush();
             expect(scope.createPrompt).toBe(false);
         });
+
+        it('should delete file', function() {
+            $httpBackend.expect('POST', 'images/delete/Foo/').respond({
+                can_manage: true,
+                can_write: true,
+                files: [],
+                folders: [],
+                name: '',
+                photos: [],
+                path: '/'
+            });
+
+            scope.promptDelete({path: '/Foo/'});
+            scope.doDelete();
+            $httpBackend.flush();
+            expect(scope.deleteTarget).toBe(undefined);
+        });
     });
 });
