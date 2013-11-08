@@ -112,7 +112,7 @@ factory('FormData', [function() {
 }]).
 factory('settings', ['$http', function($http) {
     return {
-        coconuts_root: '/images/',
+        coconuts_root: 'images/',
         static_root: '/static/coconuts/'
     };
 }]).

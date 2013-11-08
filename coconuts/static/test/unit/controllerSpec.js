@@ -31,7 +31,7 @@ describe('Controllers', function() {
                 $scope: scope
             });
 
-            $httpBackend.expect('GET', '/images/contents/').respond({
+            $httpBackend.expect('GET', 'images/contents/').respond({
                 can_manage: true,
                 can_write: true,
                 files: [],
@@ -56,7 +56,7 @@ describe('Controllers', function() {
         });
 
         it('should add file', function() {
-            $httpBackend.expect('POST', '/images/add_file/', function(data) {
+            $httpBackend.expect('POST', 'images/add_file/', function(data) {
                 return angular.equals(data, {
                     upload: {name: 'folder.png'}
                 }, true);
@@ -84,7 +84,7 @@ describe('Controllers', function() {
         });
 
         it('should create folder', function() {
-            $httpBackend.expect('POST', '/images/add_folder/', function(data) {
+            $httpBackend.expect('POST', 'images/add_folder/', function(data) {
                 return angular.equals(data, {
                     name: 'New folder'
                 }, true);
