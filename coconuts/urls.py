@@ -27,7 +27,6 @@ urlpatterns = patterns('',
     url(r'^images/download/(?P<path>.*)$', 'coconuts.views.download'),
     url(r'^images/manage/(?P<path>.*)$', 'coconuts.views.manage'),
     url(r'^images/render/(?P<path>.*)$', 'coconuts.views.render'),
-    url(r'^images/rss/(?P<path>.*)$', 'coconuts.views.rss'),
 
     # folders
     url(r'^(?P<path>.*)$', 'coconuts.views.browse'),

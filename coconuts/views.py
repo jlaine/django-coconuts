@@ -160,21 +160,6 @@ def content_list(request, path):
     })
 
 @login_required
-def rss(request,path):
-    """Generate a Media RSS feed for the given folder."""
-    folder = Folder(path)
-
-    # check permissions
-    if not folder.has_perm('can_read', request.user):
-        return forbidden(request)
-
-    # list of sub-folders and photos
-    children, files, photos, mode = folder.list()
-    return render_to_response('coconuts/photos.rss',
-        FolderContext(request, folder, {'photos': photos}),
-        mimetype="application/rss+xml")
-
-@login_required
 @require_http_methods(['POST'])
 def delete(request, path):
     """Delete the given file."""

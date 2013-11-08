@@ -7,10 +7,6 @@
 
 {% block breadcrumbs %}{% coconuts_crumbs folder.path %}{% endblock %}
 
-{% block rssfeeds %}
-<link rel="alternate" href="{% url 'coconuts.views.rss' folder.path %}" type="application/rss+xml" title="" id="gallery" />
-{% endblock %}
-
 {% block content %}
 {% for message in messages %}
 <div class="message">{{ message|escape }}</div>
