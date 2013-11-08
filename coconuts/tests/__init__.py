@@ -76,7 +76,7 @@ class FolderContentTest(BaseTest):
                     'url': '/Foo/'
                 },
             ],
-            'name': '',
+            'name': 'Shares',
             'photos': [],
             'path': '',
             'url': '/',
@@ -143,7 +143,7 @@ class AddFileTest(BaseTest):
                 }
              ],
             'folders': [],
-            'name': '',
+            'name': 'Shares',
             'photos': [],
             'path': '',
             'url': '/',
@@ -180,7 +180,7 @@ class AddFolderTest(BaseTest):
                     'url': '/New%20folder/'
                 },
             ],
-            'name': '',
+            'name': 'Shares',
             'photos': [],
             'path': '',
             'url': '/',
@@ -227,7 +227,7 @@ class DeleteFileTest(BaseTest):
             'can_write': True,
             'files': [],
             'folders': [],
-            'name': '',
+            'name': 'Shares',
             'photos': [],
             'path': '',
             'url': '/',
