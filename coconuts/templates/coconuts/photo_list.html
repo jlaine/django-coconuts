@@ -25,7 +25,7 @@
 
 <h1 ng-hide="currentPhoto">{{ contents.name }}</h1>
 
-<div class="btn-group object-tools" ng-show="contents.can_write && !currentPhoto">
+<div class="btn-group object-tools ng-cloak" ng-show="contents.can_write && !currentPhoto">
     <a class="btn dropdown-toggle" data-toggle="dropdown" href="">
         <span co-translate>Operations</span>
         <span class="caret"></span>
@@ -38,7 +38,7 @@
     </ul>
 </div>
 
-<div ng-hide="currentPhoto">
+<div class="ng-cloak" ng-hide="currentPhoto">
     <p ng-show="contents.files.length == 0 && contents.folders.length == 0" co-translate>There are no files in this folder.</p>
 
     <div class="file" title="{{ folder.filedate }}" ng-repeat="folder in contents.folders">
