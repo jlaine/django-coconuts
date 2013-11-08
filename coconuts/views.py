@@ -95,7 +95,7 @@ def add_file(request, path):
         fp.write(chunk)
     fp.close()
 
-    return render_to_json({})
+    return content_list(request, folder.path)
 
 @login_required
 @require_http_methods(['POST'])
@@ -113,10 +113,9 @@ def add_folder(request, path):
     if not form.is_valid():
         return HttpResponseBadRequest()
 
-    foldername = form.cleaned_data['name']
-    subfolder = Folder.create(os.path.join(folder.path, foldername))
+    Folder.create(os.path.join(folder.path, form.cleaned_data['name']))
 
-    return render_to_json({})
+    return content_list(request, folder.path)
 
 @login_required
 def browse(request, path):
@@ -182,7 +181,7 @@ def delete(request, path):
 
     # delete file or folder
     target.delete()
-    return render_to_json({})
+    return content_list(request, folder.path)
 
 @login_required
 def download(request, path):

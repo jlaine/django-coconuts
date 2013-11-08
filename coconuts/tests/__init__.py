@@ -132,7 +132,22 @@ class AddFileTest(BaseTest):
         # POST succeeds
         data_path = os.path.join(os.path.dirname(__file__), 'folder.png')
         response = self.client.post('/images/add_file/', {'upload': open(data_path, 'rb')})
-        self.assertJson(response, {})
+        self.assertJson(response, {
+            'can_manage': True,
+            'can_write': True,
+            'files': [
+                {
+                    'filesize': 548,
+                    'name': 'folder.png',
+                    'path': 'folder.png',
+                }
+             ],
+            'folders': [],
+            'name': '',
+            'photos': [],
+            'path': '',
+            'url': '/',
+        })
 
         # check folder
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'folder.png')
@@ -153,7 +168,23 @@ class AddFolderTest(BaseTest):
 
         # POST succeeds
         response = self.client.post('/images/add_folder/', {'name': 'New folder'})
-        self.assertJson(response, {})
+        self.assertJson(response, {
+            'can_manage': True,
+            'can_write': True,
+            'files': [],
+            'folders': [
+                {
+                    'filesize': 4096,
+                    'name': 'New folder',
+                    'path': 'New folder',
+                    'url': '/New%20folder/'
+                },
+            ],
+            'name': '',
+            'photos': [],
+            'path': '',
+            'url': '/',
+        })
 
         # check folder
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'New folder')
@@ -191,7 +222,16 @@ class DeleteFileTest(BaseTest):
 
         # POST succeeds
         response = self.client.post('/images/delete/folder.png')
-        self.assertJson(response, {})
+        self.assertJson(response, {
+            'can_manage': True,
+            'can_write': True,
+            'files': [],
+            'folders': [],
+            'name': '',
+            'photos': [],
+            'path': '',
+            'url': '/',
+        })
 
         # check folder
         self.assertFalse(os.path.exists(data_path))
