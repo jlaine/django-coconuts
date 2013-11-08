@@ -24,7 +24,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 from django.utils.http import http_date, urlquote
 from django.views.decorators.http import require_http_methods
@@ -124,16 +124,7 @@ def browse(request, path):
     if path:
         return redirect(reverse(browse, args=['']) + '#/' + path)
 
-    try:
-        folder = Folder(os.path.dirname(path))
-    except Folder.DoesNotExist:
-        raise Http404
-
-    # check permissions
-    if not folder.has_perm('can_read', request.user):
-        return forbidden(request)
-
-    return render_to_response('coconuts/photo_list.html', FolderContext(request, folder, {}))
+    return render(request, 'coconuts/photo_list.html')
 
 @login_required
 def content_list(request, path):
@@ -258,7 +249,7 @@ def manage(request, path):
         }))
 
 @login_required
-def render(request, path):
+def render_file(request, path):
     """Return a resized version of the given photo."""
     folder = Folder(os.path.dirname(path))
 

@@ -93,28 +93,35 @@ class FolderContentTest(BaseTest):
 class HomeTest(BaseTest):
     fixtures = ['test_users.json']
 
-    def test_as_anonymous(self):
+    def test_home_as_anonymous(self):
         """
-        Anonymous users need to login.
+        Anonymous user needs to login.
         """
         response = self.client.get('/')
         self.assertRedirects(response, '/accounts/login/?next=/')
 
-    def test_as_superuser(self):
+    def test_home_as_user(self):
         """
-        Authenticated super-user can browse the home folder.
-        """
-        self.client.login(username="test_user_1", password="test")
-        response = self.client.get('/')
-        self.assertContains(response, '<h1>')
-
-    def test_as_user(self):
-        """
-        Authenticated user cannot browse the home folder.
+        Authenticated user can browse home folder.
         """
         self.client.login(username="test_user_2", password="test")
         response = self.client.get('/')
-        self.assertEquals(response.status_code, 403)
+        self.assertContains(response, '<h1>')
+
+    def test_other_as_anonymous(self):
+        """
+        Anonymous user needs to login.
+        """
+        response = self.client.get('/other/')
+        self.assertRedirects(response, '/accounts/login/?next=/other/')
+
+    def test_other_as_user(self):
+        """
+        Authenticated user can browse other folder.
+        """
+        self.client.login(username="test_user_2", password="test")
+        response = self.client.get('/other/')
+        self.assertRedirects(response, '/#/other/')
 
 class AddFileTest(BaseTest):
     fixtures = ['test_users.json']
