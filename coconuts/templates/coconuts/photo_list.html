@@ -44,7 +44,7 @@
     <div ng-switch="contents.files.length == contents.photos.length">
         <div ng-switch-when="false">
             <div class="file" title="{{ file.filedate }}" ng-repeat="file in contents.files">
-                <div class="filename"><a href="{{ file.url }}"><img ng-src="{{ file.name | fileIcon }}"/>{{ file.name }}</a></div>
+                <div class="filename"><a href="{{ settings.coconuts_root }}download/{{ file.path }}"><img ng-src="{{ file.name | fileIcon }}"/>{{ file.name }}</a></div>
                 <div class="filesize">{{ file.filesize | fileSize }}</div>
                 <div class="fileactions" ng-show="contents.can_write">
                     <a href="" ng-click="promptDelete(file)"><i class="icon-remove"></i> <span co-translate>Delete</span></a>

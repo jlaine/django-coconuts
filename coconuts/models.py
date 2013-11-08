@@ -296,10 +296,6 @@ class File:
         """Get the file's name."""
         return os.path.basename(self.path)
 
-    def url(self):
-        """Get the URL at which the file can be downloaded."""
-        return reverse('coconuts.views.download', args=[self.path])
-
 class Photo(File):
     def __init__(self, path):
         File.__init__(self, path)
@@ -369,8 +365,3 @@ class Photo(File):
             self.__tags = EXIF.process_file(fp, details=False)
             fp.close()
         return self.__tags
-
-    def url(self):
-        """Get the URL at which the photo can be viewed."""
-        return reverse('coconuts.views.browse', args=[self.path])
-

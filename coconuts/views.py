@@ -55,9 +55,10 @@ def render_to_json(arg = {}):
                 'filesize': obj.filesize(),
                 'name': obj.name(),
                 'path': obj.path,
-                'url': obj.url(),
             }
-            if isinstance(obj, Photo):
+            if isinstance(obj, Folder):
+                data['url'] = obj.url()
+            elif isinstance(obj, Photo):
                 data.update({
                     'camera': obj.camera(),
                     'settings': obj.settings(),
