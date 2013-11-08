@@ -31,7 +31,6 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_http_methods
 import django.views.static
 
-from coconuts import notifications
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
 from coconuts.models import File, Folder, Photo, NamedAcl, PERMISSIONS
 
@@ -117,7 +116,6 @@ def add_folder(request, path):
 
     foldername = form.cleaned_data['name']
     subfolder = Folder.create(os.path.join(folder.path, foldername))
-    notifications.create_folder(request.user, subfolder)
 
     return render_to_json({})
 
