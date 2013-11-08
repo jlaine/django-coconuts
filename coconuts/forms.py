@@ -47,7 +47,8 @@ class OwnerField(forms.ChoiceField):
             opts = []
             for obj in klass.objects.all().order_by(key):
                 opts.append(("%s:%s" % (klass.__name__.lower(), getattr(obj, key)), obj))
-            choices.append((klass.__name__, opts))
+            if len(opts):
+                choices.append((klass.__name__, opts))
         super(OwnerField, self).__init__(choices=choices, **kwargs)
 
 class ShareForm(forms.ModelForm):
