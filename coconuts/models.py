@@ -229,9 +229,7 @@ class Folder:
 
     def name(self):
         """Get the folder's name."""
-        if self.share.path == self.path and self.share.description:
-            return self.share.description
-        elif not self.path:
+        if not self.path:
             try:
                 return settings.COCONUTS_TITLE
             except:
