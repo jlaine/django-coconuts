@@ -125,8 +125,7 @@ def browse(request, path):
     if path:
         return redirect(reverse(browse, args=['']) + '#/' + path)
     template_path = os.path.join(os.path.dirname(__file__), 'templates', 'coconuts', 'photo_list.html')
-    data = open(template_path).read().replace('{{ STATIC_URL }}', '/static/')
-    return HttpResponse(data)
+    return HttpResponse(open(template_path, 'rb').read())
 
 @login_required
 def content_list(request, path):

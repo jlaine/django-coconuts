@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <title>Coconuts</title>
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/base.css"/>
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/bootstrap.min.css"/>
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/bootstrap-responsive.min.css"/>
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/font-awesome.min.css"/>
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/coconuts.css"/>
+<link rel="stylesheet" type="text/css" href="/static/coconuts/css/base.css"/>
+<link rel="stylesheet" type="text/css" href="/static/coconuts/css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="/static/coconuts/css/bootstrap-responsive.min.css"/>
+<link rel="stylesheet" type="text/css" href="/static/coconuts/css/font-awesome.min.css"/>
+<link rel="stylesheet" type="text/css" href="/static/coconuts/css/coconuts.css"/>
 <style>
 .ng-cloak {
     display: none !important;
@@ -125,7 +125,7 @@
     </div>
     <div class="modal-body">
         <img ng-src="{{ settings.coconuts_root }}render{{ deleteTarget.path }}?size=128" alt="{{ deleteTarget.name }}" style="vertical-align: center; display: inline"/>
-        <p co-translate ng-show="deleteFolder">Are you sure you want to delete the folder "{{ deleteTarget.name }}" and all its currentFolder?</p>
+        <p co-translate ng-show="deleteFolder">Are you sure you want to delete the folder "{{ deleteTarget.name }}" and all its contents?</p>
         <p co-translate ng-hide="deleteFolder">Are you sure you want to delete the file "{{ deleteTarget.name }}"?</p>
     </div>
     <div class="modal-footer">
@@ -136,14 +136,14 @@
 
 </div>
 <div id="footer">
-    <script src="{{ STATIC_URL }}coconuts/js/jquery.min.js"></script>
-    <script src="{{ STATIC_URL }}coconuts/js/bootstrap.min.js"></script>
-    <script src="{{ STATIC_URL }}coconuts/js/angular.min.js" type="text/javascript"></script>
-    <script src="{{ STATIC_URL }}coconuts/js/angular-animate.min.js" type="text/javascript"></script>
-    <script src="{{ STATIC_URL }}coconuts/js/angular-resource.min.js" type="text/javascript"></script>
-    <script src="{{ STATIC_URL }}coconuts/js/angular-route.min.js" type="text/javascript"></script>
-    <script src="{{ STATIC_URL }}coconuts/js/angular-touch.min.js" type="text/javascript"></script>
-    <script src="{{ STATIC_URL }}coconuts/js/coconuts.js" type="text/javascript"></script>
+    <script src="/static/coconuts/js/jquery.min.js"></script>
+    <script src="/static/coconuts/js/bootstrap.min.js"></script>
+    <script src="/static/coconuts/js/angular.min.js" type="text/javascript"></script>
+    <script src="/static/coconuts/js/angular-animate.min.js" type="text/javascript"></script>
+    <script src="/static/coconuts/js/angular-resource.min.js" type="text/javascript"></script>
+    <script src="/static/coconuts/js/angular-route.min.js" type="text/javascript"></script>
+    <script src="/static/coconuts/js/angular-touch.min.js" type="text/javascript"></script>
+    <script src="/static/coconuts/js/coconuts.js" type="text/javascript"></script>
 </div>
 </div>
 </body>
