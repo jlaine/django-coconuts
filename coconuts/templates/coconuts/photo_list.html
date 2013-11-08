@@ -7,13 +7,17 @@
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/bootstrap-responsive.min.css"/>
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/font-awesome.min.css"/>
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/coconuts.css"/>
+<style>
+.ng-cloak {
+    display: none !important;
+}
+</style>
 </head>
 
 <body ng-app="coconuts">
 <div class="container">
-<div id="content">
 {% verbatim %}
-<div ng-controller="FolderCtrl">
+<div id="content" ng-controller="FolderCtrl">
 
 <div class="breadcrumbs">
     <span><a href="#/">Home</a></span>
@@ -66,7 +70,7 @@
     </div>
 </div>
 
-<div ng-show="currentPhoto">
+<div class="ng-cloak" ng-show="currentPhoto">
     <div class="thumbnail" style="position: relative" ng-show="currentPhoto">
         <img ng-src="{{ settings.coconuts_root}}render{{ currentPhoto.path }}?size=1024" alt="{{ currentPhoto.name }}"/>
         <a class="left carousel-control" ng-href="#{{ previousPhoto.path }}" ng-show="previousPhoto">&lsaquo;</a>
@@ -87,7 +91,7 @@
     </div>
 </div>
 
-<div class="modal form-inline" ng-show="addPrompt">
+<div class="modal form-inline ng-cloak" ng-show="addPrompt">
     <div class="modal-header">
         <button type="button" class="close" aria-hidden="true" ng-click="addPrompt = false">&times;</button>
         <h3><i class="icon-picture"></i> <span co-translate>Add a file</span></h3>
@@ -101,7 +105,7 @@
     </div>
 </div>
 
-<div class="modal form-inline" ng-show="createPrompt">
+<div class="modal form-inline ng-cloak" ng-show="createPrompt">
     <div class="modal-header">
         <button type="button" class="close" aria-hidden="true" ng-click="createPrompt = false">&times;</button>
         <h3><i class="icon-folder-close"></i> <span co-translate>Create a folder</span></h3>
@@ -115,7 +119,7 @@
     </div>
 </div>
 
-<div class="modal form-inline" ng-show="deleteTarget">
+<div class="modal form-inline ng-cloak" ng-show="deleteTarget">
     <div class="modal-header">
         <button type="button" class="close" aria-hidden="true" ng-click="deleteTarget = undefined">&times;</button>
         <h3 co-translate>Really delete "{{ deleteTarget.name }}"?</h3>
@@ -133,7 +137,6 @@
 
 </div>
 {% endverbatim %}
-</div>
 <div id="footer">
     <script src="{{ STATIC_URL }}coconuts/js/jquery.min.js"></script>
     <script src="{{ STATIC_URL }}coconuts/js/bootstrap.min.js"></script>
