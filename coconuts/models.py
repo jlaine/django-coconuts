@@ -25,7 +25,6 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse
-from django.utils.encoding import iri_to_uri
 from django.utils.translation import ugettext_lazy as _
 import Image
 
@@ -349,7 +348,7 @@ class Photo(File):
     def settings(self):
         """Get the photo's aperture and exposure time."""
         tags = self.tags()
-	bits = []
+        bits = []
         if tags.has_key('EXIF FNumber'):
             v = eval("float(%s.0)" % tags['EXIF FNumber'])
             bits.append("f/%s" % v)

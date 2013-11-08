@@ -22,12 +22,10 @@ import time
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.utils.http import http_date, urlquote
-from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_http_methods
 import django.views.static
 
