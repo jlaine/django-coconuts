@@ -124,7 +124,7 @@ def browse(request, path):
     """Show the list of photos for the given folder."""
     if path:
         return redirect(reverse(browse, args=['']) + '#/' + path)
-    template_path = os.path.join(os.path.dirname(__file__), 'templates', 'coconuts', 'photo_list.html')
+    template_path = os.path.join(os.path.dirname(__file__), 'static', 'coconuts', 'index.html')
     return HttpResponse(open(template_path, 'rb').read())
 
 @login_required
