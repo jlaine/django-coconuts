@@ -19,10 +19,10 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
                 $scope.nextPhoto = $scope.contents.photos[i+1];
                 return;
             }
-            $scope.previousPhoto = undefined;
-            $scope.currentPhoto = undefined;
-            $scope.nextPhoto = undefined;
         }
+        $scope.previousPhoto = undefined;
+        $scope.currentPhoto = undefined;
+        $scope.nextPhoto = undefined;
     }
 
     $scope.doAdd = function() {
@@ -72,6 +72,10 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
         for (var i = 1; i < bits.length - 1; i++) {
             crumbPath += bits[i] + '/';
             crumbs.push({name: bits[i], path: crumbPath});
+        }
+        if (bits[bits.length-1]) {
+            crumbPath += bits[bits.length-1];
+            crumbs.push({name: bits[bits.length-1], path: crumbPath});
         }
         $scope.crumbs = crumbs;
         $http.get(settings.coconuts_root + 'contents' + path).success(function(contents) {
