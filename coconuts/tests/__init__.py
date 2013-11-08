@@ -25,6 +25,8 @@ from django.conf import settings
 from django.test import TestCase
 
 class BaseTest(TestCase):
+    maxDiff = None
+
     def assertJson(self, response, data, status_code=200):
         self.assertEquals(response.status_code, status_code)
         self.assertEquals(response['Content-Type'], 'application/json')
@@ -44,12 +46,8 @@ class BaseTest(TestCase):
         for path in [settings.COCONUTS_CACHE_ROOT, settings.COCONUTS_DATA_ROOT]:
             shutil.rmtree(path)
 
-class FolderContentTest(BaseTest):
+class EmptyFolderContentTest(BaseTest):
     fixtures = ['test_users.json']
-
-    def setUp(self):
-        super(FolderContentTest, self).setUp()
-        os.makedirs(os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo'))
 
     def test_home_as_anonymous(self):
         """
@@ -68,6 +66,60 @@ class FolderContentTest(BaseTest):
             'can_manage': True,
             'can_write': True,
             'files': [],
+            'folders': [],
+            'name': 'Shares',
+            'photos': [],
+            'path': '/',
+        })
+
+    def test_home_as_user(self):
+        """
+        Authenticated user cannot browse the home folder.
+        """
+        self.client.login(username="test_user_2", password="test")
+        response = self.client.get('/images/contents/')
+        self.assertEquals(response.status_code, 403)
+
+class FolderContentTest(BaseTest):
+    fixtures = ['test_users.json']
+
+    def setUp(self):
+        super(FolderContentTest, self).setUp()
+        os.makedirs(os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo'))
+        for name in ['test.dat', 'test.jpg']:
+            source_path = os.path.join(os.path.dirname(__file__), name)
+            dest_path = os.path.join(settings.COCONUTS_DATA_ROOT, name)
+            shutil.copyfile(source_path, dest_path)
+
+    def test_home_as_anonymous(self):
+        """
+        Anonymous users need to login.
+        """
+        response = self.client.get('/images/contents/')
+        self.assertRedirects(response, '/accounts/login/?next=/images/contents/')
+
+    def test_home_as_superuser(self):
+        """
+        Authenticated super-user can browse the home folder.
+        """
+        self.client.login(username="test_user_1", password="test")
+        response = self.client.get('/images/contents/')
+        self.assertJson(response, {
+            'can_manage': True,
+            'can_write': True,
+            'files': [],
+            'files': [
+                {
+                    'filesize': 6,
+                    'name': 'test.dat',
+                    'path': '/test.dat',
+                },
+                {
+                    'filesize': 186899,
+                    'name': 'test.jpg',
+                    'path': '/test.jpg',
+                }
+            ],
             'folders': [
                 {
                     'filesize': 4096,
@@ -76,7 +128,16 @@ class FolderContentTest(BaseTest):
                 },
             ],
             'name': 'Shares',
-            'photos': [],
+            'photos': [
+                {
+                    'camera': 'Canon EOS 450D',
+                    'filesize': 186899,
+                    'name': 'test.jpg',
+                    'path': '/test.jpg',
+                    'settings': u'f/10.0, 1/125\xa0sec, 48\xa0mm',
+                    'size': [1024, 683],
+                }
+            ],
             'path': '/',
         })
 
@@ -135,8 +196,8 @@ class AddFileTest(BaseTest):
         self.assertEquals(response.status_code, 405)
 
         # POST succeeds
-        data_path = os.path.join(os.path.dirname(__file__), 'folder.png')
-        response = self.client.post('/images/add_file/', {'upload': open(data_path, 'rb')})
+        source_path = os.path.join(os.path.dirname(__file__), 'folder.png')
+        response = self.client.post('/images/add_file/', {'upload': open(source_path, 'rb')})
         self.assertJson(response, {
             'can_manage': True,
             'can_write': True,
