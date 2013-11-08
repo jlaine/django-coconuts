@@ -13,7 +13,7 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
         var photo, i;
         for (i = 0; i < $scope.contents.photos.length; i++) {
             photo = $scope.contents.photos[i];
-            if (photo.path == path) {
+            if (photo.path === path) {
                 $scope.previousPhoto = $scope.contents.photos[i-1];
                 $scope.currentPhoto = photo;
                 $scope.nextPhoto = $scope.contents.photos[i+1];
@@ -28,7 +28,7 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
     $scope.doAdd = function() {
         var formData = new FormData();
         formData.append('upload', $scope.addFile);
-        $http.post(settings.coconuts_root + 'add_file' + $location.path(), formData, {
+        $http.post(settings.coconuts_root + 'add_file' + $scope.contents.path, formData, {
             headers: { 'Content-Type': undefined },
             transformRequest: function(data) { return data; }
         }).success(function(contents) {
@@ -41,7 +41,7 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
     $scope.doCreate = function() {
         var formData = new FormData();
         formData.append('name', $scope.createName);
-        $http.post(settings.coconuts_root + 'add_folder' + $location.path(), formData, {
+        $http.post(settings.coconuts_root + 'add_folder' + $scope.contents.path, formData, {
             headers: { 'Content-Type': undefined },
             transformRequest: function(data) { return data; }
         }).success(function(contents) {
@@ -59,13 +59,13 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
         $http.post(settings.coconuts_root + 'delete/' + $scope.deleteTarget.path).success(function(contents) {
             $scope.deleteTarget = undefined;
             $scope.contents = contents;
-            $location.path(contents.path);
+            $location.path($scope.contents.path);
         });
     };
 
     $scope.location = $location;
     $scope.$watch('location.path()', function(path) {
-        if (path == '') path = '/';
+        if (path === '') path = '/';
         var crumbs = [];
         var crumbPath = '';
         var bits = path.split('/');

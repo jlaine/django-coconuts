@@ -31,15 +31,14 @@ describe('Controllers', function() {
                 $scope: scope
             });
 
-            $httpBackend.expect('GET', '/images/contents/context.html').respond({
+            $httpBackend.expect('GET', '/images/contents/').respond({
                 can_manage: true,
                 can_write: true,
                 files: [],
                 name: '',
                 folders: [],
                 photos: [],
-                path: '',
-                url: '/'
+                path: '/'
             });
             $httpBackend.flush();
         }));
@@ -52,13 +51,12 @@ describe('Controllers', function() {
                 folders: [],
                 name: '',
                 photos: [],
-                path: '',
-                url: '/'
+                path: '/'
             }); 
         });
 
         it('should add file', function() {
-            $httpBackend.expect('POST', '/images/add_file/context.html', function(data) {
+            $httpBackend.expect('POST', '/images/add_file/', function(data) {
                 return angular.equals(data, {
                     upload: {name: 'folder.png'}
                 }, true);
@@ -75,8 +73,7 @@ describe('Controllers', function() {
                 folders: [],
                 name: '',
                 photos: [],
-                path: '',
-                url: '/'
+                path: '/'
             });
  
             scope.addPrompt = true;
@@ -87,11 +84,13 @@ describe('Controllers', function() {
         });
 
         it('should create folder', function() {
-            $httpBackend.expect('POST', '/images/add_folder/context.html', function(data) {
+            $httpBackend.expect('POST', '/images/add_folder/', function(data) {
                 return angular.equals(data, {
                     name: 'New folder'
                 }, true);
             }).respond({
+                can_manage: true,
+                can_write: true,
                 files: [],
                 folders: [
                     {
@@ -101,7 +100,9 @@ describe('Controllers', function() {
                         url: '/New%20folder/',
                     }
                 ],
-                photos: []
+                name: '',
+                photos: [],
+                path: '/'
             });
  
             scope.createPrompt = true;
