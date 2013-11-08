@@ -13,19 +13,6 @@
 
 <body>
 <div class="container">
-<div id="header">
-    <div id="logo">&nbsp;</div>
-    <div id="branding">{% block branding %}{% endblock %}</div>
-    <div id="user-tools">
-{% if user.is_authenticated %}
-<a href="{% url 'django.contrib.auth.views.logout' %}">{% trans "Log out" %}</a>
-{% else %}
-{% comment %}FIXME : fix hard-coded URL{% endcomment %}
-<a href="{{ login_url }}?next=/">{% trans "Log in" %}</a>
-{% endif %}
-    </div>
-</div>
-<div class="breadcrumbs">{% block breadcrumbs %}{% endblock %}</div>
 <div id="content">{% block content %}{% endblock %}</div>
 <div id="footer">
     <script src="{{ STATIC_URL }}coconuts/js/jquery.min.js"></script>

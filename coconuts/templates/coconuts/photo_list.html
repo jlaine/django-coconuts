@@ -5,8 +5,6 @@
 
 {% block subtitle %}{{ folder }}{% endblock %}
 
-{% block breadcrumbs %}{% coconuts_crumbs folder.path %}{% endblock %}
-
 {% block content %}
 {% for message in messages %}
 <div class="message">{{ message|escape }}</div>
@@ -14,6 +12,10 @@
 
 {% verbatim %}
 <div ng-app="coconuts" ng-controller="FolderCtrl">
+
+<div class="breadcrumbs">
+    {{ contents.name }}
+</div>
 
 <h1>{{ contents.name }}</h1>
 
