@@ -235,7 +235,7 @@ class Folder:
             try:
                 return settings.COCONUTS_TITLE
             except:
-                return _("Shares")
+                return 'Shares'
         else:
             return os.path.basename(self.path)
 
