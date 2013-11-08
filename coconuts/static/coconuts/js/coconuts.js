@@ -6,17 +6,15 @@ config(['$httpProvider', '$routeProvider', function($httpProvider, $routeProvide
 }]).
 controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings', function($http, $location, $scope, FormData, settings) {
     $scope.settings = settings;
-    $scope.contents = {photos: []};
+    $scope.currentFolder = {photos: []};
 
     function updatePhoto() {
         var path = $location.path();
-        var photo, i;
-        for (i = 0; i < $scope.contents.photos.length; i++) {
-            photo = $scope.contents.photos[i];
-            if (photo.path === path) {
-                $scope.previousPhoto = $scope.contents.photos[i-1];
-                $scope.currentPhoto = photo;
-                $scope.nextPhoto = $scope.contents.photos[i+1];
+        for (var i = 0; i < $scope.currentFolder.photos.length; i++) {
+            if ($scope.currentFolder.photos[i].path === path) {
+                $scope.previousPhoto = $scope.currentFolder.photos[i-1];
+                $scope.currentPhoto = $scope.currentFolder.photos[i];
+                $scope.nextPhoto = $scope.currentFolder.photos[i+1];
                 return;
             }
         }
@@ -28,12 +26,12 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
     $scope.doAdd = function() {
         var formData = new FormData();
         formData.append('upload', $scope.addFile);
-        $http.post(settings.coconuts_root + 'add_file' + $scope.contents.path, formData, {
+        $http.post(settings.coconuts_root + 'add_file' + $scope.currentFolder.path, formData, {
             headers: { 'Content-Type': undefined },
             transformRequest: function(data) { return data; }
-        }).success(function(contents) {
+        }).success(function(currentFolder) {
             $scope.addPrompt = false;
-            $scope.contents = contents;
+            $scope.currentFolder = currentFolder;
             updatePhoto();
         });
     };
@@ -41,12 +39,12 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
     $scope.doCreate = function() {
         var formData = new FormData();
         formData.append('name', $scope.createName);
-        $http.post(settings.coconuts_root + 'add_folder' + $scope.contents.path, formData, {
+        $http.post(settings.coconuts_root + 'add_folder' + $scope.currentFolder.path, formData, {
             headers: { 'Content-Type': undefined },
             transformRequest: function(data) { return data; }
-        }).success(function(contents) {
+        }).success(function(currentFolder) {
             $scope.createPrompt = false;
-            $scope.contents = contents;
+            $scope.currentFolder = currentFolder;
             updatePhoto();
         });
     };
@@ -56,10 +54,10 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
         $scope.deleteFolder = false;
     };
     $scope.doDelete = function() {
-        $http.post(settings.coconuts_root + 'delete/' + $scope.deleteTarget.path).success(function(contents) {
+        $http.post(settings.coconuts_root + 'delete/' + $scope.deleteTarget.path).success(function(currentFolder) {
             $scope.deleteTarget = undefined;
-            $scope.contents = contents;
-            $location.path($scope.contents.path);
+            $scope.currentFolder = currentFolder;
+            $location.path(currentFolder.path);
         });
     };
 
@@ -84,11 +82,11 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
         $scope.crumbs = crumbs;
 
         // fetch folder contents
-        if ($scope.contents.path == dirPath) {
+        if ($scope.currentFolder.path == dirPath) {
             updatePhoto();
         } else {
-            $http.get(settings.coconuts_root + 'contents' + dirPath).success(function(contents) {
-                $scope.contents = contents;
+            $http.get(settings.coconuts_root + 'contents' + dirPath).success(function(currentFolder) {
+                $scope.currentFolder = currentFolder;
                 updatePhoto();
             });
         }

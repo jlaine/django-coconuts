@@ -44,7 +44,7 @@ describe('Controllers', function() {
         }));
 
         it('should get contents', function() {
-            expect(scope.contents).toEqual({
+            expect(scope.currentFolder).toEqual({
                 can_manage: true,
                 can_write: true,
                 files: [],

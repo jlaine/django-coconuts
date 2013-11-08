@@ -23,45 +23,45 @@
     <span ng-repeat="crumb in crumbs"> &rsaquo; <a href="#{{ crumb.path }}">{{ crumb.name }}</a></span>
 </div>
 
-<h1 ng-hide="currentPhoto">{{ contents.name }}</h1>
+<h1 ng-hide="currentPhoto">{{ currentFolder.name }}</h1>
 
-<div class="btn-group object-tools ng-cloak" ng-show="contents.can_write && !currentPhoto">
+<div class="btn-group object-tools ng-cloak" ng-show="currentFolder.can_write && !currentPhoto">
     <a class="btn dropdown-toggle" data-toggle="dropdown" href="">
         <span co-translate>Operations</span>
         <span class="caret"></span>
     </a>
     <ul class="dropdown-menu">
-        <li ng-show="contents.can_write"><a href="" ng-click="addPrompt = true"><i class="icon-picture"></i> <span co-translate>Add a file</span></a></li>
-        <li ng-show="contents.can_write"><a href="" ng-click="createPrompt = true"><i class="icon-folder-close"></i> <span co-translate>Create a folder</span></a></li>
-        <li ng-show="contents.can_manage"><a href="{{ settings.coconuts_root }}manage{{ contents.path }}"><i class="icon-key"></i> <span co-translate>Manage this share's permissions</span></a></li>
-        <li ng-show="contents.can_manage"><a href="/admin/auth/user/"><i class="icon-user"></i> <span co-translate>Manage user accounts</span></a></li>
+        <li ng-show="currentFolder.can_write"><a href="" ng-click="addPrompt = true"><i class="icon-picture"></i> <span co-translate>Add a file</span></a></li>
+        <li ng-show="currentFolder.can_write"><a href="" ng-click="createPrompt = true"><i class="icon-folder-close"></i> <span co-translate>Create a folder</span></a></li>
+        <li ng-show="currentFolder.can_manage"><a href="{{ settings.coconuts_root }}manage{{ currentFolder.path }}"><i class="icon-key"></i> <span co-translate>Manage this share's permissions</span></a></li>
+        <li ng-show="currentFolder.can_manage"><a href="/admin/auth/user/"><i class="icon-user"></i> <span co-translate>Manage user accounts</span></a></li>
     </ul>
 </div>
 
 <div class="ng-cloak" ng-hide="currentPhoto">
-    <p ng-show="contents.files.length == 0 && contents.folders.length == 0" co-translate>There are no files in this folder.</p>
+    <p ng-show="currentFolder.files.length == 0 && currentFolder.folders.length == 0" co-translate>There are no files in this folder.</p>
 
-    <div class="file" title="{{ folder.filedate }}" ng-repeat="folder in contents.folders">
+    <div class="file" title="{{ folder.filedate }}" ng-repeat="folder in currentFolder.folders">
         <div class="filename"><a href="#{{ folder.path }}"><img ng-src="{{ settings.static_root }}img/folder.png"/>{{ folder.name }}</a></div>
         <div class="filesize"></div>
-        <div class="fileactions" ng-show="contents.can_write">
+        <div class="fileactions" ng-show="currentFolder.can_write">
             <a href="" ng-click="promptDelete(folder)"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
         </div>
     </div>
 
-    <div ng-switch="contents.files.length == contents.photos.length">
+    <div ng-switch="currentFolder.files.length == currentFolder.photos.length">
         <div ng-switch-when="false">
-            <div class="file" title="{{ file.filedate }}" ng-repeat="file in contents.files">
+            <div class="file" title="{{ file.filedate }}" ng-repeat="file in currentFolder.files">
                 <div class="filename"><a href="{{ settings.coconuts_root }}download{{ file.path }}"><img ng-src="{{ file.name | fileIcon }}"/>{{ file.name }}</a></div>
                 <div class="filesize">{{ file.filesize | fileSize }}</div>
-                <div class="fileactions" ng-show="contents.can_write">
+                <div class="fileactions" ng-show="currentFolder.can_write">
                     <a href="" ng-click="promptDelete(file)"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
                 </div>
             </div>
         </div>
         <div ng-switch-when="true">
             <ul class="thumbnails">
-                <li ng-repeat="photo in contents.photos">
+                <li ng-repeat="photo in currentFolder.photos">
                     <a class="thumbnail" href="#{{ photo.path }}"><img ng-src="{{ settings.coconuts_root }}render{{ photo.path }}?size=128" alt="{{ photo.name }}"/></a>
                 </li>
             </ul>
@@ -84,7 +84,7 @@
             <li title="The aperture and exposure time for this picture"><i class="icon-wrench"></i> {{ currentPhoto.settings }}</li>
         </ul>
         <div class="photo-actions">
-            <a class="btn btn-danger" href="" ng-click="promptDelete(currentPhoto)" ng-show="contents.can_write"><i class="icon-remove"></i> <span co-translate>Delete</a>
+            <a class="btn btn-danger" href="" ng-click="promptDelete(currentPhoto)" ng-show="currentFolder.can_write"><i class="icon-remove"></i> <span co-translate>Delete</a>
             <a class="btn" href="{{ settings.coconuts_root }}download{{ currentPhoto.path }}"><i class="icon-download"></i> <span co-translate>Download</span></a>
         </div>
     </div>
@@ -125,7 +125,7 @@
     </div>
     <div class="modal-body">
         <img ng-src="{{ settings.coconuts_root }}render{{ deleteTarget.path }}?size=128" alt="{{ deleteTarget.name }}" style="vertical-align: center; display: inline"/>
-        <p co-translate ng-show="deleteFolder">Are you sure you want to delete the folder "{{ deleteTarget.name }}" and all its contents?</p>
+        <p co-translate ng-show="deleteFolder">Are you sure you want to delete the folder "{{ deleteTarget.name }}" and all its currentFolder?</p>
         <p co-translate ng-hide="deleteFolder">Are you sure you want to delete the file "{{ deleteTarget.name }}"?</p>
     </div>
     <div class="modal-footer">
