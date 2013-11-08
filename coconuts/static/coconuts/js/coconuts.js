@@ -38,9 +38,10 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
         $http.post(settings.coconuts_root + 'add_file' + window.location.pathname, formData, {
             headers: { 'Content-Type': undefined },
             transformRequest: function(data) { return data; }
-        }).success(function() {
+        }).success(function(contents) {
             $scope.addPrompt = false;
-            updateList();
+            $scope.contents = contents;
+            updatePhoto();
         });
     };
 
@@ -50,9 +51,10 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
         $http.post(settings.coconuts_root + 'add_folder' + window.location.pathname, formData, {
             headers: { 'Content-Type': undefined },
             transformRequest: function(data) { return data; }
-        }).success(function() {
+        }).success(function(contents) {
             $scope.createPrompt = false;
-            updateList();
+            $scope.contents = contents;
+            updatePhoto();
         });
     };
 
@@ -61,10 +63,11 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
         $scope.deleteFolder = false;
     };
     $scope.doDelete = function() {
-        $http.post(settings.coconuts_root + 'delete/' + $scope.deleteTarget.path).success(function() {
+        $http.post(settings.coconuts_root + 'delete/' + $scope.deleteTarget.path).success(function(contents) {
             $scope.deleteTarget = undefined;
+            $scope.contents = contents;
             $location.path('');
-            updateList();
+            updatePhoto();
         });
     };
 

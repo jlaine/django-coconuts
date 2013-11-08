@@ -32,31 +32,55 @@ describe('Controllers', function() {
             });
 
             $httpBackend.expect('GET', '/images/contents/context.html').respond({
+                can_manage: true,
+                can_write: true,
                 files: [],
+                name: '',
                 folders: [],
-                photos: []
+                photos: [],
+                path: '',
+                url: '/'
             });
             $httpBackend.flush();
         }));
 
         it('should get contents', function() {
             expect(scope.contents).toEqual({
+                can_manage: true,
+                can_write: true,
                 files: [],
                 folders: [],
-                photos: []
+                name: '',
+                photos: [],
+                path: '',
+                url: '/'
             }); 
         });
 
         it('should add file', function() {
             $httpBackend.expect('POST', '/images/add_file/context.html', function(data) {
                 return angular.equals(data, {
-                    upload: {name: 'New file.jpg'}
+                    upload: {name: 'folder.png'}
                 }, true);
             }).respond({
+                can_manage: true,
+                can_write: true,
+                files: [
+                    {
+                        filesize: 548,
+                        name: 'folder.png',
+                        path: 'folder.png'
+                    }
+                ],
+                folders: [],
+                name: '',
+                photos: [],
+                path: '',
+                url: '/'
             });
  
             scope.addPrompt = true;
-            scope.addFile = {name: "New file.jpg"};
+            scope.addFile = {name: "folder.png"};
             scope.doAdd();
             $httpBackend.flush();
             expect(scope.addPrompt).toBe(false);
@@ -68,6 +92,16 @@ describe('Controllers', function() {
                     name: 'New folder'
                 }, true);
             }).respond({
+                files: [],
+                folders: [
+                    {
+                        filesize: 4096,
+                        name: 'New folder',
+                        path: 'New folder',
+                        url: '/New%20folder/',
+                    }
+                ],
+                photos: []
             });
  
             scope.createPrompt = true;
