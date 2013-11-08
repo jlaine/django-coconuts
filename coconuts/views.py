@@ -23,7 +23,7 @@ import time
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse, HttpResponseBadRequest
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.utils.http import http_date, urlquote
@@ -81,7 +81,7 @@ def add_file(request, path):
 
     # check permissions
     if not folder.has_perm('can_write', request.user):
-        return forbidden(request)
+        return HttpResponseForbidden()
 
     form = AddFileForm(request.POST, request.FILES)
     if not form.is_valid():
@@ -109,7 +109,7 @@ def add_folder(request, path):
 
     # check permissions
     if not folder.has_perm('can_write', request.user):
-        return forbidden(request)
+        return HttpResponseForbidden()
 
     form = AddFolderForm(request.POST)
     if not form.is_valid():
@@ -145,7 +145,7 @@ def content_list(request, path):
 
     # check permissions
     if not folder.has_perm('can_read', request.user):
-        return forbidden(request)
+        return HttpResponseForbidden()
 
     # list of sub-folders and photos
     children, files, photos, mode = folder.list()
