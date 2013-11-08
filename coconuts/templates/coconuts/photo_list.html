@@ -23,7 +23,7 @@
     <span ng-repeat="crumb in crumbs"> &rsaquo; <a href="#{{ crumb.path }}">{{ crumb.name }}</a></span>
 </div>
 
-<h1>{{ contents.name }}</h1>
+<h1 ng-hide="currentPhoto">{{ contents.name }}</h1>
 
 <div class="btn-group object-tools" ng-show="contents.can_write && !currentPhoto">
     <a class="btn dropdown-toggle" data-toggle="dropdown" href="">
