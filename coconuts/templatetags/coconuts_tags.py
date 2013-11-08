@@ -27,9 +27,6 @@ import coconuts
 
 register = Library()
 
-MB = 1024 *1024
-KB = 1024
-
 def coconuts_title():
     try:
         return settings.COCONUTS_TITLE
@@ -68,20 +65,6 @@ def coconuts_static(medium):
     """
     return settings.STATIC_URL + 'coconuts/' + medium
 register.simple_tag(coconuts_static)
-
-def filesize(size):
-    if size > MB:
-        return "%.1f MB" % (float(size) / MB)
-    elif size > KB:
-        return "%.1f kB" % (float(size) / KB)
-    else:
-        return "%i B" % size
-register.simple_tag(filesize)
-
-def imagesize(size):
-    width, height = size
-    return "%i x %i pixels" % (width, height)
-register.simple_tag(imagesize)
 
 def login_url():
     try:
