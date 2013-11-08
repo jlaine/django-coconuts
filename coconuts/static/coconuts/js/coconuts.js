@@ -106,7 +106,7 @@ filter('fileIcon', ['settings', function(settings) {
                 return mime_root + 'text-x-python.png';
             }
         }
-        return mimeroot + 'unknown.png';
+        return mime_root + 'unknown.png';
     };
 }]).
 filter('fileSize', [function() {
