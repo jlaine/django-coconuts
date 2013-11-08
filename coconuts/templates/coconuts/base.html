@@ -12,19 +12,6 @@
 
 {% block footer %}
 {{ block.super }}
-<div id="crud-dialog"></div>
-<script type="text/javascript">
-$('a.popup').click(function(event) {
-    event.preventDefault();
-    var url = $(this).attr('href');
-    var container = $('#crud-dialog');
-    container.load(url + ' form.modal', function() {
-        var form = container.find('form.modal');
-        form.attr('action', url);
-        form.modal();
-    });
-});
-</script>
 <script src="{{ STATIC_URL }}coconuts/js/angular.min.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}coconuts/js/angular-animate.min.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}coconuts/js/angular-resource.min.js" type="text/javascript"></script>
