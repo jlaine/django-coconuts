@@ -31,7 +31,7 @@ from django.views.decorators.http import require_http_methods
 import django.views.static
 
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
-from coconuts.models import File, Folder, Photo, NamedAcl, PERMISSIONS
+from coconuts.models import File, Folder, Photo, NamedAcl, OWNERS, PERMISSIONS
 
 PHOTO_SIZE = 1024
 THUMB_SIZE = 128
@@ -241,6 +241,17 @@ def manage(request, path):
         'share': share,
         'shareform': shareform,
         }))
+
+@login_required
+def owner_list(request):
+    choices = []
+    for klass, key in OWNERS:
+        opts = []
+        for obj in klass.objects.all().order_by(key):
+            opts.append("%s:%s" % (klass.__name__.lower(), getattr(obj, key)))
+        if len(opts):
+            choices.append({'name': klass.__name__, 'options': opts})
+    return render_to_json(choices)
 
 @login_required
 def render_file(request, path):

@@ -18,17 +18,17 @@
 
 from django.conf.urls import patterns, url
 
-urlpatterns = patterns('',
+urlpatterns = patterns('coconuts.views',
     # files
-    url(r'^images/add_file/(?P<path>.*)$', 'coconuts.views.add_file'),
-    url(r'^images/add_folder/(?P<path>.*)$', 'coconuts.views.add_folder'),
-    url(r'^images/contents/(?P<path>.*)$', 'coconuts.views.content_list'),
-    url(r'^images/delete/(?P<path>.*)$', 'coconuts.views.delete'),
-    url(r'^images/download/(?P<path>.*)$', 'coconuts.views.download'),
-    url(r'^images/manage/(?P<path>.*)$', 'coconuts.views.manage'),
-    url(r'^images/render/(?P<path>.*)$', 'coconuts.views.render_file'),
+    url(r'^images/add_file/(?P<path>.*)$', 'add_file'),
+    url(r'^images/add_folder/(?P<path>.*)$', 'add_folder'),
+    url(r'^images/contents/(?P<path>.*)$', 'content_list'),
+    url(r'^images/delete/(?P<path>.*)$', 'delete'),
+    url(r'^images/download/(?P<path>.*)$', 'download'),
+    url(r'^images/manage/(?P<path>.*)$', 'manage'),
+    url(r'^images/owners/', 'owner_list'),
+    url(r'^images/render/(?P<path>.*)$', 'render_file'),
 
     # folders
-    url(r'^(?P<path>.*)$', 'coconuts.views.browse'),
+    url(r'^(?P<path>.*)$', 'browse'),
 )
-
