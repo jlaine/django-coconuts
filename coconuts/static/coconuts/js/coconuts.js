@@ -66,6 +66,10 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
     $scope.location = $location;
     $scope.$watch('location.path()', function(path) {
         if (path === '') path = '/';
+        var idx = path.lastIndexOf('/');
+        var dirPath = path.slice(0, idx + 1)
+
+        // breadcrumbs
         var crumbs = [];
         var crumbPath = '/';
         var bits = path.split('/');
@@ -78,10 +82,16 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
             crumbs.push({name: bits[bits.length-1], path: crumbPath});
         }
         $scope.crumbs = crumbs;
-        $http.get(settings.coconuts_root + 'contents' + path).success(function(contents) {
-            $scope.contents = contents;
+
+        // fetch folder contents
+        if ($scope.contents.path == dirPath) {
             updatePhoto();
-        });
+        } else {
+            $http.get(settings.coconuts_root + 'contents' + dirPath).success(function(contents) {
+                $scope.contents = contents;
+                updatePhoto();
+            });
+        }
     });
 }]).
 directive('coFile', ['$parse', function($parse) {
