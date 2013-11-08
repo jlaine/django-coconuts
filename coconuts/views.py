@@ -43,12 +43,6 @@ def FolderContext(request, folder, args):
         'can_write': folder.has_perm('can_write', request.user)})
     return RequestContext(request, args)
 
-def forbidden(request):
-    """Return an error page when the user attempts something forbidden."""
-    resp = render_to_response('coconuts/forbidden.html', RequestContext(request))
-    resp.status_code = 403
-    return resp
-
 def render_to_json(arg = {}):
     def encode_models(obj):
         if isinstance(obj, File) or isinstance(obj, Folder):
@@ -159,7 +153,7 @@ def content_list(request, path):
 def delete(request, path):
     """Delete the given file."""
     if not path:
-        return forbidden(request)
+        return HttpResponseForbidden()
 
     # find target
     if File.isdir(path):
@@ -172,7 +166,7 @@ def delete(request, path):
     # check permissions
     folder = Folder(os.path.dirname(target.path))
     if not folder.has_perm('can_write', request.user):
-        return forbidden(request)
+        return HttpResponseForbidden()
 
     # delete file or folder
     target.delete()
@@ -185,7 +179,7 @@ def download(request, path):
 
     # check permissions
     if not folder.has_perm('can_read', request.user):
-        return forbidden(request)
+        return HttpResponseForbidden()
 
     resp = django.views.static.serve(request,
         path,
@@ -199,13 +193,13 @@ def manage(request, path):
 
     # Check this is a folder, not a file
     if path and not (path.endswith('/') and path.count("/") == 1):
-        return forbidden(request)
+        return HttpResponseForbidden()
 
     # Check permissions
     folder = Folder(os.path.dirname(path))
     share = folder.share
     if not share.has_perm('can_manage', request.user):
-        return forbidden(request)
+        return HttpResponseForbidden()
 
     # Process submission
     if request.method == 'POST':
@@ -228,7 +222,7 @@ def manage(request, path):
 
             # Check we are not locking ourselves out before saving
             if not share.has_perm('can_manage', request.user):
-                return forbidden(request)
+                return HttpResponseForbidden()
             share.save()
             return redirect(folder.url())
 
@@ -255,7 +249,7 @@ def render_file(request, path):
 
     # check permissions
     if not folder.has_perm('can_read', request.user):
-        return forbidden(request)
+        return HttpResponseForbidden()
 
     # check the size is legitimate
     form = PhotoForm(request.GET)
