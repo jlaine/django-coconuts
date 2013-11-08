@@ -67,12 +67,17 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
             $scope.deleteTarget = undefined;
             $scope.contents = contents;
             $location.path('');
-            updatePhoto();
         });
     };
 
     $scope.location = $location;
-    $scope.$watch('location.path()', updatePhoto);
+    $scope.$watch('location.path()', function(path) {
+        if (path == '') path = '/';
+        $http.get(settings.coconuts_root + 'contents' + path).success(function(contents) {
+            $scope.contents = contents;
+            updatePhoto();
+        });
+    });
     updateList();
 }]).
 directive('coFile', ['$parse', function($parse) {

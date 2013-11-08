@@ -1,15 +1,6 @@
 {% extends "coconuts/base.html" %}
-{% load coconuts_tags %}
-{% load i18n %}
-{% load url from future %}
-
-{% block subtitle %}{{ folder }}{% endblock %}
 
 {% block content %}
-{% for message in messages %}
-<div class="message">{{ message|escape }}</div>
-{% endfor %}
-
 {% verbatim %}
 <div ng-app="coconuts" ng-controller="FolderCtrl">
 
@@ -36,7 +27,7 @@
     <p ng-show="contents.files.length == 0 && contents.folders.length == 0" co-translate>There are no files in this folder.</p>
 
     <div class="file" title="{{ folder.filedate }}" ng-repeat="folder in contents.folders">
-        <div class="filename"><a href="{{ folder.url }}"><img ng-src="{{ settings.static_root }}img/folder.png"/>{{ folder.name }}</a></div>
+        <div class="filename"><a href="#/{{ folder.path }}/"><img ng-src="{{ settings.static_root }}img/folder.png"/>{{ folder.name }}</a></div>
         <div class="filesize"></div>
         <div class="fileactions" ng-show="contents.can_write">
             <a href="" ng-click="promptDelete(folder)"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
@@ -83,7 +74,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal form-inline" ng-show="addPrompt">
     <div class="modal-header">

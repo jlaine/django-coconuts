@@ -22,6 +22,7 @@ import time
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
@@ -120,6 +121,9 @@ def add_folder(request, path):
 @login_required
 def browse(request, path):
     """Show the list of photos for the given folder."""
+    if path:
+        return redirect(reverse(browse, args=['']) + '#/' + path)
+
     try:
         folder = Folder(os.path.dirname(path))
     except Folder.DoesNotExist:
