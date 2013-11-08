@@ -124,8 +124,9 @@ def browse(request, path):
     """Show the list of photos for the given folder."""
     if path:
         return redirect(reverse(browse, args=['']) + '#/' + path)
-
-    return render(request, 'coconuts/photo_list.html')
+    template_path = os.path.join(os.path.dirname(__file__), 'templates', 'coconuts', 'photo_list.html')
+    data = open(template_path).read().replace('{{ STATIC_URL }}', '/static/')
+    return HttpResponse(data)
 
 @login_required
 def content_list(request, path):
