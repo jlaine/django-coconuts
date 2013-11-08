@@ -165,7 +165,7 @@ class HomeTest(BaseTest):
         """
         self.client.login(username="test_user_2", password="test")
         response = self.client.get('/')
-        self.assertContains(response, '<h1>')
+        self.assertEquals(response.status_code, 200)
 
     def test_other_as_anonymous(self):
         """
@@ -272,7 +272,7 @@ class DeleteFileTest(BaseTest):
 
     def test_as_superuser(self):
         """
-        Authenticated super-user can create a folder.
+        Authenticated super-user can delete a file.
         """
         self.client.login(username="test_user_1", password="test")
 
@@ -282,6 +282,7 @@ class DeleteFileTest(BaseTest):
         # GET fails
         response = self.client.get('/images/delete/folder.png')
         self.assertEquals(response.status_code, 405)
+        self.assertTrue(os.path.exists(data_path))
 
         # POST succeeds
         response = self.client.post('/images/delete/folder.png')
@@ -294,13 +295,11 @@ class DeleteFileTest(BaseTest):
             'photos': [],
             'path': '/',
         })
-
-        # check folder
         self.assertFalse(os.path.exists(data_path))
 
     def test_as_user(self):
         """
-        Authenticated super-user can create a folder.
+        Authenticated user cannot delete a file.
         """
         self.client.login(username="test_user_2", password="test")
 
@@ -310,10 +309,58 @@ class DeleteFileTest(BaseTest):
         # GET fails
         response = self.client.get('/images/delete/folder.png')
         self.assertEquals(response.status_code, 405)
+        self.assertTrue(os.path.exists(data_path))
 
-        # POST succeeds
+        # POST fails
         response = self.client.post('/images/delete/folder.png')
         self.assertEquals(response.status_code, 403)
+        self.assertTrue(os.path.exists(data_path))
 
-        # check folder
+class DeleteFolderTest(BaseTest):
+    fixtures = ['test_users.json']
+
+    def test_as_superuser(self):
+        """
+        Authenticated super-user can delete a file.
+        """
+        self.client.login(username="test_user_1", password="test")
+
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo')
+        os.makedirs(data_path)
+
+        # GET fails
+        response = self.client.get('/images/delete/Foo/')
+        self.assertEquals(response.status_code, 405)
+        self.assertTrue(os.path.exists(data_path))
+
+        # POST succeeds
+        response = self.client.post('/images/delete/Foo/')
+        self.assertJson(response, {
+            'can_manage': True,
+            'can_write': True,
+            'files': [],
+            'folders': [],
+            'name': 'Shares',
+            'photos': [],
+            'path': '/',
+        })
+        self.assertFalse(os.path.exists(data_path))
+
+    def test_as_user(self):
+        """
+        Authenticated user cannot delete a file.
+        """
+        self.client.login(username="test_user_2", password="test")
+
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo')
+        os.makedirs(data_path)
+
+        # GET fails
+        response = self.client.get('/images/delete/Foo/')
+        self.assertEquals(response.status_code, 405)
+        self.assertTrue(os.path.exists(data_path))
+
+        # POST fails
+        response = self.client.post('/images/delete/Foo/')
+        self.assertEquals(response.status_code, 403)
         self.assertTrue(os.path.exists(data_path))
