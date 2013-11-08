@@ -72,7 +72,7 @@ class FolderContentTest(BaseTest):
                 {
                     'filesize': 4096,
                     'name': 'Foo',
-                    'path': '/Foo',
+                    'path': '/Foo/',
                 },
             ],
             'name': 'Shares',
@@ -180,7 +180,7 @@ class AddFolderTest(BaseTest):
                 {
                     'filesize': 4096,
                     'name': 'New folder',
-                    'path': '/New folder',
+                    'path': '/New folder/',
                 },
             ],
             'name': 'Shares',

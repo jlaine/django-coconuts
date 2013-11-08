@@ -8,13 +8,6 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
     $scope.settings = settings;
     $scope.contents = {photos: []};
 
-    function updateList() {
-        $http.get(settings.coconuts_root + 'contents' + window.location.pathname).success(function(contents) {
-            $scope.contents = contents;
-            updatePhoto();
-        });
-    }
-
     function updatePhoto() {
         var path = $location.path();
         var photo, i;
@@ -35,7 +28,7 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
     $scope.doAdd = function() {
         var formData = new FormData();
         formData.append('upload', $scope.addFile);
-        $http.post(settings.coconuts_root + 'add_file' + window.location.pathname, formData, {
+        $http.post(settings.coconuts_root + 'add_file' + location.path(), formData, {
             headers: { 'Content-Type': undefined },
             transformRequest: function(data) { return data; }
         }).success(function(contents) {
@@ -48,7 +41,7 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
     $scope.doCreate = function() {
         var formData = new FormData();
         formData.append('name', $scope.createName);
-        $http.post(settings.coconuts_root + 'add_folder' + window.location.pathname, formData, {
+        $http.post(settings.coconuts_root + 'add_folder' + $location.path(), formData, {
             headers: { 'Content-Type': undefined },
             transformRequest: function(data) { return data; }
         }).success(function(contents) {
@@ -73,21 +66,19 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
     $scope.location = $location;
     $scope.$watch('location.path()', function(path) {
         if (path == '') path = '/';
-        var bits = path.split('/');
         var crumbs = [];
         var crumbPath = '';
+        var bits = path.split('/');
         for (var i = 1; i < bits.length - 1; i++) {
             crumbPath += '/' + bits[i] + '/';
             crumbs.push({name: bits[i], path: crumbPath});
         }
         $scope.crumbs = crumbs;
-        console.log(crumbs);
         $http.get(settings.coconuts_root + 'contents' + path).success(function(contents) {
             $scope.contents = contents;
             updatePhoto();
         });
     });
-    updateList();
 }]).
 directive('coFile', ['$parse', function($parse) {
     return {

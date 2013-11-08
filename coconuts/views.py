@@ -45,7 +45,7 @@ def FolderContext(request, folder, args):
 
 def render_to_json(arg = {}):
     def encode_models(obj):
-        if isinstance(obj, File) or isinstance(obj, Folder):
+        if isinstance(obj, File):
             data = {
                 'filesize': obj.filesize(),
                 'name': obj.name(),
@@ -58,6 +58,15 @@ def render_to_json(arg = {}):
                     'size': obj.size(),
                 })
             return data
+        elif isinstance(obj, Folder):
+            path = '/' + obj.path
+            if not path.endswith('/'):
+                path += '/'
+            return {
+                'filesize': obj.filesize(),
+                'name': obj.name(),
+                'path': path,
+            }
         raise TypeError(repr(obj) + " is not JSON serializable")
     data = json.dumps(arg, default=encode_models)
     return HttpResponse(data, content_type='application/json')

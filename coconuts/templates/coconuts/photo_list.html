@@ -30,7 +30,7 @@
     <ul class="dropdown-menu">
         <li ng-show="contents.can_write"><a href="" ng-click="addPrompt = true"><i class="icon-picture"></i> <span co-translate>Add a file</span></a></li>
         <li ng-show="contents.can_write"><a href="" ng-click="createPrompt = true"><i class="icon-folder-close"></i> <span co-translate>Create a folder</span></a></li>
-        <li ng-show="contents.can_manage"><a href="{{ settings.coconuts_root }}manage{{ contents.path }}/"><i class="icon-key"></i> <span co-translate>Manage this share's permissions</span></a></li>
+        <li ng-show="contents.can_manage"><a href="{{ settings.coconuts_root }}manage{{ contents.path }}"><i class="icon-key"></i> <span co-translate>Manage this share's permissions</span></a></li>
         <li ng-show="contents.can_manage"><a href="/admin/auth/user/"><i class="icon-user"></i> <span co-translate>Manage user accounts</span></a></li>
     </ul>
 </div>
@@ -39,7 +39,7 @@
     <p ng-show="contents.files.length == 0 && contents.folders.length == 0" co-translate>There are no files in this folder.</p>
 
     <div class="file" title="{{ folder.filedate }}" ng-repeat="folder in contents.folders">
-        <div class="filename"><a href="#{{ folder.path }}/"><img ng-src="{{ settings.static_root }}img/folder.png"/>{{ folder.name }}</a></div>
+        <div class="filename"><a href="#{{ folder.path }}"><img ng-src="{{ settings.static_root }}img/folder.png"/>{{ folder.name }}</a></div>
         <div class="filesize"></div>
         <div class="fileactions" ng-show="contents.can_write">
             <a href="" ng-click="promptDelete(folder)"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
