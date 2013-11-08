@@ -69,7 +69,7 @@
     </div>
 </div>
 
-<div class="ng-cloak" ng-show="currentPhoto">
+<div class="ng-cloak" ng-show="currentPhoto" ng-swipe-left="swipeLeft()" ng-swipe-right="swipeRight()">
     <div class="thumbnail" style="position: relative" ng-show="currentPhoto">
         <img ng-src="{{ settings.coconuts_root}}render{{ currentPhoto.path }}?size=1024" alt="{{ currentPhoto.name }}"/>
         <a class="left carousel-control" ng-href="#{{ previousPhoto.path }}" ng-show="previousPhoto">&lsaquo;</a>

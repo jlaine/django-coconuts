@@ -23,6 +23,19 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
         $scope.nextPhoto = undefined;
     }
 
+    $scope.swipeLeft = function() {
+        console.log('swipe left');
+        if ($scope.previousPhoto) {
+            $location.path($scope.previousPhoto.path);
+        }
+    };
+
+    $scope.swipeRight = function() {
+        if ($scope.nextPhoto) {
+            $location.path($scope.nextPhoto.path);
+        }
+    };
+
     $scope.doAdd = function() {
         var formData = new FormData();
         formData.append('upload', $scope.addFile);
