@@ -139,6 +139,10 @@ def content_list(request, path):
     if not folder.has_perm('can_read', request.user):
         return HttpResponseForbidden()
 
+    path = '/' + folder.path
+    if not path.endswith('/'):
+        path += '/'
+
     # list of sub-folders and photos
     children, files, photos, mode = folder.list()
     # keep only the children the user is allowed to read. This is only useful in '/'
@@ -147,7 +151,7 @@ def content_list(request, path):
         'can_manage': folder.has_perm('can_manage', request.user),
         'can_write': folder.has_perm('can_write', request.user),
         'name': folder.name(),
-        'path': '/' + folder.path,
+        'path': path,
 
         'files': files,
         'folders': allowed_children,
