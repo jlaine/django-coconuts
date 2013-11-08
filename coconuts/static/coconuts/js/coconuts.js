@@ -67,10 +67,10 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
     $scope.$watch('location.path()', function(path) {
         if (path === '') path = '/';
         var crumbs = [];
-        var crumbPath = '';
+        var crumbPath = '/';
         var bits = path.split('/');
         for (var i = 1; i < bits.length - 1; i++) {
-            crumbPath += '/' + bits[i] + '/';
+            crumbPath += bits[i] + '/';
             crumbs.push({name: bits[i], path: crumbPath});
         }
         $scope.crumbs = crumbs;
