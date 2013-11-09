@@ -55,12 +55,14 @@ controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'Folde
     $scope.swipeLeft = function() {
         if ($scope.nextPhoto) {
             $location.path($scope.nextPhoto.path);
+            $location.replace();
         }
     };
 
     $scope.swipeRight = function() {
         if ($scope.previousPhoto) {
             $location.path($scope.previousPhoto.path);
+            $location.replace();
         }
     };
 
