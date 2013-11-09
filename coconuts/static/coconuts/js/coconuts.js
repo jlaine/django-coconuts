@@ -8,7 +8,8 @@ config(['$httpProvider', '$routeProvider', function($httpProvider, $routeProvide
         when(':path*', {
             templateUrl: '/folder.html',
             controller: 'FolderCtrl'
-        });
+        }).
+        otherwise({redirectTo: '/'});
 }]).
 controller('CrumbCtrl', ['$location', '$scope', function($location, $scope) {
     $scope.location = $location;
