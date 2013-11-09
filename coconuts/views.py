@@ -161,17 +161,15 @@ def content_list(request, path):
 @login_required
 @require_http_methods(['POST'])
 def delete(request, path):
-    """Delete the given file."""
+    """Delete the given file or folder."""
     if not path:
         return HttpResponseForbidden()
 
     # find target
     if File.isdir(path):
         target = Folder(path)
-        is_folder = True
     else:
         target = File(path)
-        is_folder = False
 
     # check permissions
     folder = Folder(os.path.dirname(target.path))
