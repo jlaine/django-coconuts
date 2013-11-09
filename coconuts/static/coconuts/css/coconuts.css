@@ -67,3 +67,41 @@
     display: inline-block;
     float: right;
 }
+
+/* transitions */
+
+.slide-forward.ng-enter,
+.slide-backward.ng-enter,
+.slide-forward.ng-leave,
+.slide-backward.ng-leave {
+    -webkit-transition: 0.5s ease all;
+    -moz-transition: 0.5s ease all;
+    -o-transition: 0.5s ease all;
+    transition: 0.5s ease all;
+}
+
+.slide-forward.ng-enter {
+    transform: translateX(100%);
+}
+.slide-forward.ng-enter-active {
+    transform: translateX(0%);
+}
+.slide-forward.ng-leave {
+    transform: translateX(0%);
+}
+.slide-forward.ng-leave-active {
+    transform: translateX(-100%);
+}
+
+.slide-backward.ng-enter {
+    transform: translateX(-100%);
+}
+.slide-backward.ng-enter-active {
+    transform: translateX(0%);
+}
+.slide-backward.ng-leave {
+    transform: translateX(0%);
+}
+.slide-backward.ng-leave-active {
+    transform: translateX(100%);
+}
