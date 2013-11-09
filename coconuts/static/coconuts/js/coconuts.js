@@ -3,6 +3,12 @@ config(['$httpProvider', '$routeProvider', function($httpProvider, $routeProvide
     // handle django's CSRF
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+    $routeProvider.
+        when(':path*', {
+            templateUrl: '/folder.html',
+            controller: 'FolderCtrl'
+        });
 }]).
 controller('CrumbCtrl', ['$location', '$scope', function($location, $scope) {
     $scope.location = $location;
@@ -22,14 +28,13 @@ controller('CrumbCtrl', ['$location', '$scope', function($location, $scope) {
         $scope.crumbs = crumbs;
     });
 }]).
-controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings', function($http, $location, $scope, FormData, settings) {
+controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'FormData', 'settings', function($http, $location, $routeParams, $scope, FormData, settings) {
     $scope.settings = settings;
     $scope.currentFolder = {photos: []};
 
     function updatePhoto() {
-        var path = $location.path();
         for (var i = 0; i < $scope.currentFolder.photos.length; i++) {
-            if ($scope.currentFolder.photos[i].path === path) {
+            if ($scope.currentFolder.photos[i].path === $routeParams.path) {
                 $scope.previousPhoto = $scope.currentFolder.photos[i-1];
                 $scope.currentPhoto = $scope.currentFolder.photos[i];
                 $scope.nextPhoto = $scope.currentFolder.photos[i+1];
@@ -91,21 +96,12 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
         });
     };
 
-    $scope.location = $location;
-    $scope.$watch('location.path()', function(path) {
-        if (path === '') path = '/';
-        var idx = path.lastIndexOf('/');
-        var dirPath = path.slice(0, idx + 1);
-
-        // fetch folder contents
-        if ($scope.currentFolder.path == dirPath) {
-            updatePhoto();
-        } else {
-            $http.get(settings.coconuts_root + 'contents' + dirPath).success(function(currentFolder) {
-                $scope.currentFolder = currentFolder;
-                updatePhoto();
-            });
-        }
+    // fetch folder contents
+    var idx = $routeParams.path.lastIndexOf('/');
+    var dirPath = $routeParams.path.slice(0, idx + 1);
+    $http.get(settings.coconuts_root + 'contents' + dirPath).success(function(currentFolder) {
+        $scope.currentFolder = currentFolder;
+        updatePhoto();
     });
 }]).
 directive('coFile', ['$parse', function($parse) {

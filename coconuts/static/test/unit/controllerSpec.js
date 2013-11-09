@@ -80,6 +80,7 @@ describe('Controllers', function() {
         beforeEach(inject(function($controller, $rootScope) {
             scope = $rootScope.$new();
             ctrl = $controller('FolderCtrl', {
+                $routeParams: {path: '/'},
                 $scope: scope
             });
 
