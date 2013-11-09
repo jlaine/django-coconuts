@@ -84,6 +84,7 @@
 <div class="ng-cloak" ng-show="currentPhoto" ng-swipe-left="swipeLeft()" ng-swipe-right="swipeRight()">
     <div class="thumbnail" style="position: relative" ng-show="currentPhoto">
         <img co-photo="currentPhoto" co-size="1024"/>
+        <img co-photo="nextPhoto" co-size="1024" style="display: none"/>
         <a class="left carousel-control" ng-href="#{{ previousPhoto.path }}" ng-show="previousPhoto">&lsaquo;</a>
         <a class="right carousel-control" ng-href="#{{ nextPhoto.path }}" ng-show="nextPhoto">&rsaquo;</a>
     </div>
