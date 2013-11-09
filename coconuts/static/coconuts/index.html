@@ -74,7 +74,7 @@
         <div ng-switch-when="true">
             <ul class="thumbnails">
                 <li ng-repeat="photo in currentFolder.photos">
-                    <a class="thumbnail" href="#{{ photo.path }}"><img ng-src="{{ settings.coconuts_root }}render{{ photo.path }}?size=128" alt="{{ photo.name }}"/></a>
+                    <a class="thumbnail" href="#{{ photo.path }}"><img co-photo="photo" co-size="128"/></a>
                 </li>
             </ul>
         </div>
@@ -83,7 +83,7 @@
 
 <div class="ng-cloak" ng-show="currentPhoto" ng-swipe-left="swipeLeft()" ng-swipe-right="swipeRight()">
     <div class="thumbnail" style="position: relative" ng-show="currentPhoto">
-        <img ng-src="{{ settings.coconuts_root}}render{{ currentPhoto.path }}?size=1024" alt="{{ currentPhoto.name }}"/>
+        <img co-photo="currentPhoto" co-size="1024"/>
         <a class="left carousel-control" ng-href="#{{ previousPhoto.path }}" ng-show="previousPhoto">&lsaquo;</a>
         <a class="right carousel-control" ng-href="#{{ nextPhoto.path }}" ng-show="nextPhoto">&rsaquo;</a>
     </div>
@@ -136,7 +136,7 @@
         <h3 co-translate>Really delete "{{ deleteTarget.name }}"?</h3>
     </div>
     <div class="modal-body">
-        <img ng-src="{{ settings.coconuts_root }}render{{ deleteTarget.path }}?size=128" alt="{{ deleteTarget.name }}" style="vertical-align: center; display: inline"/>
+        <img co-photo="deleteTarget" co-size="128" style="vertical-align: center; display: inline"/>
         <p co-translate ng-show="deleteFolder">Are you sure you want to delete the folder "{{ deleteTarget.name }}" and all its contents?</p>
         <p co-translate ng-hide="deleteFolder">Are you sure you want to delete the file "{{ deleteTarget.name }}"?</p>
     </div>

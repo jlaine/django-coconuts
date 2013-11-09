@@ -99,7 +99,6 @@ controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'Folde
             $location.path(currentFolder.path);
         });
     };
-
 }]).
 directive('coFile', ['$parse', function($parse) {
     return {
@@ -110,6 +109,24 @@ directive('coFile', ['$parse', function($parse) {
                 scope.$apply(function() {
                     model.assign(scope, evt.target.files[0]);
                 });
+            });
+        }
+    };
+}]).
+directive('coPhoto', ['settings', function(settings) {
+    return {
+        restrict: 'A',
+        scope: {
+            photo: '=coPhoto'
+        },
+        link: function(scope, elm, attrs) {
+            scope.$watch('photo', function(photo) {
+                elm.attr('alt', photo.name);
+                if (photo.path) {
+                    elm.attr('src', settings.coconuts_root + 'render' + photo.path + '?size=' + attrs.coSize);
+                } else {
+                    elm.attr('src', '');
+                }
             });
         }
     };
