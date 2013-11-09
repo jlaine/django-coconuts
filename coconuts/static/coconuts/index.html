@@ -17,12 +17,12 @@
 
 <body ng-app="coconuts">
 <div class="container">
-<div id="content" ng-controller="FolderCtrl">
-
-<div class="breadcrumbs">
+<div class="breadcrumbs" ng-controller="CrumbCtrl">
     <span><a href="#/">Home</a></span>
     <span ng-repeat="crumb in crumbs"> &rsaquo; <a href="#{{ crumb.path }}">{{ crumb.name }}</a></span>
 </div>
+
+<div id="content" ng-controller="FolderCtrl">
 
 <h1 ng-hide="currentPhoto">{{ currentFolder.name }}</h1>
 

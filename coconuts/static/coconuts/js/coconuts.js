@@ -4,6 +4,24 @@ config(['$httpProvider', '$routeProvider', function($httpProvider, $routeProvide
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]).
+controller('CrumbCtrl', ['$location', '$scope', function($location, $scope) {
+    $scope.location = $location;
+    $scope.$watch('location.path()', function(path) {
+        if (path === '') path = '/';
+        var crumbs = [];
+        var crumbPath = '/';
+        var bits = path.split('/');
+        for (var i = 1; i < bits.length - 1; i++) {
+            crumbPath += bits[i] + '/';
+            crumbs.push({name: bits[i], path: crumbPath});
+        }
+        if (bits[bits.length-1]) {
+            crumbPath += bits[bits.length-1];
+            crumbs.push({name: bits[bits.length-1], path: crumbPath});
+        }
+        $scope.crumbs = crumbs;
+    });
+}]).
 controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings', function($http, $location, $scope, FormData, settings) {
     $scope.settings = settings;
     $scope.currentFolder = {photos: []};
@@ -77,21 +95,7 @@ controller('FolderCtrl', ['$http', '$location', '$scope', 'FormData', 'settings'
     $scope.$watch('location.path()', function(path) {
         if (path === '') path = '/';
         var idx = path.lastIndexOf('/');
-        var dirPath = path.slice(0, idx + 1)
-
-        // breadcrumbs
-        var crumbs = [];
-        var crumbPath = '/';
-        var bits = path.split('/');
-        for (var i = 1; i < bits.length - 1; i++) {
-            crumbPath += bits[i] + '/';
-            crumbs.push({name: bits[i], path: crumbPath});
-        }
-        if (bits[bits.length-1]) {
-            crumbPath += bits[bits.length-1];
-            crumbs.push({name: bits[bits.length-1], path: crumbPath});
-        }
-        $scope.crumbs = crumbs;
+        var dirPath = path.slice(0, idx + 1);
 
         // fetch folder contents
         if ($scope.currentFolder.path == dirPath) {
