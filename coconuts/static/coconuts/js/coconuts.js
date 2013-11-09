@@ -29,9 +29,8 @@ controller('CrumbCtrl', ['$location', '$scope', function($location, $scope) {
         $scope.crumbs = crumbs;
     });
 }]).
-controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'FormData', 'settings', function($http, $location, $routeParams, $scope, FormData, settings) {
+controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'Folder', 'FormData', 'settings', function($http, $location, $routeParams, $scope, Folder, FormData, settings) {
     $scope.settings = settings;
-    $scope.currentFolder = {photos: []};
 
     function updatePhoto() {
         for (var i = 0; i < $scope.currentFolder.photos.length; i++) {
@@ -46,6 +45,12 @@ controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'FormD
         $scope.currentPhoto = undefined;
         $scope.nextPhoto = undefined;
     }
+
+    // fetch folder contents
+    var idx = $routeParams.path.lastIndexOf('/');
+    var dirPath = $routeParams.path.slice(0, idx + 1);
+    $scope.currentFolder = Folder.get(dirPath);
+    $scope.$watch('currentFolder', updatePhoto, true);
 
     $scope.swipeLeft = function() {
         if ($scope.nextPhoto) {
@@ -67,8 +72,7 @@ controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'FormD
             transformRequest: function(data) { return data; }
         }).success(function(currentFolder) {
             $scope.addPrompt = false;
-            $scope.currentFolder = currentFolder;
-            updatePhoto();
+            angular.copy($scope.currentFolder, currentFolder);
         });
     };
 
@@ -80,8 +84,7 @@ controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'FormD
             transformRequest: function(data) { return data; }
         }).success(function(currentFolder) {
             $scope.createPrompt = false;
-            $scope.currentFolder = currentFolder;
-            updatePhoto();
+            angular.copy($scope.currentFolder, currentFolder);
         });
     };
 
@@ -92,18 +95,11 @@ controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'FormD
     $scope.doDelete = function() {
         $http.post(settings.coconuts_root + 'delete' + $scope.deleteTarget.path).success(function(currentFolder) {
             $scope.deleteTarget = undefined;
-            $scope.currentFolder = currentFolder;
+            angular.copy($scope.currentFolder, currentFolder);
             $location.path(currentFolder.path);
         });
     };
 
-    // fetch folder contents
-    var idx = $routeParams.path.lastIndexOf('/');
-    var dirPath = $routeParams.path.slice(0, idx + 1);
-    $http.get(settings.coconuts_root + 'contents' + dirPath).success(function(currentFolder) {
-        $scope.currentFolder = currentFolder;
-        updatePhoto();
-    });
 }]).
 directive('coFile', ['$parse', function($parse) {
     return {
@@ -117,6 +113,24 @@ directive('coFile', ['$parse', function($parse) {
             });
         }
     };
+}]).
+factory('Folder', ['$cacheFactory', '$http', 'settings', function($cacheFactory, $http, settings) {
+    var cache = $cacheFactory('Folder');
+    var Folder = function() {
+        this.photos = [];
+    };
+    Folder.get = function(dirPath) {
+        var folder = cache.get(dirPath);
+        if (folder === undefined) {
+            folder = new Folder();
+            $http.get(settings.coconuts_root + 'contents' + dirPath).success(function(data) {
+                angular.copy(data, folder);
+                cache.put(dirPath, folder);
+            });
+        }
+        return folder;
+    };
+    return Folder;
 }]).
 factory('FormData', [function() {
     return FormData;
