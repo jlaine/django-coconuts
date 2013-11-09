@@ -12,9 +12,10 @@ setup(
     packages = ['coconuts'],
     package_data = {
         'coconuts': [
-            'public/css/*.css',
-            'public/img/*.png',
-            'public/js/*.js',
+            'static/coconuts/css/*.css',
+            'static/coconuts/img/*.png',
+            'static/coconuts/index.html',
+            'static/coconuts/js/*.js',
             'templates/coconuts/*.html',
         ]
     })

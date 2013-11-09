@@ -1,6 +1,6 @@
 {
-'directories': ['coconuts', 'coconuts/templatetags'],
-'exclude': 'coconuts/(templatetags/)?(__init__|EXIF)\.py',
+'directories': ['coconuts'],
+'exclude': 'coconuts/EXIF\.py',
 'license': """Copyright (C) 2008-2013 Jeremy Lainé
 
 This program is free software: you can redistribute it and/or modify
