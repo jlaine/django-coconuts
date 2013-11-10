@@ -17,9 +17,11 @@
 #
 
 import json
+import mimetypes
 import os
 import shutil
 import time
+import Image
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -31,11 +33,50 @@ from django.utils.http import http_date, urlquote
 from django.views.decorators.http import require_http_methods
 import django.views.static
 
+import coconuts.EXIF as EXIF
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
 from coconuts.models import File, Folder, Photo, NamedAcl, OWNERS, PERMISSIONS, urljoin
 
 PHOTO_SIZE = 1024
 THUMB_SIZE = 128
+
+def get_image_info(filepath):
+    """
+    Get an image's information.
+    """
+    info = {}
+    with open(filepath, 'rb') as fp:
+        tags = EXIF.process_file(fp, details=False)
+
+    # camera
+    camera = None
+    if tags.has_key('Image Model'):
+        camera = "%s" % tags['Image Model']
+    if tags.has_key('Image Make'):
+        make = "%s" % tags['Image Make']
+        if not camera:
+            camera = make
+        elif not camera.startswith(make):
+            camera = "%s %s" % (make, camera)
+    if camera:
+        info['camera'] = camera
+
+    # settings
+    bits = []
+    if tags.has_key('EXIF FNumber'):
+        v = eval("float(%s.0)" % tags['EXIF FNumber'])
+        bits.append("f/%s" % v)
+    if tags.has_key('EXIF ExposureTime'):
+        bits.append(u"%s sec" % tags['EXIF ExposureTime'])
+    if tags.has_key('EXIF FocalLength'):
+        bits.append(u"%s mm" % tags['EXIF FocalLength'])
+    if bits:
+        info['settings'] = ', '.join(bits)
+
+    # size
+    info['size'] = Image.open(filepath).size
+
+    return info
 
 def FolderContext(request, folder, args):
     args.update({
@@ -43,22 +84,6 @@ def FolderContext(request, folder, args):
         'can_manage': folder.has_perm('can_manage', request.user),
         'can_write': folder.has_perm('can_write', request.user)})
     return RequestContext(request, args)
-
-def render_to_json(arg = {}):
-    def encode_models(obj):
-        if isinstance(obj, File):
-            data = {
-                'mimetype': obj.mimetype(),
-                'name': obj.name(),
-                'path': '/' + obj.path,
-                'size': os.path.getsize(obj.filepath()),
-            }
-            if isinstance(obj, Photo):
-                data['image'] = obj.get_image_info()
-            return data
-        raise TypeError(repr(obj) + " is not JSON serializable")
-    data = json.dumps(arg, default=encode_models)
-    return HttpResponse(data, content_type='application/json')
 
 @login_required
 @require_http_methods(['POST'])
@@ -147,17 +172,21 @@ def content_list(request, path):
                     'size': os.path.getsize(node),
                 })
         else:
-            file = File(node_path)
-            if file.is_image():
-                files.append(Photo(node_path))
-            else:
-                files.append(file)
+            data = {
+                'mimetype': mimetypes.guess_type(node)[0],
+                'name': entry,
+                'path': '/' + node_path,
+                'size': os.path.getsize(node),
+            }
+            if data['mimetype'] in ['image/jpeg', 'image/pjpeg']:
+                data['image'] = get_image_info(node)
+            files.append(data)
 
     path = '/' + folder.path
     if not path.endswith('/'):
         path += '/'
 
-    return render_to_json({
+    return HttpResponse(json.dumps({
         'can_manage': folder.has_perm('can_manage', request.user),
         'can_write': folder.has_perm('can_write', request.user),
         'name': folder.name(),
@@ -165,7 +194,7 @@ def content_list(request, path):
 
         'files': files,
         'folders': folders,
-    })
+    }), content_type='application/json')
 
 @login_required
 @require_http_methods(['POST'])
@@ -265,7 +294,7 @@ def owner_list(request):
             opts.append("%s:%s" % (klass.__name__.lower(), getattr(obj, key)))
         if len(opts):
             choices.append({'name': klass.__name__, 'options': opts})
-    return render_to_json(choices)
+    return HttpResponse(json.dumps(choices), content_type='application/json')
 
 @login_required
 def render_file(request, path):

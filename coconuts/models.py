@@ -216,54 +216,9 @@ class File:
         filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
         return os.path.isdir(filepath)
 
-    def get_image_info(self):
-        """
-        Get the photo's information.
-        """
-        info = {}
-        tags = self.tags()
-
-        # camera
-        camera = None
-        if tags.has_key('Image Model'):
-            camera = "%s" % tags['Image Model']
-        if tags.has_key('Image Make'):
-            make = "%s" % tags['Image Make']
-            if not camera:
-                camera = make
-            elif not camera.startswith(make):
-                camera = "%s %s" % (make, camera)
-        if camera:
-            info['camera'] = camera
-
-        # settings
-        bits = []
-        if tags.has_key('EXIF FNumber'):
-            v = eval("float(%s.0)" % tags['EXIF FNumber'])
-            bits.append("f/%s" % v)
-        if tags.has_key('EXIF ExposureTime'):
-            bits.append(u"%s sec" % tags['EXIF ExposureTime'])
-        if tags.has_key('EXIF FocalLength'):
-            bits.append(u"%s mm" % tags['EXIF FocalLength'])
-        if bits:
-            info['settings'] = ', '.join(bits)
-
-        # size
-        info['size'] = Image.open(self.filepath()).size
-
-        return info
-
     def filepath(self):
         """Get the file's full path."""
         return os.path.join(settings.COCONUTS_DATA_ROOT, url2path(self.path))
-
-    def is_image(self):
-        (type, encoding) = mimetypes.guess_type(self.path)
-        return type == 'image/jpeg' or type == 'image/pjpeg'
-
-    def mimetype(self):
-        """Get the file's MIME type."""
-        return mimetypes.guess_type(self.path)[0]
 
     def name(self):
         """Get the file's name."""
@@ -272,16 +227,6 @@ class File:
 class Photo(File):
     def __init__(self, path):
         File.__init__(self, path)
-        self.__tags = None
-
-    def angle(self):
-        """Get the photo's orientation."""
-        tags = self.tags()
-        if tags.has_key('Image Orientation'):
-            orientation = tags['Image Orientation'].values[0]
-            return ORIENTATIONS[orientation][2]
-        else:
-            return 0
 
     def cache(self, size):
         """Get a resized version of the photo."""
@@ -293,17 +238,14 @@ class Photo(File):
             if not os.path.exists(cachedir):
                 os.makedirs(cachedir)
             img = Image.open(self.filepath())
-            angle = self.angle()
-            if angle:
-                img = img.rotate(angle)
+
+            # rotate if needed
+            with open(self.filepath, 'rb') as fp:
+                tags = EXIF.process_file(fp, details=False)
+                if tags.has_key('Image Orientation'):
+                    orientation = tags['Image Orientation'].values[0]
+                    img = img.rotate(ORIENTATIONS[orientation][2])
+
             img.thumbnail(cachesize, Image.ANTIALIAS)
             img.save(cachefile, quality=90)
         return path2url(cachepath)
-
-    def tags(self):
-        """Get the photo's EXIF tags."""
-        if not self.__tags:
-            fp = file(self.filepath())
-            self.__tags = EXIF.process_file(fp, details=False)
-            fp.close()
-        return self.__tags
