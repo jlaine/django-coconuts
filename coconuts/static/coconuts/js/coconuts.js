@@ -33,11 +33,14 @@ controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'Folde
     $scope.settings = settings;
 
     function updatePhoto() {
-        for (var i = 0; i < $scope.currentFolder.photos.length; i++) {
-            if ($scope.currentFolder.photos[i].path === $routeParams.path) {
-                $scope.previousPhoto = $scope.currentFolder.photos[i-1];
-                $scope.currentPhoto = $scope.currentFolder.photos[i];
-                $scope.nextPhoto = $scope.currentFolder.photos[i+1];
+        var photos = $scope.currentFolder.files.filter(function(x) {
+            return x.image !== undefined;
+        });
+        for (var i = 0; i < photos.length; i++) {
+            if (photos[i].path === $routeParams.path) {
+                $scope.previousPhoto = photos[i-1];
+                $scope.currentPhoto = photos[i];
+                $scope.nextPhoto = photos[i+1];
                 return;
             }
         }

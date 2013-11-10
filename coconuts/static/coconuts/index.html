@@ -73,8 +73,8 @@
         </div>
         <div ng-switch-when="true">
             <ul class="thumbnails">
-                <li ng-repeat="photo in currentFolder.photos">
-                    <a class="thumbnail" href="#{{ photo.path }}"><img co-photo="photo" co-size="128"/></a>
+                <li ng-repeat="file in currentFolder.files">
+                    <a class="thumbnail" href="#{{ file.path }}"><img co-photo="file" co-size="128"/></a>
                 </li>
             </ul>
         </div>
