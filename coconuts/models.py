@@ -200,7 +200,7 @@ class Folder:
         return os.path.join(settings.COCONUTS_DATA_ROOT, url2path(self.path))
 
     def filesize(self):
-        """Get the file's size."""
+        """Get the folder's size."""
         return os.path.getsize(self.filepath())
 
     def list(self):
@@ -289,6 +289,10 @@ class File:
     def is_image(self):
         (type, encoding) = mimetypes.guess_type(self.path)
         return type == 'image/jpeg' or type == 'image/pjpeg'
+
+    def mimetype(self):
+        """Get the file's MIME type."""
+        return mimetypes.guess_type(self.path)[0]
 
     def name(self):
         """Get the file's name."""

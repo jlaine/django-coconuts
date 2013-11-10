@@ -86,7 +86,7 @@ class FolderContentTest(BaseTest):
     def setUp(self):
         super(FolderContentTest, self).setUp()
         os.makedirs(os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo'))
-        for name in ['test.dat', 'test.jpg']:
+        for name in ['test.jpg', 'test.txt']:
             source_path = os.path.join(os.path.dirname(__file__), name)
             dest_path = os.path.join(settings.COCONUTS_DATA_ROOT, name)
             shutil.copyfile(source_path, dest_path)
@@ -110,12 +110,8 @@ class FolderContentTest(BaseTest):
             'files': [],
             'files': [
                 {
-                    'filesize': 6,
-                    'name': 'test.dat',
-                    'path': '/test.dat',
-                },
-                {
                     'filesize': 186899,
+                    'mimetype': 'image/jpeg',
                     'name': 'test.jpg',
                     'path': '/test.jpg',
                     'image': {
@@ -123,6 +119,12 @@ class FolderContentTest(BaseTest):
                         'settings': u'f/10.0, 1/125\xa0sec, 48\xa0mm',
                         'size': [1024, 683],
                     }
+                },
+                {
+                    'filesize': 6,
+                    'mimetype': 'text/plain',
+                    'name': 'test.txt',
+                    'path': '/test.txt',
                 }
             ],
             'folders': [
@@ -136,6 +138,7 @@ class FolderContentTest(BaseTest):
             'photos': [
                 {
                     'filesize': 186899,
+                    'mimetype': 'image/jpeg',
                     'name': 'test.jpg',
                     'path': '/test.jpg',
                     'image': {
@@ -211,6 +214,7 @@ class AddFileTest(BaseTest):
             'files': [
                 {
                     'filesize': 548,
+                    'mimetype': 'image/png',
                     'name': 'folder.png',
                     'path': '/folder.png',
                 }

@@ -48,6 +48,7 @@ def render_to_json(arg = {}):
         if isinstance(obj, File):
             data = {
                 'filesize': obj.filesize(),
+                'mimetype': obj.mimetype(),
                 'name': obj.name(),
                 'path': '/' + obj.path,
             }
