@@ -47,10 +47,10 @@ def render_to_json(arg = {}):
     def encode_models(obj):
         if isinstance(obj, File):
             data = {
-                'filesize': obj.filesize(),
                 'mimetype': obj.mimetype(),
                 'name': obj.name(),
                 'path': '/' + obj.path,
+                'size': obj.filesize(),
             }
             if isinstance(obj, Photo):
                 data['image'] = {
@@ -64,9 +64,9 @@ def render_to_json(arg = {}):
             if not path.endswith('/'):
                 path += '/'
             return {
-                'filesize': obj.filesize(),
                 'name': obj.name(),
                 'path': path,
+                'size': obj.filesize(),
             }
         raise TypeError(repr(obj) + " is not JSON serializable")
     data = json.dumps(arg, default=encode_models)

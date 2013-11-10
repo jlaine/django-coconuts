@@ -65,7 +65,7 @@
         <div ng-switch-when="false">
             <div class="file" title="{{ file.filedate }}" ng-repeat="file in currentFolder.files">
                 <div class="filename"><a href="{{ settings.coconuts_root }}download{{ file.path }}"><img ng-src="{{ file.name | fileIcon }}"/>{{ file.name }}</a></div>
-                <div class="filesize">{{ file.filesize | fileSize }}</div>
+                <div class="filesize">{{ file.size | fileSize }}</div>
                 <div class="fileactions" ng-show="currentFolder.can_write">
                     <a href="" ng-click="promptDelete(file)"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
                 </div>
@@ -93,7 +93,7 @@
     <div class="well photo-footer">
         <ul class="nav nav-tabs nav-stacked photo-info">
             <li title="The size of the original picture"><i class="icon-resize-full"></i> {{ currentPhoto.image.size[0] }} x {{ currentPhoto.image.size[1] }} pixels</li>
-            <li title="The size of the original picture"><i class="icon-file"></i> {{ currentPhoto.filesize | fileSize }}</li>
+            <li title="The size of the original picture"><i class="icon-file"></i> {{ currentPhoto.size | fileSize }}</li>
             <li title="The camera used to take this picture"><i class="icon-camera"></i> {{ currentPhoto.image.camera }}</li>
             <li title="The aperture and exposure time for this picture"><i class="icon-wrench"></i> {{ currentPhoto.image.settings }}</li>
         </ul>

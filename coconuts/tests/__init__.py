@@ -110,42 +110,42 @@ class FolderContentTest(BaseTest):
             'files': [],
             'files': [
                 {
-                    'filesize': 186899,
-                    'mimetype': 'image/jpeg',
-                    'name': 'test.jpg',
-                    'path': '/test.jpg',
                     'image': {
                         'camera': 'Canon EOS 450D',
                         'settings': u'f/10.0, 1/125\xa0sec, 48\xa0mm',
                         'size': [1024, 683],
-                    }
+                    },
+                    'mimetype': 'image/jpeg',
+                    'name': 'test.jpg',
+                    'path': '/test.jpg',
+                    'size': 186899,
                 },
                 {
-                    'filesize': 6,
                     'mimetype': 'text/plain',
                     'name': 'test.txt',
                     'path': '/test.txt',
+                    'size': 6,
                 }
             ],
             'folders': [
                 {
-                    'filesize': 4096,
                     'name': 'Foo',
                     'path': '/Foo/',
+                    'size': 4096,
                 },
             ],
             'name': 'Shares',
             'photos': [
                 {
-                    'filesize': 186899,
-                    'mimetype': 'image/jpeg',
-                    'name': 'test.jpg',
-                    'path': '/test.jpg',
                     'image': {
                         'camera': 'Canon EOS 450D',
                         'settings': u'f/10.0, 1/125\xa0sec, 48\xa0mm',
                         'size': [1024, 683],
-                    }
+                    },
+                    'mimetype': 'image/jpeg',
+                    'name': 'test.jpg',
+                    'path': '/test.jpg',
+                    'size': 186899,
                 }
             ],
             'path': '/',
@@ -213,10 +213,10 @@ class AddFileTest(BaseTest):
             'can_write': True,
             'files': [
                 {
-                    'filesize': 548,
                     'mimetype': 'image/png',
                     'name': 'folder.png',
                     'path': '/folder.png',
+                    'size': 548,
                 }
              ],
             'folders': [],
@@ -250,9 +250,9 @@ class AddFolderTest(BaseTest):
             'files': [],
             'folders': [
                 {
-                    'filesize': 4096,
                     'name': 'New folder',
                     'path': '/New folder/',
+                    'size': 4096,
                 },
             ],
             'name': 'Shares',

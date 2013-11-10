@@ -118,9 +118,9 @@ describe('Controllers', function() {
                 can_write: true,
                 files: [
                     {
-                        filesize: 548,
                         name: 'folder.png',
-                        path: 'folder.png'
+                        path: 'folder.png',
+                        size: 548,
                     }
                 ],
                 folders: [],
@@ -147,10 +147,9 @@ describe('Controllers', function() {
                 files: [],
                 folders: [
                     {
-                        filesize: 4096,
                         name: 'New folder',
                         path: 'New folder',
-                        url: '/New%20folder/',
+                        size: 4096,
                     }
                 ],
                 name: '',
