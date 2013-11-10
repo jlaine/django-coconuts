@@ -170,12 +170,6 @@ class Folder:
         except Share.DoesNotExist:
             self.share = Share(path=sharepath)
 
-    def __eq__(self, other):
-        if isinstance(other, Folder):
-            return self.path == other.path
-        else:
-            return NotImplemented
-
     def __unicode__(self):
         return self.name()
 
@@ -191,17 +185,9 @@ class Folder:
         """Delete the folder."""
         shutil.rmtree(self.filepath())
 
-    def filedate(self):
-        """Get the file's last modification date."""
-        return datetime.datetime.fromtimestamp(os.path.getmtime(self.filepath()))
-
     def filepath(self):
         """Get the folder's full path."""
         return os.path.join(settings.COCONUTS_DATA_ROOT, url2path(self.path))
-
-    def filesize(self):
-        """Get the folder's size."""
-        return os.path.getsize(self.filepath())
 
     def list(self):
         folders = []
@@ -256,12 +242,6 @@ class File:
         if not os.path.exists(self.filepath()):
             raise self.DoesNotExist
 
-    def __eq__(self, other):
-        if isinstance(other, File):
-            return self.path == other.path
-        else:
-            return NotImplemented
-
     def __unicode__(self):
         return self.name()
 
@@ -274,17 +254,9 @@ class File:
         """Delete the file."""
         os.unlink(self.filepath())
 
-    def filedate(self):
-        """Get the file's last modification date."""
-        return datetime.datetime.fromtimestamp(os.path.getmtime(self.filepath()))
-
     def filepath(self):
         """Get the file's full path."""
         return os.path.join(settings.COCONUTS_DATA_ROOT, url2path(self.path))
-
-    def filesize(self):
-        """Get the file's size."""
-        return os.path.getsize(self.filepath())
 
     def is_image(self):
         (type, encoding) = mimetypes.guess_type(self.path)
@@ -354,7 +326,7 @@ class Photo(File):
             bits.append(u"%s sec" % tags['EXIF ExposureTime'])
         if tags.has_key('EXIF FocalLength'):
             bits.append(u"%s mm" % tags['EXIF FocalLength'])
-	return bits and ', '.join(bits) or None
+        return bits and ', '.join(bits) or None
 
     def size(self):
         """Get the photo's dimensions."""

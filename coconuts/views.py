@@ -50,7 +50,7 @@ def render_to_json(arg = {}):
                 'mimetype': obj.mimetype(),
                 'name': obj.name(),
                 'path': '/' + obj.path,
-                'size': obj.filesize(),
+                'size': os.path.getsize(obj.filepath()),
             }
             if isinstance(obj, Photo):
                 data['image'] = {
@@ -66,7 +66,7 @@ def render_to_json(arg = {}):
             return {
                 'name': obj.name(),
                 'path': path,
-                'size': obj.filesize(),
+                'size': os.path.getsize(obj.filepath()),
             }
         raise TypeError(repr(obj) + " is not JSON serializable")
     data = json.dumps(arg, default=encode_models)

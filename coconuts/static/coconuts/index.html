@@ -53,7 +53,7 @@
 <div class="ng-cloak" ng-hide="currentPhoto">
     <p ng-show="currentFolder.files.length == 0 && currentFolder.folders.length == 0" co-translate>There are no files in this folder.</p>
 
-    <div class="file" title="{{ folder.filedate }}" ng-repeat="folder in currentFolder.folders">
+    <div class="file" ng-repeat="folder in currentFolder.folders">
         <div class="filename"><a href="#{{ folder.path }}"><img ng-src="{{ settings.static_root }}img/folder.png"/>{{ folder.name }}</a></div>
         <div class="filesize"></div>
         <div class="fileactions" ng-show="currentFolder.can_write">
@@ -63,7 +63,7 @@
 
     <div ng-switch="currentFolder.files.length == currentFolder.photos.length">
         <div ng-switch-when="false">
-            <div class="file" title="{{ file.filedate }}" ng-repeat="file in currentFolder.files">
+            <div class="file" ng-repeat="file in currentFolder.files">
                 <div class="filename"><a href="{{ settings.coconuts_root }}download{{ file.path }}"><img ng-src="{{ file.name | fileIcon }}"/>{{ file.name }}</a></div>
                 <div class="filesize">{{ file.size | fileSize }}</div>
                 <div class="fileactions" ng-show="currentFolder.can_write">
