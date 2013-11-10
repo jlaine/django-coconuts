@@ -32,10 +32,15 @@ controller('CrumbCtrl', ['$location', '$scope', function($location, $scope) {
 controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'Folder', 'FormData', 'settings', function($http, $location, $routeParams, $scope, Folder, FormData, settings) {
     $scope.settings = settings;
 
-    function updatePhoto() {
+    // fetch folder contents
+    var idx = $routeParams.path.lastIndexOf('/');
+    var dirPath = $routeParams.path.slice(0, idx + 1);
+    $scope.currentFolder = Folder.get(dirPath);
+    $scope.$watch('currentFolder', function() {
         var photos = $scope.currentFolder.files.filter(function(x) {
             return x.image !== undefined;
         });
+        $scope.showThumbnails = (photos.length == $scope.currentFolder.files.length);
         for (var i = 0; i < photos.length; i++) {
             if (photos[i].path === $routeParams.path) {
                 $scope.previousPhoto = photos[i-1];
@@ -47,13 +52,7 @@ controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'Folde
         $scope.previousPhoto = undefined;
         $scope.currentPhoto = undefined;
         $scope.nextPhoto = undefined;
-    }
-
-    // fetch folder contents
-    var idx = $routeParams.path.lastIndexOf('/');
-    var dirPath = $routeParams.path.slice(0, idx + 1);
-    $scope.currentFolder = Folder.get(dirPath);
-    $scope.$watch('currentFolder', updatePhoto, true);
+    }, true);
 
     $scope.swipeLeft = function() {
         if ($scope.nextPhoto) {
@@ -77,7 +76,7 @@ controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'Folde
             transformRequest: function(data) { return data; }
         }).success(function(currentFolder) {
             $scope.addPrompt = false;
-            angular.copy($scope.currentFolder, currentFolder);
+            angular.copy(currentFolder, $scope.currentFolder);
         });
     };
 
@@ -89,7 +88,7 @@ controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'Folde
             transformRequest: function(data) { return data; }
         }).success(function(currentFolder) {
             $scope.createPrompt = false;
-            angular.copy($scope.currentFolder, currentFolder);
+            angular.copy(currentFolder, $scope.currentFolder);
         });
     };
 
@@ -100,7 +99,7 @@ controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'Folde
     $scope.doDelete = function() {
         $http.post(settings.coconuts_root + 'delete' + $scope.deleteTarget.path).success(function(currentFolder) {
             $scope.deleteTarget = undefined;
-            angular.copy($scope.currentFolder, currentFolder);
+            angular.copy(currentFolder, $scope.currentFolder);
             $location.path(currentFolder.path);
         });
     };

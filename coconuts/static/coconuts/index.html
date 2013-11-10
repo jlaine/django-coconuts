@@ -61,7 +61,7 @@
         </div>
     </div>
 
-    <div ng-switch="currentFolder.files.length == currentFolder.photos.length">
+    <div ng-switch="showThumbnails">
         <div ng-switch-when="false">
             <div class="file" ng-repeat="file in currentFolder.files">
                 <div class="filename"><a href="{{ settings.coconuts_root }}download{{ file.path }}"><img ng-src="{{ file.name | fileIcon }}"/>{{ file.name }}</a></div>
