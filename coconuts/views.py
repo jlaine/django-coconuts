@@ -32,7 +32,7 @@ from django.views.decorators.http import require_http_methods
 import django.views.static
 
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
-from coconuts.models import File, Folder, Photo, NamedAcl, OWNERS, PERMISSIONS
+from coconuts.models import File, Folder, Photo, NamedAcl, OWNERS, PERMISSIONS, urljoin
 
 PHOTO_SIZE = 1024
 THUMB_SIZE = 128
@@ -54,11 +54,7 @@ def render_to_json(arg = {}):
                 'size': os.path.getsize(obj.filepath()),
             }
             if isinstance(obj, Photo):
-                data['image'] = {
-                    'camera': obj.camera(),
-                    'settings': obj.settings(),
-                    'size': obj.size(),
-                }
+                data['image'] = obj.get_image_info()
             return data
         elif isinstance(obj, Folder):
             path = '/' + obj.path
@@ -141,14 +137,31 @@ def content_list(request, path):
     if not folder.has_perm('can_read', request.user):
         return HttpResponseForbidden()
 
+    # list items
+    folders = []
+    files = []
+    directory = folder.filepath()
+    for entry in sorted(os.listdir(directory)):
+        if entry.startswith('.'):
+            continue
+        node = os.path.join(directory, entry)
+        node_path = urljoin(folder.path, entry)
+        if os.path.isdir(node):
+            # keep only the children the user is allowed to read. This is only useful in '/'
+            child = Folder(node_path)
+            if child.has_perm('can_read', request.user):
+                folders.append(child)
+        else:
+            file = File(node_path)
+            if file.is_image():
+                files.append(Photo(node_path))
+            else:
+                files.append(file)
+
     path = '/' + folder.path
     if not path.endswith('/'):
         path += '/'
 
-    # list of sub-folders and photos
-    children, files = folder.list()
-    # keep only the children the user is allowed to read. This is only useful in '/'
-    allowed_children = [x for x in children if x.has_perm('can_read', request.user)]
     return render_to_json({
         'can_manage': folder.has_perm('can_manage', request.user),
         'can_write': folder.has_perm('can_write', request.user),
@@ -156,7 +169,7 @@ def content_list(request, path):
         'path': path,
 
         'files': files,
-        'folders': allowed_children,
+        'folders': folders,
     })
 
 @login_required

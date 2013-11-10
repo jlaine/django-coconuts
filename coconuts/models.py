@@ -185,25 +185,6 @@ class Folder:
         """Get the folder's full path."""
         return os.path.join(settings.COCONUTS_DATA_ROOT, url2path(self.path))
 
-    def list(self):
-        folders = []
-        files = []
-        directory = self.filepath()
-        for entry in sorted(os.listdir(directory)):
-            if entry.startswith('.'):
-                continue
-            node = os.path.join(directory, entry)
-            path = urljoin(self.path, entry)
-            if os.path.isdir(node):
-                folders.append(Folder(path))
-            else:
-                file = File(path)
-                if file.is_image():
-                    files.append(Photo(path))
-                else:
-                    files.append(file)
-        return folders, files
-
     def name(self):
         """Get the folder's name."""
         if not self.path:
@@ -234,6 +215,43 @@ class File:
     def isdir(self, path):
         filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
         return os.path.isdir(filepath)
+
+    def get_image_info(self):
+        """
+        Get the photo's information.
+        """
+        info = {}
+        tags = self.tags()
+
+        # camera
+        camera = None
+        if tags.has_key('Image Model'):
+            camera = "%s" % tags['Image Model']
+        if tags.has_key('Image Make'):
+            make = "%s" % tags['Image Make']
+            if not camera:
+                camera = make
+            elif not camera.startswith(make):
+                camera = "%s %s" % (make, camera)
+        if camera:
+            info['camera'] = camera
+
+        # settings
+        bits = []
+        if tags.has_key('EXIF FNumber'):
+            v = eval("float(%s.0)" % tags['EXIF FNumber'])
+            bits.append("f/%s" % v)
+        if tags.has_key('EXIF ExposureTime'):
+            bits.append(u"%s sec" % tags['EXIF ExposureTime'])
+        if tags.has_key('EXIF FocalLength'):
+            bits.append(u"%s mm" % tags['EXIF FocalLength'])
+        if bits:
+            info['settings'] = ', '.join(bits)
+
+        # size
+        info['size'] = Image.open(self.filepath()).size
+
+        return info
 
     def filepath(self):
         """Get the file's full path."""
@@ -281,37 +299,6 @@ class Photo(File):
             img.thumbnail(cachesize, Image.ANTIALIAS)
             img.save(cachefile, quality=90)
         return path2url(cachepath)
-
-    def camera(self):
-        """Get the photo's camera name."""
-        tags = self.tags()
-        camera = None
-        if tags.has_key('Image Model'):
-            camera = "%s" % tags['Image Model']
-        if tags.has_key('Image Make'):
-            make = "%s" % tags['Image Make']
-            if not camera:
-                camera = make
-            elif not camera.startswith(make):
-                camera = "%s %s" % (make, camera)
-        return camera
-
-    def settings(self):
-        """Get the photo's aperture and exposure time."""
-        tags = self.tags()
-        bits = []
-        if tags.has_key('EXIF FNumber'):
-            v = eval("float(%s.0)" % tags['EXIF FNumber'])
-            bits.append("f/%s" % v)
-        if tags.has_key('EXIF ExposureTime'):
-            bits.append(u"%s sec" % tags['EXIF ExposureTime'])
-        if tags.has_key('EXIF FocalLength'):
-            bits.append(u"%s mm" % tags['EXIF FocalLength'])
-        return bits and ', '.join(bits) or None
-
-    def size(self):
-        """Get the photo's dimensions."""
-        return Image.open(self.filepath()).size
 
     def tags(self):
         """Get the photo's EXIF tags."""
