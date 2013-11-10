@@ -35,7 +35,7 @@ import django.views.static
 
 import coconuts.EXIF as EXIF
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
-from coconuts.models import File, Folder, Photo, NamedAcl, OWNERS, PERMISSIONS, urljoin
+from coconuts.models import File, Folder, Photo, NamedAcl, OWNERS, PERMISSIONS
 
 def get_image_info(filepath):
     """
@@ -144,46 +144,44 @@ def content_list(request, path):
         return HttpResponseForbidden()
 
     # list items
+    folder_path = folder.filepath()
+    folder_url = '/' + folder.path
+    if not folder_url.endswith('/'):
+        folder_url += '/'
     folders = []
     files = []
-    directory = folder.filepath()
-    for entry in sorted(os.listdir(directory)):
+    for entry in sorted(os.listdir(folder_path)):
         if entry.startswith('.'):
             continue
-        node = os.path.join(directory, entry)
-        node_path = urljoin(folder.path, entry)
-        if os.path.isdir(node):
+        node_path = os.path.join(folder_path, entry)
+        node_url = folder_url + entry
+        if os.path.isdir(node_path):
             # keep only the children the user is allowed to read. This is only useful in '/'
-            child = Folder(node_path)
+            child = Folder(node_url[1:])
             if child.has_perm('can_read', request.user):
                 folders.append({
                     'name': entry,
-                    'path': '/' + node_path + '/',
-                    'size': os.path.getsize(node),
+                    'path': node_url + '/',
+                    'size': os.path.getsize(node_path),
                 })
         else:
             data = {
-                'mimetype': mimetypes.guess_type(node)[0],
+                'mimetype': mimetypes.guess_type(node_path)[0],
                 'name': entry,
-                'path': '/' + node_path,
-                'size': os.path.getsize(node),
+                'path': node_url,
+                'size': os.path.getsize(node_path),
             }
             if data['mimetype'] in ['image/jpeg', 'image/pjpeg']:
-                data['image'] = get_image_info(node)
+                data['image'] = get_image_info(node_path)
             files.append(data)
-
-    path = '/' + folder.path
-    if not path.endswith('/'):
-        path += '/'
 
     return HttpResponse(json.dumps({
         'can_manage': folder.has_perm('can_manage', request.user),
         'can_write': folder.has_perm('can_write', request.user),
-        'name': folder.name(),
-        'path': path,
-
         'files': files,
         'folders': folders,
+        'name': folder.name(),
+        'path': folder_url,
     }), content_type='application/json')
 
 @login_required

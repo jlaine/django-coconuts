@@ -37,14 +37,6 @@ ORIENTATIONS = {
     8: [ False, False, 90 ], # Rotated 90 CCW
 }
 
-def urljoin(base, entry):
-    if base.endswith('/'):
-        base = base[0:-1]
-    if base:
-        return base + '/' + entry
-    else:
-        return entry
-
 def url2path(url):
     return url.replace('/', os.path.sep)
 
@@ -222,8 +214,8 @@ class Photo(File):
         cachesize = size, int(size * 0.75)
         cachepath = os.path.join(str(size), url2path(self.path))
         cachefile = os.path.join(settings.COCONUTS_CACHE_ROOT, cachepath)
-        cachedir = os.path.dirname(cachefile)
         if not os.path.exists(cachefile):
+            cachedir = os.path.dirname(cachefile)
             if not os.path.exists(cachedir):
                 os.makedirs(cachedir)
             img = Image.open(self.filepath())
