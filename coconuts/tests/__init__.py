@@ -118,6 +118,11 @@ class FolderContentTest(BaseTest):
                     'filesize': 186899,
                     'name': 'test.jpg',
                     'path': '/test.jpg',
+                    'image': {
+                        'camera': 'Canon EOS 450D',
+                        'settings': u'f/10.0, 1/125\xa0sec, 48\xa0mm',
+                        'size': [1024, 683],
+                    }
                 }
             ],
             'folders': [

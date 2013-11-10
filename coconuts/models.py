@@ -207,7 +207,6 @@ class Folder:
         folders = []
         files = []
         photos = []
-        mode = 'photos'
         directory = self.filepath()
         entries = os.listdir(directory)
         entries.sort()
@@ -220,12 +219,12 @@ class Folder:
                 folders.append(Folder(path))
             else:
                 file = File(path)
-                files.append(file)
                 if file.is_image():
+                    files.append(Photo(path))
                     photos.append(Photo(path))
                 else:
-                    mode = 'files'
-        return folders, files, photos, mode
+                    files.append(file)
+        return folders, files, photos
 
     def name(self):
         """Get the folder's name."""

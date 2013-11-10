@@ -144,7 +144,7 @@ def content_list(request, path):
         path += '/'
 
     # list of sub-folders and photos
-    children, files, photos, mode = folder.list()
+    children, files, photos = folder.list()
     # keep only the children the user is allowed to read. This is only useful in '/'
     allowed_children = [x for x in children if x.has_perm('can_read', request.user)]
     return render_to_json({
