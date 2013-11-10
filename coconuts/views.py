@@ -56,15 +56,6 @@ def render_to_json(arg = {}):
             if isinstance(obj, Photo):
                 data['image'] = obj.get_image_info()
             return data
-        elif isinstance(obj, Folder):
-            path = '/' + obj.path
-            if not path.endswith('/'):
-                path += '/'
-            return {
-                'name': obj.name(),
-                'path': path,
-                'size': os.path.getsize(obj.filepath()),
-            }
         raise TypeError(repr(obj) + " is not JSON serializable")
     data = json.dumps(arg, default=encode_models)
     return HttpResponse(data, content_type='application/json')
@@ -150,7 +141,11 @@ def content_list(request, path):
             # keep only the children the user is allowed to read. This is only useful in '/'
             child = Folder(node_path)
             if child.has_perm('can_read', request.user):
-                folders.append(child)
+                folders.append({
+                    'name': entry,
+                    'path': '/' + node_path + '/',
+                    'size': os.path.getsize(node),
+                })
         else:
             file = File(node_path)
             if file.is_image():
