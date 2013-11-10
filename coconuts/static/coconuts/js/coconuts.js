@@ -140,7 +140,8 @@ directive('coPhoto', ['settings', function(settings) {
 factory('Folder', ['$cacheFactory', '$http', 'settings', function($cacheFactory, $http, settings) {
     var cache = $cacheFactory('Folder');
     var Folder = function() {
-        this.photos = [];
+        this.files = [];
+        this.folders = [];
     };
     Folder.get = function(dirPath) {
         var folder = cache.get(dirPath);
