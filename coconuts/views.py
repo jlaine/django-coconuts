@@ -255,7 +255,7 @@ def manage(request, path):
             if not share.has_perm('can_manage', request.user):
                 return HttpResponseForbidden()
             share.save()
-            return redirect(folder.url())
+            return redirect(reverse(browse, args=['']))
 
     # fill form from database
     data = []
