@@ -35,7 +35,7 @@ import django.views.static
 
 import coconuts.EXIF as EXIF
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
-from coconuts.models import File, Folder, Photo, NamedAcl, OWNERS, PERMISSIONS
+from coconuts.models import Folder, NamedAcl, OWNERS, PERMISSIONS, path2url, url2path
 
 def get_image_info(filepath):
     """
@@ -196,10 +196,11 @@ def delete(request, path):
         return HttpResponseForbidden()
 
     # delete file or folder
-    if File.isdir(path):
-        shutil.rmtree(Folder(path).filepath())
+    filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
+    if os.path.isdir(filepath):
+        shutil.rmtree(filepath)
     else:
-        os.unlink(File(path).filepath())
+        os.unlink(filepath)
 
     return content_list(request, folder.path)
 
@@ -288,6 +289,7 @@ def owner_list(request):
 def render_file(request, path):
     """Return a resized version of the given photo."""
     folder = Folder(os.path.dirname(path))
+    filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
 
     # check permissions
     if not folder.has_perm('can_read', request.user):
@@ -299,10 +301,29 @@ def render_file(request, path):
         return HttpResponseBadRequest()
     size = form.cleaned_data['size']
 
+    # check thumbnail
+    cachesize = size, int(size * 0.75)
+    cachepath = os.path.join(str(size), url2path(path))
+    cachefile = os.path.join(settings.COCONUTS_CACHE_ROOT, cachepath)
+    if not os.path.exists(cachefile):
+        cachedir = os.path.dirname(cachefile)
+        if not os.path.exists(cachedir):
+            os.makedirs(cachedir)
+        img = Image.open(filepath)
+
+        # rotate if needed
+        with open(filepath, 'rb') as fp:
+            tags = EXIF.process_file(fp, details=False)
+            if tags.has_key('Image Orientation'):
+                orientation = tags['Image Orientation'].values[0]
+                img = img.rotate(ORIENTATIONS[orientation][2])
+
+        img.thumbnail(cachesize, Image.ANTIALIAS)
+        img.save(cachefile, quality=90)
+
     # serve the photo
-    photo = Photo(path)
     response = django.views.static.serve(request,
-        photo.cache(size),
+        path2url(cachepath),
         document_root=settings.COCONUTS_CACHE_ROOT)
     response["Expires"] = http_date(time.time() + 3600 * 24 * 365)
     return response
