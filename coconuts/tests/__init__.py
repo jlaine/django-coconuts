@@ -68,7 +68,6 @@ class EmptyFolderContentTest(BaseTest):
             'files': [],
             'folders': [],
             'name': 'Shares',
-            'photos': [],
             'path': '/',
         })
 
@@ -135,19 +134,6 @@ class FolderContentTest(BaseTest):
                 },
             ],
             'name': 'Shares',
-            'photos': [
-                {
-                    'image': {
-                        'camera': 'Canon EOS 450D',
-                        'settings': u'f/10.0, 1/125\xa0sec, 48\xa0mm',
-                        'size': [1024, 683],
-                    },
-                    'mimetype': 'image/jpeg',
-                    'name': 'test.jpg',
-                    'path': '/test.jpg',
-                    'size': 186899,
-                }
-            ],
             'path': '/',
         })
 
@@ -221,7 +207,6 @@ class AddFileTest(BaseTest):
              ],
             'folders': [],
             'name': 'Shares',
-            'photos': [],
             'path': '/',
         })
 
@@ -256,7 +241,6 @@ class AddFolderTest(BaseTest):
                 },
             ],
             'name': 'Shares',
-            'photos': [],
             'path': '/',
         })
 
@@ -303,7 +287,6 @@ class DeleteFileTest(BaseTest):
             'files': [],
             'folders': [],
             'name': 'Shares',
-            'photos': [],
             'path': '/',
         })
         self.assertFalse(os.path.exists(data_path))
@@ -352,7 +335,6 @@ class DeleteFolderTest(BaseTest):
             'files': [],
             'folders': [],
             'name': 'Shares',
-            'photos': [],
             'path': '/',
         })
         self.assertFalse(os.path.exists(data_path))

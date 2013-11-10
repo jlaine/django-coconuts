@@ -146,7 +146,7 @@ def content_list(request, path):
         path += '/'
 
     # list of sub-folders and photos
-    children, files, photos = folder.list()
+    children, files = folder.list()
     # keep only the children the user is allowed to read. This is only useful in '/'
     allowed_children = [x for x in children if x.has_perm('can_read', request.user)]
     return render_to_json({
@@ -157,7 +157,6 @@ def content_list(request, path):
 
         'files': files,
         'folders': allowed_children,
-        'photos': photos,
     })
 
 @login_required
@@ -167,7 +166,7 @@ def delete(request, path):
     # check permissions
     if not path:
         return HttpResponseForbidden()
-    folder = Folder(os.path.dirname(target.path))
+    folder = Folder(os.path.dirname(path))
     if not folder.has_perm('can_write', request.user):
         return HttpResponseForbidden()
 

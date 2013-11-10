@@ -188,11 +188,8 @@ class Folder:
     def list(self):
         folders = []
         files = []
-        photos = []
         directory = self.filepath()
-        entries = os.listdir(directory)
-        entries.sort()
-        for entry in entries:
+        for entry in sorted(os.listdir(directory)):
             if entry.startswith('.'):
                 continue
             node = os.path.join(directory, entry)
@@ -203,10 +200,9 @@ class Folder:
                 file = File(path)
                 if file.is_image():
                     files.append(Photo(path))
-                    photos.append(Photo(path))
                 else:
                     files.append(file)
-        return folders, files, photos
+        return folders, files
 
     def name(self):
         """Get the folder's name."""
@@ -221,13 +217,6 @@ class Folder:
     def has_perm(self, perm, user):
         """Check whether a user has a given permission."""
         return self.share.has_perm(perm, user)
-
-    def url(self):
-        """Get the URL at which the folder can be viewed."""
-        path = self.path
-        if path:
-            path += '/'
-        return reverse('coconuts.views.browse', args=[path])
 
 class File:
     class DoesNotExist(Exception):
