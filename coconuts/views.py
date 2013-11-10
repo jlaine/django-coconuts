@@ -18,6 +18,7 @@
 
 import json
 import os
+import shutil
 import time
 
 from django.conf import settings
@@ -163,22 +164,19 @@ def content_list(request, path):
 @require_http_methods(['POST'])
 def delete(request, path):
     """Delete the given file or folder."""
+    # check permissions
     if not path:
         return HttpResponseForbidden()
-
-    # find target
-    if File.isdir(path):
-        target = Folder(path)
-    else:
-        target = File(path)
-
-    # check permissions
     folder = Folder(os.path.dirname(target.path))
     if not folder.has_perm('can_write', request.user):
         return HttpResponseForbidden()
 
     # delete file or folder
-    target.delete()
+    if File.isdir(path):
+        shutil.rmtree(Folder(path).filepath())
+    else:
+        os.unlink(File(path).filepath())
+
     return content_list(request, folder.path)
 
 @login_required

@@ -181,10 +181,6 @@ class Folder:
             os.mkdir(filepath)
         return klass(path)
 
-    def delete(self):
-        """Delete the folder."""
-        shutil.rmtree(self.filepath())
-
     def filepath(self):
         """Get the folder's full path."""
         return os.path.join(settings.COCONUTS_DATA_ROOT, url2path(self.path))
@@ -249,10 +245,6 @@ class File:
     def isdir(self, path):
         filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
         return os.path.isdir(filepath)
-
-    def delete(self):
-        """Delete the file."""
-        os.unlink(self.filepath())
 
     def filepath(self):
         """Get the file's full path."""
