@@ -16,15 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import datetime
-import mimetypes
 import os
-import shutil
 
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User, Group
-from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 import Image
 
@@ -123,13 +119,6 @@ class Share(models.Model):
     def name(self):
         """Get the share's friendly name."""
         return os.path.basename(self.path)
-
-    def manage_url(self):
-        """Get the URL at which the share can be managed."""
-        path = self.path
-        if path:
-            path += '/'
-        return reverse('coconuts.views.manage', args=[path])
 
     def has_perm(self, perm, user):
         """Check whether a user has a given permission."""

@@ -27,7 +27,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
-from django.shortcuts import render, render_to_response, redirect
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.utils.http import http_date, urlquote
 from django.views.decorators.http import require_http_methods
@@ -36,9 +36,6 @@ import django.views.static
 import coconuts.EXIF as EXIF
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
 from coconuts.models import File, Folder, Photo, NamedAcl, OWNERS, PERMISSIONS, urljoin
-
-PHOTO_SIZE = 1024
-THUMB_SIZE = 128
 
 def get_image_info(filepath):
     """
