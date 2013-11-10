@@ -52,11 +52,11 @@ def render_to_json(arg = {}):
                 'path': '/' + obj.path,
             }
             if isinstance(obj, Photo):
-                data.update({
+                data['image'] = {
                     'camera': obj.camera(),
                     'settings': obj.settings(),
                     'size': obj.size(),
-                })
+                }
             return data
         elif isinstance(obj, Folder):
             path = '/' + obj.path
