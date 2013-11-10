@@ -26,17 +26,6 @@ import Image
 
 import coconuts.EXIF as EXIF
 
-ORIENTATIONS = {
-    1: [ False, False, 0   ], # Horizontal (normal)
-    2: [ True,  False, 0   ], # Mirrored horizontal
-    3: [ False, False, 180 ], # Rotated 180
-    4: [ False, True,  0   ], # Mirrored vertical
-    5: [ True,  False, 90 ], # Mirrored horizontal then rotated 90 CCW
-    6: [ False, False, -90  ], # Rotated 90 CW
-    7: [ True,  False, -90  ], # Mirrored horizontal then rotated 90 CW
-    8: [ False, False, 90 ], # Rotated 90 CCW
-}
-
 def url2path(url):
     return url.replace('/', os.path.sep)
 

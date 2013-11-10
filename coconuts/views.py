@@ -37,6 +37,17 @@ import coconuts.EXIF as EXIF
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
 from coconuts.models import Folder, NamedAcl, OWNERS, PERMISSIONS, path2url, url2path
 
+ORIENTATIONS = {
+    1: [ False, False, 0   ], # Horizontal (normal)
+    2: [ True,  False, 0   ], # Mirrored horizontal
+    3: [ False, False, 180 ], # Rotated 180
+    4: [ False, True,  0   ], # Mirrored vertical
+    5: [ True,  False, 90 ], # Mirrored horizontal then rotated 90 CCW
+    6: [ False, False, -90  ], # Rotated 90 CW
+    7: [ True,  False, -90  ], # Mirrored horizontal then rotated 90 CW
+    8: [ False, False, 90 ], # Rotated 90 CCW
+}
+
 def get_image_info(filepath):
     """
     Get an image's information.

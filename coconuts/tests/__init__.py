@@ -357,3 +357,34 @@ class DeleteFolderTest(BaseTest):
         response = self.client.post('/images/delete/Foo/')
         self.assertEquals(response.status_code, 403)
         self.assertTrue(os.path.exists(data_path))
+
+class RenderFileTest(BaseTest):
+    fixtures = ['test_users.json']
+
+    def setUp(self):
+        super(RenderFileTest, self).setUp()
+        for name in ['test.jpg']:
+            source_path = os.path.join(os.path.dirname(__file__), name)
+            dest_path = os.path.join(settings.COCONUTS_DATA_ROOT, name)
+            shutil.copyfile(source_path, dest_path)
+
+    def test_as_superuser(self):
+        """
+        Authenticated super-user can render a file.
+        """
+        self.client.login(username="test_user_1", password="test")
+
+        # no size
+        response = self.client.get('/images/render/test.jpg')
+        self.assertEquals(response.status_code, 400)
+
+        # bad size
+        response = self.client.get('/images/render/test.jpg?size=123')
+        self.assertEquals(response.status_code, 400)
+
+        # good size
+        response = self.client.get('/images/render/test.jpg?size=1024')
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response['Content-Type'], 'image/jpeg')
+        self.assertTrue('Expires' in response)
+        self.assertTrue('Last-Modified' in response)
