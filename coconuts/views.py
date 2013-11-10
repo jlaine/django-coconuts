@@ -27,7 +27,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render, redirect
 from django.template import RequestContext
 from django.utils.http import http_date, urlquote
 from django.views.decorators.http import require_http_methods
@@ -74,13 +74,6 @@ def get_image_info(filepath):
     info['size'] = Image.open(filepath).size
 
     return info
-
-def FolderContext(request, folder, args):
-    args.update({
-        'folder': folder,
-        'can_manage': folder.has_perm('can_manage', request.user),
-        'can_write': folder.has_perm('can_write', request.user)})
-    return RequestContext(request, args)
 
 @login_required
 @require_http_methods(['POST'])
@@ -276,11 +269,11 @@ def manage(request, path):
     shareform = ShareForm(instance=share)
     formset = ShareAccessFormSet(initial=data)
 
-    return render_to_response('coconuts/manage.html', FolderContext(request, folder, {
+    return render(request, 'coconuts/manage.html', {
         'formset': formset,
         'share': share,
         'shareform': shareform,
-        }))
+    })
 
 @login_required
 def owner_list(request):
