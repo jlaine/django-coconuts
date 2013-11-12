@@ -86,7 +86,7 @@ class EmptyFolderContentTest(BaseTest):
             'can_write': True,
             'files': [],
             'folders': [],
-            'name': 'Shares',
+            'name': '',
             'path': '/',
         })
 
@@ -108,6 +108,20 @@ class FolderContentTest(BaseTest):
             source_path = os.path.join(os.path.dirname(__file__), name)
             dest_path = os.path.join(settings.COCONUTS_DATA_ROOT, name)
             shutil.copyfile(source_path, dest_path)
+
+    def test_file_as_anonymous(self):
+        response = self.client.get('/images/contents/test.jpg')
+        self.assertRedirects(response, '/accounts/login/?next=/images/contents/test.jpg')
+
+    def test_file_as_superuser(self):
+        self.client.login(username="test_user_1", password="test")
+        response = self.client.get('/images/contents/test.jpg')
+        self.assertEquals(response.status_code, 404)
+
+    def test_file_as_user(self):
+        self.client.login(username="test_user_2", password="test")
+        response = self.client.get('/images/contents/test.jpg')
+        self.assertEquals(response.status_code, 403)
 
     def test_home_as_anonymous(self):
         """
@@ -152,7 +166,7 @@ class FolderContentTest(BaseTest):
                     'size': 4096,
                 },
             ],
-            'name': 'Shares',
+            'name': '',
             'path': '/',
         })
 
@@ -225,7 +239,7 @@ class AddFileTest(BaseTest):
                 }
              ],
             'folders': [],
-            'name': 'Shares',
+            'name': '',
             'path': '/',
         })
 
@@ -259,7 +273,7 @@ class AddFolderTest(BaseTest):
                     'size': 4096,
                 },
             ],
-            'name': 'Shares',
+            'name': '',
             'path': '/',
         })
 
@@ -305,7 +319,7 @@ class DeleteFileTest(BaseTest):
             'can_write': True,
             'files': [],
             'folders': [],
-            'name': 'Shares',
+            'name': '',
             'path': '/',
         })
         self.assertFalse(os.path.exists(data_path))
@@ -353,7 +367,7 @@ class DeleteFolderTest(BaseTest):
             'can_write': True,
             'files': [],
             'folders': [],
-            'name': 'Shares',
+            'name': '',
             'path': '/',
         })
         self.assertFalse(os.path.exists(data_path))

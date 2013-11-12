@@ -188,18 +188,18 @@ def browse(request, path):
 def content_list(request, path):
     """Show the list of photos for the given folder."""
     path = clean_path(path)
-    try:
-        folder = Folder(path)
-    except Folder.DoesNotExist:
-        raise Http404
 
     # check permissions
     if not has_permission(path, 'can_read', request.user):
         return HttpResponseForbidden()
 
+    # check folder exists
+    folder_path = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
+    if not os.path.isdir(folder_path):
+        raise Http404
+
     # list items
-    folder_path = folder.filepath()
-    folder_url = '/' + folder.path
+    folder_url = '/' + path
     if not folder_url.endswith('/'):
         folder_url += '/'
     folders = []
@@ -229,11 +229,11 @@ def content_list(request, path):
             files.append(data)
 
     return HttpResponse(json.dumps({
-        'can_manage': folder.has_perm('can_manage', request.user),
-        'can_write': folder.has_perm('can_write', request.user),
+        'can_manage': has_permission(path, 'can_manage', request.user),
+        'can_write': has_permission(path, 'can_write', request.user),
         'files': files,
         'folders': folders,
-        'name': folder.name(),
+        'name': os.path.basename(folder_path),
         'path': folder_url,
     }), content_type='application/json')
 
