@@ -108,7 +108,7 @@ class EmptyFolderContentTest(BaseTest):
         self.assertEquals(response.status_code, 403)
 
 class FolderContentTest(BaseTest):
-    files = ['test.jpg', 'test.txt']
+    files = ['test.jpg', 'test.png', 'test.txt']
     fixtures = ['test_users.json']
     folders = ['Foo']
 
@@ -154,6 +154,12 @@ class FolderContentTest(BaseTest):
                     'name': 'test.jpg',
                     'path': '/test.jpg',
                     'size': 186899,
+                },
+                {
+                    'mimetype': 'image/png',
+                    'name': 'test.png',
+                    'path': '/test.png',
+                    'size': 548,
                 },
                 {
                     'mimetype': 'text/plain',
