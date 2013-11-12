@@ -55,6 +55,9 @@ ORIENTATIONS = {
 
 def clean_path(path):
     """
+    Returns the canonical version of a path
+    or raises ValueError if the path is invalid.
+
     Adapted from django.views.static.serve
     """
     path = posixpath.normpath(unquote(path))
@@ -76,7 +79,7 @@ def clean_path(path):
 
 def get_image_info(filepath):
     """
-    Get an image's information.
+    Gets an image's information.
     """
     info = {}
     with open(filepath, 'rb') as fp:
@@ -113,7 +116,9 @@ def get_image_info(filepath):
     return info
 
 def has_permission(path, perm, user):
-    """Check whether a user has a given permission on a folder path."""
+    """
+    Checks whether a user has a given permission on a folder path.
+    """
     sharepath = path.split("/")[0]
     try:
         share = Share.objects.get(path=sharepath)
