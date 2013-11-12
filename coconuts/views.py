@@ -171,8 +171,9 @@ def browse(request, path):
 @login_required
 def content_list(request, path):
     """Show the list of photos for the given folder."""
+    path = clean_path(path)
     try:
-        folder = Folder(os.path.dirname(path))
+        folder = Folder(path)
     except Folder.DoesNotExist:
         raise Http404
 
@@ -226,9 +227,10 @@ def content_list(request, path):
 def delete(request, path):
     """Delete the given file or folder."""
     # check permissions
+    path = clean_path(path)
     if not path:
         return HttpResponseForbidden()
-    folder = Folder(os.path.dirname(path))
+    folder = Folder(posixpath.dirname(path))
     if not folder.has_perm('can_write', request.user):
         return HttpResponseForbidden()
 
@@ -244,7 +246,8 @@ def delete(request, path):
 @login_required
 def download(request, path):
     """Return the raw file for the given photo."""
-    folder = Folder(os.path.dirname(path))
+    path = clean_path(path)
+    folder = Folder(posixpath.dirname(path))
 
     # check permissions
     if not folder.has_perm('can_read', request.user):
@@ -259,13 +262,10 @@ def download(request, path):
 @login_required
 def manage(request, path):
     """Manage the properties for the given folder."""
-
-    # Check this is a folder, not a file
-    if path and not (path.endswith('/') and path.count("/") == 1):
-        return HttpResponseForbidden()
+    path = clean_path(path)
 
     # Check permissions
-    folder = Folder(os.path.dirname(path))
+    folder = Folder(path)
     share = folder.share
     if not share.has_perm('can_manage', request.user):
         return HttpResponseForbidden()
@@ -325,7 +325,8 @@ def owner_list(request):
 @login_required
 def render_file(request, path):
     """Return a resized version of the given photo."""
-    folder = Folder(os.path.dirname(path))
+    path = clean_path(path)
+    folder = Folder(posixpath.dirname(path))
     filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
 
     # check permissions
