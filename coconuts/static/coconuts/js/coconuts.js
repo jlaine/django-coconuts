@@ -11,7 +11,12 @@ config(['$httpProvider', '$routeProvider', function($httpProvider, $routeProvide
         }).
         otherwise({redirectTo: '/'});
 }]).
-controller('CrumbCtrl', ['$location', '$scope', function($location, $scope) {
+controller('CrumbCtrl', ['$location', '$rootScope', '$scope', function($location, $rootScope, $scope) {
+    $scope.show = function(crumb) {
+        $rootScope.transitionClass = 'slide-backward';
+        $location.path(crumb.path);
+    };
+
     $scope.location = $location;
     $scope.$watch('location.path()', function(path) {
         if (path === '') path = '/';
@@ -53,6 +58,11 @@ controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$
         $scope.currentPhoto = undefined;
         $scope.nextPhoto = undefined;
     }, true);
+
+    $scope.show = function(photo) {
+        $rootScope.transitionClass = 'slide-forward';
+        $location.path(photo.path);
+    };
 
     $scope.showNext = function() {
         if ($scope.nextPhoto) {
