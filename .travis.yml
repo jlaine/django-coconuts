@@ -2,11 +2,8 @@ language: python
 python:
   - "2.7"
 env:
-  - DJANGO=1.4.10
-  - DJANGO=1.5.5
   - DJANGO=1.6
 install:
-  - sudo apt-get -qq install libjpeg8-dev
   - pip install -q Django==$DJANGO --use-mirrors
   - pip install -q PIL --use-mirrors
 script: python manage.py test coconuts
