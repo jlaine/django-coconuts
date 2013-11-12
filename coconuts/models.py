@@ -16,14 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import os
-
 from django.db import models
 from django.contrib.auth.models import User, Group
 from django.utils.translation import ugettext_lazy as _
-
-def url2path(url):
-    return url.replace('/', os.path.sep)
 
 class OtherManager:
     def all(self):
@@ -89,10 +84,6 @@ class Share(models.Model):
     def set_acls(self, acls):
         """Set the ACLs associated with this share."""
         self.access = ",".join([unicode(x) for x in acls])
-
-    def name(self):
-        """Get the share's friendly name."""
-        return os.path.basename(self.path)
 
     def has_perm(self, perm, user):
         """Check whether a user has a given permission."""

@@ -1,19 +1,17 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}{% blocktrans with share.name as name %}Manage {{ name }}{% endblocktrans %} | Coconuts{% endblock %}
+{% block title %}{{ title }} | Coconuts{% endblock %}
 
 {% block headextra %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}coconuts/css/coconuts.css"/>
 {% endblock %}
 
-{% block subtitle %}{% blocktrans with share.name as name %}Manage {{ name }}{% endblocktrans %}{% endblock %}
-
 {% block content %}
 <form class="modal" action="" method="POST">
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3><i class="icon-key"></i> {% blocktrans with share.name as name %}Manage {{ name }}{% endblocktrans %}</h3>
+    <h3><i class="icon-key"></i> {{ title }}</h3>
 </div>
 <div class="modal-body">
     {% csrf_token %}

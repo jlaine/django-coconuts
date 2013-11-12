@@ -33,14 +33,14 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render, redirect
-from django.template import RequestContext
 from django.utils.http import http_date, urlquote
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 import django.views.static
 
 import coconuts.EXIF as EXIF
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
-from coconuts.models import NamedAcl, Share, OWNERS, PERMISSIONS, url2path
+from coconuts.models import NamedAcl, Share, OWNERS, PERMISSIONS
 
 ORIENTATIONS = {
     1: [ False, False, 0   ], # Horizontal (normal)
@@ -125,6 +125,9 @@ def has_permission(path, perm, user):
     except Share.DoesNotExist:
         share = Share(path=sharepath)
     return share.has_perm(perm, user)
+
+def url2path(url):
+    return url.replace('/', os.path.sep)
 
 @login_required
 @require_http_methods(['POST'])
@@ -330,6 +333,7 @@ def manage(request, path):
         'formset': formset,
         'share': share,
         'shareform': shareform,
+        'title': _("Manage %(name)s") % {'name': posixpath.basename(path)},
     })
 
 @login_required
