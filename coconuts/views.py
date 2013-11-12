@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import EXIF
 import json
 import mimetypes
 import os
@@ -38,7 +39,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 import django.views.static
 
-import coconuts.EXIF as EXIF
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
 from coconuts.models import NamedAcl, Share, OWNERS, PERMISSIONS
 
