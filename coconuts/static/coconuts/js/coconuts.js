@@ -29,7 +29,7 @@ controller('CrumbCtrl', ['$location', '$scope', function($location, $scope) {
         $scope.crumbs = crumbs;
     });
 }]).
-controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'Folder', 'FormData', 'settings', function($http, $location, $routeParams, $scope, Folder, FormData, settings) {
+controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$scope', 'Folder', 'FormData', 'settings', function($http, $location, $rootScope, $routeParams, $scope, Folder, FormData, settings) {
     $scope.settings = settings;
 
     // fetch folder contents
@@ -54,15 +54,17 @@ controller('FolderCtrl', ['$http', '$location', '$routeParams', '$scope', 'Folde
         $scope.nextPhoto = undefined;
     }, true);
 
-    $scope.swipeLeft = function() {
+    $scope.showNext = function() {
         if ($scope.nextPhoto) {
+            $rootScope.transitionClass = 'slide-forward';
             $location.path($scope.nextPhoto.path);
             $location.replace();
         }
     };
 
-    $scope.swipeRight = function() {
+    $scope.showPrevious = function() {
         if ($scope.previousPhoto) {
+            $rootScope.transitionClass = 'slide-backward';
             $location.path($scope.previousPhoto.path);
             $location.replace();
         }
