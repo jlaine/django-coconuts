@@ -130,21 +130,23 @@ def has_permission(path, perm, user):
 @require_http_methods(['POST'])
 def add_file(request, path):
     path = clean_path(path)
-    try:
-        folder = Folder(path)
-    except Folder.DoesNotExist:
-        raise Http404
+
+    # check input
+    form = AddFileForm(request.POST, request.FILES)
+    if not form.is_valid():
+        return HttpResponseBadRequest()
 
     # check permissions
     if not has_permission(path, 'can_write', request.user):
         return HttpResponseForbidden()
 
-    form = AddFileForm(request.POST, request.FILES)
-    if not form.is_valid():
-        return HttpResponseBadRequest()
+    # check folder exists
+    folder_path = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
+    if not os.path.isdir(folder_path):
+        raise Http404
 
     filename = request.FILES['upload'].name
-    filepath = os.path.join(folder.filepath(), request.FILES['upload'].name)
+    filepath = os.path.join(folder_path, request.FILES['upload'].name)
     if os.path.exists(filepath):
         return HttpResponseBadRequest()
 
@@ -153,26 +155,28 @@ def add_file(request, path):
         fp.write(chunk)
     fp.close()
 
-    return content_list(request, folder.path)
+    return content_list(request, path)
 
 @login_required
 @require_http_methods(['POST'])
 def add_folder(request, path):
     path = clean_path(path)
-    try:
-        folder = Folder(path)
-    except Folder.DoesNotExist:
-        raise Http404
+
+    # check input
+    form = AddFolderForm(request.POST)
+    if not form.is_valid():
+        return HttpResponseBadRequest()
 
     # check permissions
     if not has_permission(path, 'can_write', request.user):
         return HttpResponseForbidden()
 
-    form = AddFolderForm(request.POST)
-    if not form.is_valid():
-        return HttpResponseBadRequest()
+    # check folder exists
+    folder_path = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
+    if not os.path.isdir(folder_path):
+        raise Http404
 
-    Folder.create(os.path.join(folder.path, form.cleaned_data['name']))
+    Folder.create(os.path.join(folder_path, form.cleaned_data['name']))
 
     return content_list(request, path)
 
@@ -341,11 +345,10 @@ def render_file(request, path):
     """Return a resized version of the given photo."""
     path = clean_path(path)
 
-    # check the size is legitimate
+    # check input
     form = PhotoForm(request.GET)
     if not form.is_valid():
         return HttpResponseBadRequest()
-    size = form.cleaned_data['size']
 
     # check permissions
     if not has_permission(posixpath.dirname(path), 'can_read', request.user):
@@ -357,6 +360,7 @@ def render_file(request, path):
         raise Http404
 
     # check thumbnail
+    size = form.cleaned_data['size']
     cachesize = size, int(size * 0.75)
     cachepath = os.path.join(str(size), url2path(path))
     cachefile = os.path.join(settings.COCONUTS_CACHE_ROOT, cachepath)
