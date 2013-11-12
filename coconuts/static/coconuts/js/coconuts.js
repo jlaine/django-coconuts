@@ -23,6 +23,7 @@ controller('CrumbCtrl', ['$location', '$rootScope', '$scope', function($location
         var crumbs = [];
         var crumbPath = '/';
         var bits = path.split('/');
+        crumbs.push({name: 'Home', path: crumbPath});
         for (var i = 1; i < bits.length - 1; i++) {
             crumbPath += bits[i] + '/';
             crumbs.push({name: bits[i], path: crumbPath});

@@ -17,8 +17,7 @@
 <body ng-app="coconuts">
 <div class="container">
     <div class="breadcrumbs" ng-controller="CrumbCtrl">
-        <span><a href="#/">Home</a></span>
-        <span ng-repeat="crumb in crumbs"> &rsaquo; <a href="" ng-click="show(crumb)">{{ crumb.name }}</a></span>
+        <span ng-repeat="crumb in crumbs"><span ng-show="$index"> &rsaquo; </span><a href="" ng-click="show(crumb)">{{ crumb.name }}</a></span>
     </div>
 
     <div style="position: relative">

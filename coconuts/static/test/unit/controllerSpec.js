@@ -35,13 +35,16 @@ describe('Controllers', function() {
 
         it('should return crumbs for /', function() {
             scope.$digest();
-            expect(scope.crumbs).toEqual([]);
+            expect(scope.crumbs).toEqual([
+                { name : 'Home', path : '/' }
+            ]);
         });
 
         it('should return crumbs for /foo.jpg', function() {
             $location.path = function() { return '/foo.jpg'; };
             scope.$digest();
             expect(scope.crumbs).toEqual([
+                { name : 'Home', path : '/' },
                 { name : 'foo.jpg', path : '/foo.jpg' }
             ]);
         });
@@ -50,6 +53,7 @@ describe('Controllers', function() {
             $location.path = function() { return '/foo/'; };
             scope.$digest();
             expect(scope.crumbs).toEqual([
+                { name : 'Home', path : '/' },
                 { name : 'foo', path : '/foo/' }
             ]);
         });
@@ -58,6 +62,7 @@ describe('Controllers', function() {
             $location.path = function() { return '/foo/bar.jpg'; };
             scope.$digest();
             expect(scope.crumbs).toEqual([
+                { name : 'Home', path : '/' },
                 { name : 'foo', path : '/foo/' },
                 { name : 'bar.jpg', path : '/foo/bar.jpg' }
             ]);
@@ -67,6 +72,7 @@ describe('Controllers', function() {
             $location.path = function() { return '/foo/bar/baz.jpg'; };
             scope.$digest();
             expect(scope.crumbs).toEqual([
+                { name : 'Home', path : '/' },
                 { name : 'foo', path : '/foo/' },
                 { name : 'bar', path : '/foo/bar/' },
                 { name : 'baz.jpg', path : '/foo/bar/baz.jpg' }
