@@ -262,10 +262,9 @@ def delete(request, path):
 def download(request, path):
     """Return the raw file for the given photo."""
     path = clean_path(path)
-    folder = Folder(posixpath.dirname(path))
 
     # check permissions
-    if not has_permission(folder.path, 'can_read', request.user):
+    if not has_permission(posixpath.dirname(path), 'can_read', request.user):
         return HttpResponseForbidden()
 
     resp = django.views.static.serve(request,
@@ -341,18 +340,21 @@ def owner_list(request):
 def render_file(request, path):
     """Return a resized version of the given photo."""
     path = clean_path(path)
-    folder = Folder(posixpath.dirname(path))
-    filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
-
-    # check permissions
-    if not has_permission(folder.path, 'can_read', request.user):
-        return HttpResponseForbidden()
 
     # check the size is legitimate
     form = PhotoForm(request.GET)
     if not form.is_valid():
         return HttpResponseBadRequest()
     size = form.cleaned_data['size']
+
+    # check permissions
+    if not has_permission(posixpath.dirname(path), 'can_read', request.user):
+        return HttpResponseForbidden()
+
+    # check file exists
+    filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
+    if not os.path.exists(filepath):
+        raise Http404
 
     # check thumbnail
     cachesize = size, int(size * 0.75)

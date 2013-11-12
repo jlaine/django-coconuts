@@ -401,9 +401,35 @@ class RenderFileTest(BaseTest):
         response = self.client.get('/images/render/test.jpg?size=123')
         self.assertEquals(response.status_code, 400)
 
-        # good size
+        # good size, bad path
+        response = self.client.get('/images/render/notfound.jpg?size=1024')
+        self.assertEquals(response.status_code, 404)
+
+        # good size, good path
         response = self.client.get('/images/render/test.jpg?size=1024')
         self.assertEquals(response.status_code, 200)
         self.assertEquals(response['Content-Type'], 'image/jpeg')
         self.assertTrue('Expires' in response)
         self.assertTrue('Last-Modified' in response)
+
+    def test_as_user(self):
+        """
+        Authenticated user cannot render a file.
+        """
+        self.client.login(username="test_user_2", password="test")
+
+        # no size
+        response = self.client.get('/images/render/test.jpg')
+        self.assertEquals(response.status_code, 400)
+
+        # bad size
+        response = self.client.get('/images/render/test.jpg?size=123')
+        self.assertEquals(response.status_code, 400)
+
+        # good size, bad path
+        response = self.client.get('/images/render/notfound.jpg?size=1024')
+        self.assertEquals(response.status_code, 403)
+
+        # good size, good path
+        response = self.client.get('/images/render/test.jpg?size=1024')
+        self.assertEquals(response.status_code, 403)
