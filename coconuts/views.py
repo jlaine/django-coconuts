@@ -16,7 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import EXIF
+try:
+    import EXIF
+except:
+    from coconuts import EXIF
 import json
 import mimetypes
 import os
