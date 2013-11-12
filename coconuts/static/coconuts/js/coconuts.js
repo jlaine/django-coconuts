@@ -34,7 +34,7 @@ controller('CrumbCtrl', ['$location', '$rootScope', '$scope', function($location
         $scope.crumbs = crumbs;
     });
 }]).
-controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$scope', 'Folder', 'FormData', 'settings', function($http, $location, $rootScope, $routeParams, $scope, Folder, FormData, settings) {
+controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$scope', '$timeout', 'Folder', 'FormData', 'settings', function($http, $location, $rootScope, $routeParams, $scope, $timeout, Folder, FormData, settings) {
     $scope.settings = settings;
 
     // fetch folder contents
@@ -115,6 +115,10 @@ controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$
             $location.path(currentFolder.path);
         });
     };
+
+    $timeout(function() {
+        $rootScope.transitionClass = '';
+    }, 600);
 }]).
 directive('coFile', ['$parse', function($parse) {
     return {
