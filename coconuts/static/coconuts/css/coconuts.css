@@ -96,16 +96,19 @@ html {
     -webkit-transform: translateX(100%);
     -moz-transform: translateX(100%);
     transform: translateX(100%);
+    opacity: 0;
 }
 .slide-forward.ng-enter-active {
     -webkit-transform: translateX(0%);
     -moz-transform: translateX(0%);
     transform: translateX(0%);
+    opacity: 1;
 }
 .slide-forward.ng-leave {
     -webkit-transform: translateX(0%);
     -moz-transform: translateX(0%);
     transform: translateX(0%);
+    opacity: 1;
 }
 .slide-forward.ng-leave-active {
     -webkit-transform: translateX(-100%);
@@ -118,16 +121,19 @@ html {
     -webkit-transform: translateX(-100%);
     -moz-transform: translateX(-100%);
     transform: translateX(-100%);
+    opacity: 0;
 }
 .slide-backward.ng-enter-active {
     -webkit-transform: translateX(0%);
     -moz-transform: translateX(0%);
     transform: translateX(0%);
+    opacity: 1;
 }
 .slide-backward.ng-leave {
     -webkit-transform: translateX(0%);
     -moz-transform: translateX(0%);
     transform: translateX(0%);
+    opacity: 1;
 }
 .slide-backward.ng-leave-active {
     -webkit-transform: translateX(100%);
