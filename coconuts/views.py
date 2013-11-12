@@ -369,8 +369,7 @@ def render_file(request, path):
     # check thumbnail
     size = form.cleaned_data['size']
     cachesize = size, int(size * 0.75)
-    cachepath = os.path.join(str(size), url2path(path))
-    cachefile = os.path.join(settings.COCONUTS_CACHE_ROOT, cachepath)
+    cachefile = os.path.join(settings.COCONUTS_CACHE_ROOT, str(size), url2path(path))
     if not os.path.exists(cachefile):
         cachedir = os.path.dirname(cachefile)
         if not os.path.exists(cachedir):
