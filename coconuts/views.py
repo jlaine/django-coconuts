@@ -40,7 +40,7 @@ import django.views.static
 
 import coconuts.EXIF as EXIF
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
-from coconuts.models import Folder, NamedAcl, Share, OWNERS, PERMISSIONS, path2url, url2path
+from coconuts.models import NamedAcl, Share, OWNERS, PERMISSIONS, url2path
 
 ORIENTATIONS = {
     1: [ False, False, 0   ], # Horizontal (normal)
@@ -176,7 +176,9 @@ def add_folder(request, path):
     if not os.path.isdir(folder_path):
         raise Http404
 
-    Folder.create(os.path.join(folder_path, form.cleaned_data['name']))
+    # create directory
+    filepath = os.path.join(folder_path, form.cleaned_data['name'])
+    os.mkdir(filepath)
 
     return content_list(request, path)
 
@@ -249,8 +251,7 @@ def delete(request, path):
     path = clean_path(path)
     if not path:
         return HttpResponseForbidden()
-    folder = Folder(posixpath.dirname(path))
-    if not folder.has_perm('can_write', request.user):
+    if not has_permission(posixpath.dirname(path), 'can_write', request.user):
         return HttpResponseForbidden()
 
     # delete file or folder
@@ -260,7 +261,7 @@ def delete(request, path):
     else:
         os.unlink(filepath)
 
-    return content_list(request, folder.path)
+    return content_list(request, posixpath.dirname(path))
 
 @login_required
 def download(request, path):
@@ -283,8 +284,10 @@ def manage(request, path):
     path = clean_path(path)
 
     # Check permissions
-    folder = Folder(path)
-    share = folder.share
+    try:
+        share = Share.objects.get(path=path)
+    except Share.DoesNotExist:
+        share = Share(path=path)
     if not share.has_perm('can_manage', request.user):
         return HttpResponseForbidden()
 
@@ -382,7 +385,7 @@ def render_file(request, path):
 
     # serve the photo
     response = django.views.static.serve(request,
-        path2url(cachepath),
+        posixpath.join(str(size), path),
         document_root=settings.COCONUTS_CACHE_ROOT)
     response["Expires"] = http_date(time.time() + 3600 * 24 * 365)
     return response

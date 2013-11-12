@@ -19,18 +19,11 @@
 import os
 
 from django.db import models
-from django.conf import settings
 from django.contrib.auth.models import User, Group
 from django.utils.translation import ugettext_lazy as _
-import Image
-
-import coconuts.EXIF as EXIF
 
 def url2path(url):
     return url.replace('/', os.path.sep)
-
-def path2url(path):
-    return path.replace(os.path.sep, '/')
 
 class OtherManager:
     def all(self):
@@ -121,50 +114,3 @@ class Share(models.Model):
 
     def __unicode__(self):
         return self.path
-
-class Folder:
-    class DoesNotExist(Exception):
-        pass
-
-    def __init__(self, path):
-        self.path = path
-
-        # Check folder exists
-        if not os.path.exists(self.filepath()):
-            raise self.DoesNotExist
-
-        # Create share if needed
-        sharepath = self.path.split("/")[0]
-        try:
-            self.share = Share.objects.get(path=sharepath)
-        except Share.DoesNotExist:
-            self.share = Share(path=sharepath)
-
-    def __unicode__(self):
-        return self.name()
-
-    @classmethod
-    def create(klass, path):
-        """Create the folder."""
-        filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
-        if not os.path.exists(filepath):
-            os.mkdir(filepath)
-        return klass(path)
-
-    def filepath(self):
-        """Get the folder's full path."""
-        return os.path.join(settings.COCONUTS_DATA_ROOT, url2path(self.path))
-
-    def name(self):
-        """Get the folder's name."""
-        if not self.path:
-            try:
-                return settings.COCONUTS_TITLE
-            except:
-                return 'Shares'
-        else:
-            return os.path.basename(self.path)
-
-    def has_perm(self, perm, user):
-        """Check whether a user has a given permission."""
-        return self.share.has_perm(perm, user)
