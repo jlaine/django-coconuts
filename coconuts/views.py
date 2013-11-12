@@ -40,7 +40,7 @@ import django.views.static
 
 import coconuts.EXIF as EXIF
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
-from coconuts.models import Folder, NamedAcl, OWNERS, PERMISSIONS, path2url, url2path
+from coconuts.models import Folder, NamedAcl, Share, OWNERS, PERMISSIONS, path2url, url2path
 
 ORIENTATIONS = {
     1: [ False, False, 0   ], # Horizontal (normal)
@@ -112,16 +112,26 @@ def get_image_info(filepath):
 
     return info
 
+def has_permission(path, perm, user):
+    """Check whether a user has a given permission on a folder path."""
+    sharepath = path.split("/")[0]
+    try:
+        share = Share.objects.get(path=sharepath)
+    except Share.DoesNotExist:
+        share = Share(path=sharepath)
+    return share.has_perm(perm, user)
+
 @login_required
 @require_http_methods(['POST'])
 def add_file(request, path):
+    path = clean_path(path)
     try:
         folder = Folder(path)
     except Folder.DoesNotExist:
         raise Http404
 
     # check permissions
-    if not folder.has_perm('can_write', request.user):
+    if not has_permission(path, 'can_write', request.user):
         return HttpResponseForbidden()
 
     form = AddFileForm(request.POST, request.FILES)
@@ -143,13 +153,14 @@ def add_file(request, path):
 @login_required
 @require_http_methods(['POST'])
 def add_folder(request, path):
+    path = clean_path(path)
     try:
         folder = Folder(path)
     except Folder.DoesNotExist:
         raise Http404
 
     # check permissions
-    if not folder.has_perm('can_write', request.user):
+    if not has_permission(path, 'can_write', request.user):
         return HttpResponseForbidden()
 
     form = AddFolderForm(request.POST)
@@ -158,7 +169,7 @@ def add_folder(request, path):
 
     Folder.create(os.path.join(folder.path, form.cleaned_data['name']))
 
-    return content_list(request, folder.path)
+    return content_list(request, path)
 
 @login_required
 def browse(request, path):
@@ -178,7 +189,7 @@ def content_list(request, path):
         raise Http404
 
     # check permissions
-    if not folder.has_perm('can_read', request.user):
+    if not has_permission(path, 'can_read', request.user):
         return HttpResponseForbidden()
 
     # list items
@@ -195,8 +206,7 @@ def content_list(request, path):
         node_url = folder_url + entry
         if os.path.isdir(node_path):
             # keep only the children the user is allowed to read. This is only useful in '/'
-            child = Folder(node_url[1:])
-            if child.has_perm('can_read', request.user):
+            if has_permission(node_url[1:], 'can_read', request.user):
                 folders.append({
                     'name': entry,
                     'path': node_url + '/',
@@ -250,7 +260,7 @@ def download(request, path):
     folder = Folder(posixpath.dirname(path))
 
     # check permissions
-    if not folder.has_perm('can_read', request.user):
+    if not has_permission(folder.path, 'can_read', request.user):
         return HttpResponseForbidden()
 
     resp = django.views.static.serve(request,
@@ -330,7 +340,7 @@ def render_file(request, path):
     filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
 
     # check permissions
-    if not folder.has_perm('can_read', request.user):
+    if not has_permission(folder.path, 'can_read', request.user):
         return HttpResponseForbidden()
 
     # check the size is legitimate
