@@ -94,8 +94,8 @@
         <ul class="nav nav-tabs nav-stacked photo-info">
             <li title="The size of the original picture"><i class="icon-resize-full"></i> {{ currentPhoto.image.size[0] }} x {{ currentPhoto.image.size[1] }} pixels</li>
             <li title="The size of the original picture"><i class="icon-file"></i> {{ currentPhoto.size | fileSize }}</li>
-            <li title="The camera used to take this picture"><i class="icon-camera"></i> {{ currentPhoto.image.camera }}</li>
-            <li title="The aperture and exposure time for this picture"><i class="icon-wrench"></i> {{ currentPhoto.image.settings }}</li>
+            <li ng-show="currentPhoto.image.camera" title="The camera used to take this picture"><i class="icon-camera"></i> {{ currentPhoto.image.camera }}</li>
+            <li ng-show="currentPhoto.image.settings" title="The aperture and exposure time for this picture"><i class="icon-wrench"></i> {{ currentPhoto.image.settings }}</li>
         </ul>
         <div class="photo-actions">
             <a class="btn btn-danger" href="" ng-click="promptDelete(currentPhoto)" ng-show="currentFolder.can_write"><i class="icon-remove"></i> <span co-translate>Delete</a>
