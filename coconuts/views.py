@@ -81,7 +81,13 @@ def get_image_info(filepath):
     """
     Gets an image's information.
     """
-    info = {}
+    image = Image.open(filepath)
+    info = {
+        'size': image.size
+    }
+    if 'exif' not in image.info:
+        return info
+
     with open(filepath, 'rb') as fp:
         tags = EXIF.process_file(fp, details=False)
 
@@ -111,7 +117,6 @@ def get_image_info(filepath):
         info['settings'] = ', '.join(bits)
 
     # size
-    info['size'] = Image.open(filepath).size
 
     return info
 
@@ -233,7 +238,7 @@ def content_list(request, path):
                 'path': node_url,
                 'size': os.path.getsize(node_path),
             }
-            if data['mimetype'] in ['image/jpeg', 'image/pjpeg']:
+            if data['mimetype'] in ['image/jpeg', 'image/pjpeg', 'image/png']:
                 data['image'] = get_image_info(node_path)
             files.append(data)
 

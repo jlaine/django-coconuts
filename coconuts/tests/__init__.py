@@ -156,6 +156,9 @@ class FolderContentTest(BaseTest):
                     'size': 186899,
                 },
                 {
+                    'image': {
+                        'size': [24, 24],
+                    },
                     'mimetype': 'image/png',
                     'name': 'test.png',
                     'path': '/test.png',
@@ -243,6 +246,9 @@ class AddFileTest(BaseTest):
             'can_write': True,
             'files': [
                 {
+                    'image': {
+                        'size': [24, 24],
+                    },
                     'mimetype': 'image/png',
                     'name': 'test.png',
                     'path': '/test.png',
@@ -452,7 +458,7 @@ class DownloadFileTest(BaseTest):
         self.assertEquals(response.status_code, 403)
 
 class RenderFileTest(BaseTest):
-    files = ['test.jpg']
+    files = ['test.jpg', 'test.png']
     fixtures = ['test_users.json']
 
     def test_as_superuser(self):
