@@ -219,16 +219,18 @@ class AddFileTest(BaseTest):
 
     def test_as_superuser(self):
         """
-        Authenticated super-user can create a folder.
+        Authenticated super-user can add a folder.
         """
         self.client.login(username="test_user_1", password="test")
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'test.png')
 
         # GET fails
         response = self.client.get('/images/add_file/')
         self.assertEquals(response.status_code, 405)
+        self.assertFalse(os.path.exists(data_path))
 
         # POST succeeds
-        source_path = os.path.join(os.path.dirname(__file__), 'folder.png')
+        source_path = os.path.join(os.path.dirname(__file__), 'test.png')
         response = self.client.post('/images/add_file/', {'upload': open(source_path, 'rb')})
         self.assertJson(response, {
             'can_manage': True,
@@ -236,8 +238,8 @@ class AddFileTest(BaseTest):
             'files': [
                 {
                     'mimetype': 'image/png',
-                    'name': 'folder.png',
-                    'path': '/folder.png',
+                    'name': 'test.png',
+                    'path': '/test.png',
                     'size': 548,
                 }
              ],
@@ -245,10 +247,25 @@ class AddFileTest(BaseTest):
             'name': '',
             'path': '/',
         })
-
-        # check folder
-        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'folder.png')
         self.assertTrue(os.path.exists(data_path))
+
+    def test_as_user(self):
+        """
+        Authenticated user cannot add a file.
+        """
+        self.client.login(username="test_user_2", password="test")
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'test.png')
+
+        # GET fails
+        response = self.client.get('/images/add_file/')
+        self.assertEquals(response.status_code, 405)
+        self.assertFalse(os.path.exists(data_path))
+
+        # POST fails
+        source_path = os.path.join(os.path.dirname(__file__), 'test.png')
+        response = self.client.post('/images/add_file/', {'upload': open(source_path, 'rb')})
+        self.assertEquals(response.status_code, 403)
+        self.assertFalse(os.path.exists(data_path))
 
 class AddFolderTest(BaseTest):
     fixtures = ['test_users.json']
@@ -299,6 +316,7 @@ class AddFolderTest(BaseTest):
         self.assertEquals(response.status_code, 403)
 
 class DeleteFileTest(BaseTest):
+    files = ['test.jpg']
     fixtures = ['test_users.json']
 
     def test_as_superuser(self):
@@ -307,16 +325,15 @@ class DeleteFileTest(BaseTest):
         """
         self.client.login(username="test_user_1", password="test")
 
-        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'folder.png')
-        open(data_path, 'w').write('foo')
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'test.jpg')
 
         # GET fails
-        response = self.client.get('/images/delete/folder.png')
+        response = self.client.get('/images/delete/test.jpg')
         self.assertEquals(response.status_code, 405)
         self.assertTrue(os.path.exists(data_path))
 
         # POST succeeds
-        response = self.client.post('/images/delete/folder.png')
+        response = self.client.post('/images/delete/test.jpg')
         self.assertJson(response, {
             'can_manage': True,
             'can_write': True,
@@ -333,20 +350,20 @@ class DeleteFileTest(BaseTest):
         """
         self.client.login(username="test_user_2", password="test")
 
-        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'folder.png')
-        open(data_path, 'w').write('foo')
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'test.jpg')
 
         # GET fails
-        response = self.client.get('/images/delete/folder.png')
+        response = self.client.get('/images/delete/test.jpg')
         self.assertEquals(response.status_code, 405)
         self.assertTrue(os.path.exists(data_path))
 
         # POST fails
-        response = self.client.post('/images/delete/folder.png')
+        response = self.client.post('/images/delete/test.jpg')
         self.assertEquals(response.status_code, 403)
         self.assertTrue(os.path.exists(data_path))
 
 class DeleteFolderTest(BaseTest):
+    folders = ['Foo']
     fixtures = ['test_users.json']
 
     def test_as_superuser(self):
@@ -356,7 +373,6 @@ class DeleteFolderTest(BaseTest):
         self.client.login(username="test_user_1", password="test")
 
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo')
-        os.makedirs(data_path)
 
         # GET fails
         response = self.client.get('/images/delete/Foo/')
@@ -382,7 +398,6 @@ class DeleteFolderTest(BaseTest):
         self.client.login(username="test_user_2", password="test")
 
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo')
-        os.makedirs(data_path)
 
         # GET fails
         response = self.client.get('/images/delete/Foo/')
