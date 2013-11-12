@@ -270,7 +270,7 @@ def download(request, path):
     resp = django.views.static.serve(request,
         path,
         document_root=settings.COCONUTS_DATA_ROOT)
-    resp['Content-Disposition'] = 'attachment; filename="%s"' % urlquote(os.path.basename(path))
+    resp['Content-Disposition'] = 'attachment; filename="%s"' % urlquote(posixpath.basename(path))
     return resp
 
 @login_required
