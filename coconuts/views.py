@@ -85,9 +85,8 @@ def get_image_info(filepath):
     info = {
         'size': image.size
     }
-    if 'exif' not in image.info:
-        return info
 
+    # get EXIF tags
     with open(filepath, 'rb') as fp:
         tags = EXIF.process_file(fp, details=False)
 
@@ -384,9 +383,9 @@ def render_file(request, path):
         # rotate if needed
         with open(filepath, 'rb') as fp:
             tags = EXIF.process_file(fp, details=False)
-            if tags.has_key('Image Orientation'):
-                orientation = tags['Image Orientation'].values[0]
-                img = img.rotate(ORIENTATIONS[orientation][2])
+        if tags.has_key('Image Orientation'):
+            orientation = tags['Image Orientation'].values[0]
+            img = img.rotate(ORIENTATIONS[orientation][2])
 
         img.thumbnail(cachesize, Image.ANTIALIAS)
         img.save(cachefile, quality=90)
