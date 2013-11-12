@@ -93,9 +93,9 @@ html {
 }
 
 .slide-forward.ng-enter {
-    -webkit-transform: translateX(100%);
-    -moz-transform: translateX(100%);
-    transform: translateX(100%);
+    -webkit-transform: translateX(25%);
+    -moz-transform: translateX(25%);
+    transform: translateX(25%);
     opacity: 0;
 }
 .slide-forward.ng-enter-active {
@@ -111,16 +111,16 @@ html {
     opacity: 1;
 }
 .slide-forward.ng-leave-active {
-    -webkit-transform: translateX(-100%);
-    -moz-transform: translateX(-100%);
-    transform: translateX(-100%);
+    -webkit-transform: translateX(-25%);
+    -moz-transform: translateX(-25%);
+    transform: translateX(-25%);
     opacity: 0;
 }
 
 .slide-backward.ng-enter {
-    -webkit-transform: translateX(-100%);
-    -moz-transform: translateX(-100%);
-    transform: translateX(-100%);
+    -webkit-transform: translateX(-25%);
+    -moz-transform: translateX(-25%);
+    transform: translateX(-25%);
     opacity: 0;
 }
 .slide-backward.ng-enter-active {
@@ -136,8 +136,8 @@ html {
     opacity: 1;
 }
 .slide-backward.ng-leave-active {
-    -webkit-transform: translateX(100%);
-    -moz-transform: translateX(100%);
-    transform: translateX(100%);
+    -webkit-transform: translateX(25%);
+    -moz-transform: translateX(25%);
+    transform: translateX(25%);
     opacity: 0;
 }
