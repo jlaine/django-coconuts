@@ -7,6 +7,6 @@ env:
   - DJANGO=1.6
 install:
   - pip install -q Django==$DJANGO --use-mirrors
-  - pip install -q EXIF --use-mirrors
+  - pip install -q exifread --use-mirrors
   - pip install -q PIL --use-mirrors
 script: python manage.py test coconuts
