@@ -24,6 +24,8 @@ import tempfile
 from django.conf import settings
 from django.test import TestCase
 
+from coconuts.views import clean_path
+
 class BaseTest(TestCase):
     maxDiff = None
 
@@ -45,6 +47,23 @@ class BaseTest(TestCase):
         """
         for path in [settings.COCONUTS_CACHE_ROOT, settings.COCONUTS_DATA_ROOT]:
             shutil.rmtree(path)
+
+class PathTest(BaseTest):
+    def test_clean(self):
+        self.assertEquals(clean_path(''), '')
+        self.assertEquals(clean_path('.'), '')
+        self.assertEquals(clean_path('..'), '')
+        self.assertEquals(clean_path('/'), '')
+        self.assertEquals(clean_path('/foo'), 'foo')
+        self.assertEquals(clean_path('/foo/'), 'foo')
+        self.assertEquals(clean_path('/foo/bar'), 'foo/bar')
+        self.assertEquals(clean_path('/foo/bar/'), 'foo/bar')
+
+    def test_clean_bad(self):
+        with self.assertRaises(ValueError):
+            clean_path('\\')
+        with self.assertRaises(ValueError):
+            clean_path('\\foo')
 
 class EmptyFolderContentTest(BaseTest):
     fixtures = ['test_users.json']

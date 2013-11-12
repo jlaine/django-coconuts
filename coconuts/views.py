@@ -19,8 +19,13 @@
 import json
 import mimetypes
 import os
+import posixpath
 import shutil
 import time
+try:
+    from urllib.parse import unquote
+except ImportError:     # Python 2
+    from urllib import unquote
 import Image
 
 from django.conf import settings
@@ -47,6 +52,27 @@ ORIENTATIONS = {
     7: [ True,  False, -90  ], # Mirrored horizontal then rotated 90 CW
     8: [ False, False, 90 ], # Rotated 90 CCW
 }
+
+def clean_path(path):
+    """
+    Adapted from django.views.static.serve
+    """
+    path = posixpath.normpath(unquote(path))
+    path = path.lstrip('/')
+    newpath = ''
+    for part in path.split('/'):
+        if not part:
+            # Strip empty path components.
+            continue
+        drive, part = os.path.splitdrive(part)
+        head, part = os.path.split(part)
+        if part in (os.curdir, os.pardir):
+            # Strip '.' and '..' in path.
+            continue
+        newpath = os.path.join(newpath, part).replace('\\', '/')
+    if newpath and newpath != path:
+        raise ValueError
+    return newpath
 
 def get_image_info(filepath):
     """
