@@ -28,6 +28,8 @@ from coconuts.views import clean_path
 
 class BaseTest(TestCase):
     maxDiff = None
+    files = []
+    folders = []
 
     def assertJson(self, response, data, status_code=200):
         self.assertEquals(response.status_code, status_code)
@@ -40,6 +42,13 @@ class BaseTest(TestCase):
         """
         for path in [settings.COCONUTS_CACHE_ROOT, settings.COCONUTS_DATA_ROOT]:
             os.makedirs(path)
+        for name in self.folders:
+            dest_path = os.path.join(settings.COCONUTS_DATA_ROOT, name)
+            os.makedirs(dest_path)
+        for name in self.files:
+            source_path = os.path.join(os.path.dirname(__file__), name)
+            dest_path = os.path.join(settings.COCONUTS_DATA_ROOT, name)
+            shutil.copyfile(source_path, dest_path)
 
     def tearDown(self):
         """
@@ -99,15 +108,9 @@ class EmptyFolderContentTest(BaseTest):
         self.assertEquals(response.status_code, 403)
 
 class FolderContentTest(BaseTest):
+    files = ['test.jpg', 'test.txt']
     fixtures = ['test_users.json']
-
-    def setUp(self):
-        super(FolderContentTest, self).setUp()
-        os.makedirs(os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo'))
-        for name in ['test.jpg', 'test.txt']:
-            source_path = os.path.join(os.path.dirname(__file__), name)
-            dest_path = os.path.join(settings.COCONUTS_DATA_ROOT, name)
-            shutil.copyfile(source_path, dest_path)
+    folders = ['Foo']
 
     def test_file_as_anonymous(self):
         response = self.client.get('/images/contents/test.jpg')
@@ -392,14 +395,8 @@ class DeleteFolderTest(BaseTest):
         self.assertTrue(os.path.exists(data_path))
 
 class DownloadFileTest(BaseTest):
+    files = ['test.jpg']
     fixtures = ['test_users.json']
-
-    def setUp(self):
-        super(DownloadFileTest, self).setUp()
-        for name in ['test.jpg']:
-            source_path = os.path.join(os.path.dirname(__file__), name)
-            dest_path = os.path.join(settings.COCONUTS_DATA_ROOT, name)
-            shutil.copyfile(source_path, dest_path)
 
     def test_as_superuser(self):
         """
@@ -434,14 +431,8 @@ class DownloadFileTest(BaseTest):
         self.assertEquals(response.status_code, 403)
 
 class RenderFileTest(BaseTest):
+    files = ['test.jpg']
     fixtures = ['test_users.json']
-
-    def setUp(self):
-        super(RenderFileTest, self).setUp()
-        for name in ['test.jpg']:
-            source_path = os.path.join(os.path.dirname(__file__), name)
-            dest_path = os.path.join(settings.COCONUTS_DATA_ROOT, name)
-            shutil.copyfile(source_path, dest_path)
 
     def test_as_superuser(self):
         """
