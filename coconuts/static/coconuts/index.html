@@ -35,7 +35,7 @@
 <script type="text/ng-template" id="/folder.html">
 <div id="content">
 
-<h1 ng-hide="currentPhoto">{{ currentFolder.name }}</h1>
+<h1 ng-hide="currentPhoto">{{ currentFolder.name || "Home" }}</h1>
 
 <div class="btn-group object-tools ng-cloak" ng-show="currentFolder.can_write && !currentPhoto">
     <a class="btn dropdown-toggle" data-toggle="dropdown" href="">
