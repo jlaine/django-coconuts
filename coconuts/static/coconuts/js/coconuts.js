@@ -185,9 +185,15 @@ filter('fileIcon', ['settings', function(settings) {
     var mime_root = settings.static_root + 'img/';
     return function(mimetype) {
         if (mimetype.indexOf('image/') === 0) {
-            return mime_root + 'image.png';
+            return mime_root + 'image-x-generic.png';
         } else if (mimetype === 'inode/directory') {
-            return mime_root + 'folder.png';
+            return mime_root + 'inode-directory.png';
+        } else if (mimetype === 'application/pdf') {
+            return mime_root + 'application-pdf.png';
+        } else if (mimetype === 'application/zip') {
+            return mime_root + 'application-zip.png';
+        } else if (mimetype.indexOf('text/') === 0) {
+            return mime_root + 'text-x-generic.png';
         } else {
             return mime_root + 'unknown.png';
         }
