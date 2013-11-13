@@ -5,7 +5,9 @@ env:
   - DJANGO=1.6
 install:
   - sudo apt-get -qq update
-  - sudo apt-get -qq install libjpeg8-dev
+  - sudo apt-get -qq install libjpeg8-dev libpng12-dev
+  - sudo ln -s /usr/lib/`uname -i`-linux-gnu/libjpeg.so /usr/lib/
+  - sudo ln -s /usr/lib/`uname -i`-linux-gnu/libz.so /usr/lib/
   - pip install -q Django==$DJANGO --use-mirrors
   - pip install PIL --use-mirrors
 script: python manage.py test coconuts
