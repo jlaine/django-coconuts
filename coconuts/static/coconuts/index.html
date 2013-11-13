@@ -143,8 +143,8 @@
         <p co-translate ng-hide="deleteFolder">Are you sure you want to delete the file "{{ deleteTarget.name }}"?</p>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-danger" href="" ng-click="doDelete()" co-translate>Yes, I'm sure</button>
-        <a class="btn" href="" ng-click="deleteTarget = undefined" co-translate>No, I'm not sure</a>
+        <button class="btn btn-danger" ng-click="doDelete()" co-translate>Yes, I'm sure</button>
+        <button class="btn" ng-click="deleteTarget = undefined" co-translate>No, I'm not sure</button>
     </div>
 </div>
 </div>
