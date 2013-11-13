@@ -240,6 +240,7 @@ def content_list(request, path):
             # keep only the children the user is allowed to read. This is only useful in '/'
             if has_permission(node_url[1:], 'can_read', request.user):
                 folders.append({
+                    'mimetype': 'inode/directory',
                     'name': entry,
                     'path': node_url + '/',
                     'size': os.path.getsize(node_path),

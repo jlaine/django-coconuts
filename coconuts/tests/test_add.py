@@ -110,6 +110,7 @@ class AddFolderTest(BaseTest):
             'files': [],
             'folders': [
                 {
+                    'mimetype': 'inode/directory',
                     'name': 'New folder',
                     'path': '/New folder/',
                     'size': 4096,

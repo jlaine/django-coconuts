@@ -97,7 +97,6 @@ class FolderContentTest(BaseTest):
         self.assertJson(response, {
             'can_manage': True,
             'can_write': True,
-            'files': [],
             'files': [
                 {
                     'image': {
@@ -128,6 +127,7 @@ class FolderContentTest(BaseTest):
             ],
             'folders': [
                 {
+                    'mimetype': 'inode/directory',
                     'name': 'Foo',
                     'path': '/Foo/',
                     'size': 4096,
