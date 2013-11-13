@@ -1,8 +1,14 @@
 django-coconuts  
 Copyright (C) 2008-2013 Jeremy Lainé
 
+[![Build Status](https://travis-ci.org/jlaine/django-coconuts.png)](https://travis-ci.org/jlaine/django-coconuts)
+
 About
 -----
+
+Coconuts is a simple photo sharing web application. The backend is written in
+Python, using the Django framework. The frontend is written in Javascript
+using the AngularJS framework.
 
 Some of Coconuts' features:
 
