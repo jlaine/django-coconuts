@@ -177,12 +177,11 @@ factory('FormData', [function() {
 }]).
 factory('settings', ['$http', function($http) {
     return {
-        coconuts_root: 'images/',
-        static_root: '/static/coconuts/'
+        coconuts_root: 'images/'
     };
 }]).
 filter('fileIcon', ['settings', function(settings) {
-    var mime_root = settings.static_root + 'img/';
+    var mime_root = '/static/coconuts/img/';
     return function(mimetype) {
         if (mimetype.indexOf('image/') === 0) {
             return mime_root + 'image-x-generic.png';
