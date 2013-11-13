@@ -3,6 +3,11 @@ html {
     overflow-y: scroll;
 }
 
+h1 {
+    font-size: 24px;
+    line-height: 26px;
+}
+
 /* blocks */
 
 #header {
@@ -10,6 +15,18 @@ html {
 }
 
 /* various */
+
+.breadcrumbs {
+  background: #f8f8f8;
+  background: -moz-linear-gradient(top, #f4f4f4, #fff);
+  background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#fff));
+  border-bottom:1px solid #ccc;
+  border-top:1px solid white;
+  color:#999999;
+  font-size:11px;
+  padding:2px 8px 3px;
+  text-align:left;
+}
 
 .object-tools {
     float: right;
