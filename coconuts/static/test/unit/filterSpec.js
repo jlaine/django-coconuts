@@ -10,20 +10,19 @@ describe('Filters', function() {
             fileIcon = $filter('fileIcon');
         }));
 
-        it('should return image icon', function() {
-            expect(fileIcon('some_file.gif')).toBe('/static/coconuts/img/mimetypes/image-jpeg.png');
-            expect(fileIcon('some_file.jpg')).toBe('/static/coconuts/img/mimetypes/image-jpeg.png');
-            expect(fileIcon('some_file.jpeg')).toBe('/static/coconuts/img/mimetypes/image-jpeg.png');
-            expect(fileIcon('some_file.png')).toBe('/static/coconuts/img/mimetypes/image-jpeg.png');
+        it('should return folder icon', function() {
+            expect(fileIcon('inode/directory')).toBe('/static/coconuts/img/folder.png');
+        });
 
-            expect(fileIcon('some_file.GIF')).toBe('/static/coconuts/img/mimetypes/image-jpeg.png');
-            expect(fileIcon('some_file.JPG')).toBe('/static/coconuts/img/mimetypes/image-jpeg.png');
-            expect(fileIcon('some_file.JPEG')).toBe('/static/coconuts/img/mimetypes/image-jpeg.png');
-            expect(fileIcon('some_file.PNG')).toBe('/static/coconuts/img/mimetypes/image-jpeg.png');
+        it('should return image icon', function() {
+            expect(fileIcon('image/gif')).toBe('/static/coconuts/img/image.png');
+            expect(fileIcon('image/jpeg')).toBe('/static/coconuts/img/image.png');
+            expect(fileIcon('image/pjpeg')).toBe('/static/coconuts/img/image.png');
+            expect(fileIcon('image/png')).toBe('/static/coconuts/img/image.png');
         });
 
         it('should return unknown icon', function() {
-            expect(fileIcon('some_file.xyz')).toBe('/static/coconuts/img/mimetypes/unknown.png');
+            expect(fileIcon('application/octet-stream')).toBe('/static/coconuts/img/unknown.png');
         });
     });
 });

@@ -182,18 +182,15 @@ factory('settings', ['$http', function($http) {
     };
 }]).
 filter('fileIcon', ['settings', function(settings) {
-    var mime_root = settings.static_root + 'img/mimetypes/';
-    return function(name) {
-        var idx = name.lastIndexOf('.');
-        if (idx !== -1) {
-            var extension = name.slice(idx + 1, name.length).toLowerCase();
-            if (extension == 'gif' || extension == 'jpg' || extension == 'jpeg' || extension == 'png') {
-                return mime_root + 'image-jpeg.png';
-            } else if (extension == 'py') {
-                return mime_root + 'text-x-python.png';
-            }
+    var mime_root = settings.static_root + 'img/';
+    return function(mimetype) {
+        if (mimetype.indexOf('image/') === 0) {
+            return mime_root + 'image.png';
+        } else if (mimetype === 'inode/directory') {
+            return mime_root + 'folder.png';
+        } else {
+            return mime_root + 'unknown.png';
         }
-        return mime_root + 'unknown.png';
     };
 }]).
 filter('fileSize', [function() {
