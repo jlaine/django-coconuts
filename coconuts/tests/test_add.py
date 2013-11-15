@@ -36,9 +36,21 @@ from coconuts.tests import BaseTest
 class AddFileTest(BaseTest):
     fixtures = ['test_users.json']
 
+    def test_as_anonymous(self):
+        """
+        Anonymous user cannot add a file.
+        """
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'test.png')
+
+        # POST fails
+        source_path = os.path.join(os.path.dirname(__file__), 'test.png')
+        response = self.client.post('/images/add_file/', {'upload': open(source_path, 'rb')})
+        self.assertEquals(response.status_code, 401)
+        self.assertFalse(os.path.exists(data_path))
+
     def test_as_superuser(self):
         """
-        Authenticated super-user can add a folder.
+        Authenticated super-user can add a file.
         """
         self.client.login(username="test_user_1", password="test")
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'test.png')
@@ -92,15 +104,34 @@ class AddFileTest(BaseTest):
 class AddFolderTest(BaseTest):
     fixtures = ['test_users.json']
 
+    def test_as_anonymous(self):
+        """
+        Anonymous user cannot add a folder.
+        """
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'test.png')
+
+        # GET fails
+        response = self.client.get('/images/add_folder/')
+        self.assertEquals(response.status_code, 401)
+        self.assertFalse(os.path.exists(data_path))
+
+        # POST fails
+        source_path = os.path.join(os.path.dirname(__file__), 'test.png')
+        response = self.client.post('/images/add_folder/', {'name': 'New folder'})
+        self.assertEquals(response.status_code, 401)
+        self.assertFalse(os.path.exists(data_path))
+
     def test_as_superuser(self):
         """
         Authenticated super-user can create a folder.
         """
         self.client.login(username="test_user_1", password="test")
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'New folder')
 
         # GET fails
         response = self.client.get('/images/add_folder/')
         self.assertEquals(response.status_code, 405)
+        self.assertFalse(os.path.exists(data_path))
 
         # POST succeeds
         response = self.client.post('/images/add_folder/', {'name': 'New folder'})
@@ -119,9 +150,6 @@ class AddFolderTest(BaseTest):
             'name': '',
             'path': '/',
         })
-
-        # check folder
-        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'New folder')
         self.assertTrue(os.path.exists(data_path))
 
     def test_as_user(self):
@@ -129,11 +157,14 @@ class AddFolderTest(BaseTest):
         Authenticated user cannot create a folder.
         """
         self.client.login(username="test_user_2", password="test")
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'New folder')
 
         # GET fails
         response = self.client.get('/images/add_folder/')
         self.assertEquals(response.status_code, 405)
+        self.assertFalse(os.path.exists(data_path))
 
         # POST fails
         response = self.client.post('/images/add_folder/', {'name': 'New folder'})
         self.assertEquals(response.status_code, 403)
+        self.assertFalse(os.path.exists(data_path))

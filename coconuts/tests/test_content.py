@@ -37,7 +37,7 @@ class EmptyFolderContentTest(BaseTest):
         Anonymous users need to login.
         """
         response = self.client.get('/images/contents/')
-        self.assertRedirects(response, '/accounts/login/?next=/images/contents/')
+        self.assertEquals(response.status_code, 401)
 
     def test_home_as_superuser(self):
         """
@@ -69,7 +69,7 @@ class FolderContentTest(BaseTest):
 
     def test_file_as_anonymous(self):
         response = self.client.get('/images/contents/test.jpg')
-        self.assertRedirects(response, '/accounts/login/?next=/images/contents/test.jpg')
+        self.assertEquals(response.status_code, 401)
 
     def test_file_as_superuser(self):
         self.client.login(username="test_user_1", password="test")
@@ -86,7 +86,7 @@ class FolderContentTest(BaseTest):
         Anonymous users need to login.
         """
         response = self.client.get('/images/contents/')
-        self.assertRedirects(response, '/accounts/login/?next=/images/contents/')
+        self.assertEquals(response.status_code, 401)
 
     def test_home_as_superuser(self):
         """

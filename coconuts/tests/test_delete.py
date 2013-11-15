@@ -37,12 +37,27 @@ class DeleteFileTest(BaseTest):
     files = ['test.jpg']
     fixtures = ['test_users.json']
 
+    def test_as_anonymous(self):
+        """
+        Anonymous user cannot delete a file.
+        """
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'test.jpg')
+
+        # GET fails
+        response = self.client.get('/images/delete/test.jpg')
+        self.assertEquals(response.status_code, 401)
+        self.assertTrue(os.path.exists(data_path))
+
+        # POST fails
+        response = self.client.post('/images/delete/test.jpg')
+        self.assertEquals(response.status_code, 401)
+        self.assertTrue(os.path.exists(data_path))
+
     def test_as_superuser(self):
         """
         Authenticated super-user can delete a file.
         """
         self.client.login(username="test_user_1", password="test")
-
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'test.jpg')
 
         # GET fails
@@ -67,7 +82,6 @@ class DeleteFileTest(BaseTest):
         Authenticated user cannot delete a file.
         """
         self.client.login(username="test_user_2", password="test")
-
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'test.jpg')
 
         # GET fails
@@ -84,12 +98,27 @@ class DeleteFolderTest(BaseTest):
     folders = ['Foo']
     fixtures = ['test_users.json']
 
+    def test_as_anonymous(self):
+        """
+        Anonymous user cannot delete a folder.
+        """
+        data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo')
+
+        # GET fails
+        response = self.client.get('/images/delete/Foo/')
+        self.assertEquals(response.status_code, 401)
+        self.assertTrue(os.path.exists(data_path))
+
+        # POST fails
+        response = self.client.post('/images/delete/Foo/')
+        self.assertEquals(response.status_code, 401)
+        self.assertTrue(os.path.exists(data_path))
+
     def test_as_superuser(self):
         """
-        Authenticated super-user can delete a file.
+        Authenticated super-user can delete a folder.
         """
         self.client.login(username="test_user_1", password="test")
-
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo')
 
         # GET fails
@@ -111,10 +140,9 @@ class DeleteFolderTest(BaseTest):
 
     def test_as_user(self):
         """
-        Authenticated user cannot delete a file.
+        Authenticated user cannot delete a folder.
         """
         self.client.login(username="test_user_2", password="test")
-
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo')
 
         # GET fails

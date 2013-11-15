@@ -67,6 +67,22 @@ ORIENTATIONS = {
     8: [ False, False, 90 ], # Rotated 90 CCW
 }
 
+def auth_required(function):
+    """
+    Decorator to check the agent is authenticated.
+
+    Unlike "login_required", if the agent is not authenticated it fails
+    with a 401 error instead of redirecting.
+    """
+    def wrap(request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return function(request, *args, **kwargs)
+
+        resp = HttpResponse()
+        resp.status_code = 401
+        return resp
+    return wrap
+
 def clean_path(path):
     """
     Returns the canonical version of a path
@@ -129,8 +145,6 @@ def get_image_info(filepath):
     if bits:
         info['settings'] = ', '.join(bits)
 
-    # size
-
     return info
 
 def has_permission(path, perm, user):
@@ -147,9 +161,12 @@ def has_permission(path, perm, user):
 def url2path(url):
     return url.replace('/', os.path.sep)
 
-@login_required
+@auth_required
 @require_http_methods(['POST'])
 def add_file(request, path):
+    """
+    Adds a file to the given folder.
+    """
     path = clean_path(path)
 
     # check input
@@ -178,9 +195,12 @@ def add_file(request, path):
 
     return content_list(request, path)
 
-@login_required
+@auth_required
 @require_http_methods(['POST'])
 def add_folder(request, path):
+    """
+    Creates a sub-folder in the given folder.
+    """
     path = clean_path(path)
 
     # check input
@@ -205,15 +225,19 @@ def add_folder(request, path):
 
 @login_required
 def browse(request, path):
-    """Show the list of photos for the given folder."""
+    """
+    Serves the static homepage.
+    """
     if path:
         return redirect(reverse(browse, args=['']) + '#/' + path)
     template_path = os.path.join(os.path.dirname(__file__), 'static', 'coconuts', 'index.html')
     return HttpResponse(open(template_path, 'rb').read())
 
-@login_required
+@auth_required
 def content_list(request, path):
-    """Show the list of photos for the given folder."""
+    """
+    Returns the contents of the given folder.
+    """
     path = clean_path(path)
 
     # check permissions
@@ -265,10 +289,12 @@ def content_list(request, path):
         'path': folder_url,
     }), content_type='application/json')
 
-@login_required
+@auth_required
 @require_http_methods(['POST'])
 def delete(request, path):
-    """Delete the given file or folder."""
+    """
+    Deletes the given file or folder.
+    """
     # check permissions
     path = clean_path(path)
     if not path:
@@ -287,7 +313,9 @@ def delete(request, path):
 
 @login_required
 def download(request, path):
-    """Return the raw file for the given photo."""
+    """
+    Returns the raw file for the given photo.
+    """
     path = clean_path(path)
 
     # check permissions
@@ -302,7 +330,9 @@ def download(request, path):
 
 @login_required
 def manage(request, path):
-    """Manage the properties for the given folder."""
+    """
+    Manages the properties for the given folder.
+    """
     path = clean_path(path)
 
     # Check permissions
@@ -368,7 +398,9 @@ def owner_list(request):
 
 @login_required
 def render_file(request, path):
-    """Return a resized version of the given photo."""
+    """
+    Returns a resized version of the given photo.
+    """
     path = clean_path(path)
 
     # check input
