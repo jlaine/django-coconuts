@@ -12,8 +12,11 @@ install:
   - sudo ln -s /usr/lib/`uname -i`-linux-gnu/libz.so /usr/lib/
   - pip install -q Django==$DJANGO --use-mirrors
   - pip install -q PIL --use-mirrors
-  - npm -g install grunt-cli
-  - cd coconuts/static && npm install
+  - cd coconuts/static
+  - npm install
+  - npm install grunt-cli
+  - cd ../..
 script:
   - python manage.py test coconuts
-  - cd coconuts/static && grunt karma
+  - cd coconuts/static
+  - node_modules/grunt-cli/bin/grunt karma
