@@ -126,9 +126,12 @@ controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$
         });
     };
     $scope.doManage = function() {
-        console.log('description: ' + $scope.description);
-        console.log($scope.permissions);
-        $scope.managePrompt = false;
+        $http.post(settings.coconuts_root + 'permissions' + $scope.currentFolder.path, {
+            description: $scope.description,
+            permissions: $scope.permissions
+        }).success(function(data) {
+            $scope.managePrompt = false;
+        });
     };
 
     $timeout(function() {

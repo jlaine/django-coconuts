@@ -47,6 +47,13 @@ class BaseTest(TestCase):
         self.assertEquals(response['Content-Type'], 'application/json')
         self.assertEquals(json.loads(response.content), data)
 
+    def postJson(self, url, data):
+        """
+        Posts data as JSON.
+        """
+        return self.client.post(url, json.dumps(data),
+            content_type='application/json')
+
     def setUp(self):
         """
         Creates temporary directories.

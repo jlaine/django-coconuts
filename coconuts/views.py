@@ -392,7 +392,7 @@ def permission_list(request, path):
     """
     path = clean_path(path)
 
-    # Check permissions
+    # check permissions
     try:
         share = Share.objects.get(path=path)
     except Share.DoesNotExist:
@@ -400,6 +400,20 @@ def permission_list(request, path):
     if not share.has_perm('can_manage', request.user):
         return HttpResponseForbidden()
 
+    # process submission
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+        except ValueError:
+            raise HttpResponseBadRequest()
+
+        # properties
+        shareform = ShareForm(data, instance=share)
+        if not shareform.is_valid():
+            raise HttpResponseBadRequest()
+        shareform.save()
+
+    # serialise
     data = {
         'description': share.description,
         'owners': [],

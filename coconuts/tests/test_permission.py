@@ -45,9 +45,39 @@ class PermissionListTest(BaseTest):
         """
         self.client.login(username="test_user_1", password="test")
 
+        # GET succeeds
         response = self.client.get('/images/permissions/')
         self.assertJson(response, {
             'description': '',
+            'owners': [
+                {
+                    'group': 'User',
+                    'name': 'test_user_1',
+                    'value': 'user:test_user_1',
+                }, {
+                    'group': 'User',
+                    'name': 'test_user_2',
+                    'value': 'user:test_user_2',
+                }, {
+                    'group': 'Group',
+                    'name': 'Test group 1',
+                    'value': 'group:Test group 1',
+                }, {
+                    'group': 'Other',
+                    'name': 'all',
+                    'value': 'other:all',
+                }
+            ],
+            'permissions': [],
+        })
+
+        # POST succeeds
+        response = self.postJson('/images/permissions/', {
+            'description': 'new description',
+            'permissions': []
+        })
+        self.assertJson(response, {
+            'description': 'new description',
             'owners': [
                 {
                     'group': 'User',
