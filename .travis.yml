@@ -10,8 +10,10 @@ install:
   - sudo apt-get -qq install libjpeg8-dev libpng12-dev
   - sudo ln -s /usr/lib/`uname -i`-linux-gnu/libjpeg.so /usr/lib/
   - sudo ln -s /usr/lib/`uname -i`-linux-gnu/libz.so /usr/lib/
+  - sudo npm -g install grunt-cli
   - pip install -q Django==$DJANGO --use-mirrors
   - pip install -q PIL --use-mirrors
+  - cd coconuts/static && npm install
 script:
   - python manage.py test coconuts
-  - cd coconuts/static && npm install && grunt karma
+  - cd coconuts/static && grunt karma
