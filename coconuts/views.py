@@ -396,7 +396,7 @@ def owner_list(request):
             choices.append({'name': klass.__name__, 'options': opts})
     return HttpResponse(json.dumps(choices), content_type='application/json')
 
-@login_required
+@auth_required
 def render_file(request, path):
     """
     Returns a resized version of the given photo.

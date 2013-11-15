@@ -33,6 +33,26 @@ class RenderFileTest(BaseTest):
     files = ['test.jpg', 'test.png']
     fixtures = ['test_users.json']
 
+    def test_as_anonymous(self):
+        """
+        Anonymous user cannot render a file.
+        """
+        # no size
+        response = self.client.get('/images/render/test.jpg')
+        self.assertEquals(response.status_code, 401)
+
+        # bad size
+        response = self.client.get('/images/render/test.jpg?size=123')
+        self.assertEquals(response.status_code, 401)
+
+        # good size, good path
+        response = self.client.get('/images/render/test.jpg?size=1024')
+        self.assertEquals(response.status_code, 401)
+
+        # good size, good path
+        response = self.client.get('/images/render/test.png?size=1024')
+        self.assertEquals(response.status_code, 401)
+
     def test_as_superuser(self):
         """
         Authenticated super-user can render a file.
