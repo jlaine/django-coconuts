@@ -385,8 +385,11 @@ def manage(request, path):
         'title': _("Manage %(name)s") % {'name': posixpath.basename(path)},
     })
 
-@login_required
+@auth_required
 def owner_list(request):
+    """
+    Returns a list of possible owners for permissions.
+    """
     choices = []
     for klass, key in OWNERS:
         opts = []
