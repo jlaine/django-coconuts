@@ -27,20 +27,45 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from django.conf.urls import patterns, url
+from coconuts.tests import BaseTest
 
-urlpatterns = patterns('coconuts.views',
-    # files
-    url(r'^images/add_file/(?P<path>.*)$', 'add_file'),
-    url(r'^images/add_folder/(?P<path>.*)$', 'add_folder'),
-    url(r'^images/contents/(?P<path>.*)$', 'content_list'),
-    url(r'^images/delete/(?P<path>.*)$', 'delete'),
-    url(r'^images/download/(?P<path>.*)$', 'download'),
-    url(r'^images/manage/(?P<path>.*)$', 'manage'),
-    url(r'^images/owners/$', 'owner_list'),
-    url(r'^images/permissions/(?P<path>.*)$', 'permission_list'),
-    url(r'^images/render/(?P<path>.*)$', 'render_file'),
+class PermissionListTest(BaseTest):
+    fixtures = ['test_users.json']
 
-    # folders
-    url(r'^(?P<path>.*)$', 'browse'),
-)
+    def test_as_anonymous(self):
+        """
+        Anonymous user cannot list permissions.
+        """
+        response = self.client.get('/images/permissions/')
+        self.assertEquals(response.status_code, 401)
+
+    def test_as_superuser(self):
+        """
+        Authenticated super-user can list owners.
+        """
+        self.client.login(username="test_user_1", password="test")
+
+        response = self.client.get('/images/permissions/')
+        self.assertJson(response, {
+            'description': '',
+            'owners': [
+                {
+                    'group': 'User',
+                    'name': 'test_user_1',
+                    'value': 'user:test_user_1',
+                }, {
+                    'group': 'User',
+                    'name': 'test_user_2',
+                    'value': 'user:test_user_2',
+                }, {
+                    'group': 'Group',
+                    'name': 'Test group 1',
+                    'value': 'group:Test group 1',
+                }, {
+                    'group': 'Other',
+                    'name': 'all',
+                    'value': 'other:all',
+                }
+            ],
+            'permissions': [],
+        })

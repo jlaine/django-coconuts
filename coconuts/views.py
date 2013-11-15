@@ -401,6 +401,45 @@ def owner_list(request):
     return HttpResponse(json.dumps(opts), content_type='application/json')
 
 @auth_required
+def permission_list(request, path):
+    """
+    Manages the properties for the given folder.
+    """
+    path = clean_path(path)
+
+    # Check permissions
+    try:
+        share = Share.objects.get(path=path)
+    except Share.DoesNotExist:
+        share = Share(path=path)
+    if not share.has_perm('can_manage', request.user):
+        return HttpResponseForbidden()
+
+    data = {
+        'description': share.description,
+        'owners': [],
+        'permissions': [],
+    }
+
+    # owners
+    for klass, key in OWNERS:
+        for obj in klass.objects.all().order_by(key):
+            data['owners'].append({
+                'group': klass.__name__,
+                'name': unicode(obj),
+                'value': "%s:%s" % (klass.__name__.lower(), getattr(obj, key))
+            })
+
+    # permissions
+    for acl in share.acls():
+        entry = {'owner': "%s:%s" % (acl.type, acl.name)}
+        for perm in PERMISSIONS:
+            entry[perm] = acl.has_perm(perm)
+        data['permissions'].append(entry)
+
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+@auth_required
 def render_file(request, path):
     """
     Returns a resized version of the given photo.

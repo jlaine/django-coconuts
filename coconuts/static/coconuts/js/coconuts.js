@@ -119,17 +119,10 @@ controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$
 
     $scope.promptManage = function() {
         $scope.managePrompt = true;
-        $http.get(settings.coconuts_root + 'owners/').success(function(owners) {
-            $scope.owners = owners;
-            $scope.description = 'bogus';
-            $scope.permissions = [
-                {
-                    owner: 'other:all',
-                    can_read: true,
-                    can_write: false,
-                    can_manage: false
-                }
-            ];
+        $http.get(settings.coconuts_root + 'permissions' + $scope.currentFolder.path).success(function(data) {
+            $scope.description = data.description;
+            $scope.permissions = data.permissions;
+            $scope.owners = data.owners;
         });
     };
     $scope.doManage = function() {
