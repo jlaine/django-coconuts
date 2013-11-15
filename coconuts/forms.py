@@ -64,7 +64,7 @@ class OwnerField(forms.ChoiceField):
 class ShareForm(forms.ModelForm):
     class Meta:
         model = Share
-        exclude = ('path', 'access')
+        fields = ('description',)
 
 class ShareAccessForm(forms.Form):
     def __init__(self, *args, **kwargs):
