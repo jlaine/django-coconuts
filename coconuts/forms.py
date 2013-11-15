@@ -68,8 +68,8 @@ class ShareForm(forms.ModelForm):
         exclude = ('path', 'access')
 
 class ShareAccessForm(forms.Form):
-    def __init__(self, **kwargs):
-        super(ShareAccessForm, self).__init__(**kwargs)
+    def __init__(self, *args, **kwargs):
+        super(ShareAccessForm, self).__init__(*args, **kwargs)
         self.fields['owner'] = OwnerField(label=_('Who?'))
         for perm in [ x[0] for x in sorted(PERMISSIONS.items(), key=itemgetter(1))]:
             self.fields[perm] = forms.BooleanField(required=False, label=PERMISSION_NAMES[perm])

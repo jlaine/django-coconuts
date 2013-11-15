@@ -45,7 +45,7 @@
     <ul class="dropdown-menu">
         <li ng-show="currentFolder.can_write"><a href="" ng-click="addPrompt = true"><i class="icon-picture"></i> <span co-translate>Add a file</span></a></li>
         <li ng-show="currentFolder.can_write"><a href="" ng-click="createPrompt = true"><i class="icon-folder-close"></i> <span co-translate>Create a folder</span></a></li>
-        <li ng-show="currentFolder.can_manage"><a href="{{ settings.coconuts_root }}manage{{ currentFolder.path }}"><i class="icon-key"></i> <span co-translate>Manage this share's permissions</span></a></li>
+        <li ng-show="currentFolder.can_manage"><a href="" ng-click="promptManage()"><i class="icon-key"></i> <span co-translate>Manage this share's permissions</span></a></li>
         <li ng-show="currentFolder.can_manage"><a href="/admin/auth/user/"><i class="icon-user"></i> <span co-translate>Manage user accounts</span></a></li>
     </ul>
 </div>

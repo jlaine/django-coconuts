@@ -41,11 +41,9 @@ class PermissionListTest(BaseTest):
 
     def test_as_superuser(self):
         """
-        Authenticated super-user can list owners.
+        Authenticated super-user can list permissions.
         """
         self.client.login(username="test_user_1", password="test")
-
-        # GET succeeds
         response = self.client.get('/images/permissions/')
         self.assertJson(response, {
             'description': '',
@@ -71,10 +69,59 @@ class PermissionListTest(BaseTest):
             'permissions': [],
         })
 
-        # POST succeeds
+class PermissionUpdateTest(BaseTest):
+    fixtures = ['test_users.json']
+
+    def test_anonymous(self):
+        """
+        Anonymous user cannot update permissions.
+        """
         response = self.postJson('/images/permissions/', {
             'description': 'new description',
-            'permissions': []
+            'permissions': [
+                {
+                    'owner': 'other:all',
+                    'can_read': True,
+                    'can_write': False,
+                    'can_manage': False,
+                }
+            ]
+        })
+        self.assertEquals(response.status_code, 401)
+
+    def test_bad_owner(self):
+        """
+        Invalid owner fails.
+        """
+        self.client.login(username="test_user_1", password="test")
+        response = self.postJson('/images/permissions/', {
+            'description': 'new description',
+            'permissions': [
+                {
+                    'owner': 'user:zorg',
+                    'can_read': True,
+                    'can_write': False,
+                    'can_manage': False,
+                }
+            ]
+        })
+        self.assertEquals(response.status_code, 400)
+
+    def test_good(self):
+        """
+        Authenticated super-user can update permissions.
+        """
+        self.client.login(username="test_user_1", password="test")
+        response = self.postJson('/images/permissions/', {
+            'description': 'new description',
+            'permissions': [
+                {
+                    'owner': 'other:all',
+                    'can_read': True,
+                    'can_write': False,
+                    'can_manage': False,
+                }
+            ]
         })
         self.assertJson(response, {
             'description': 'new description',
@@ -97,5 +144,12 @@ class PermissionListTest(BaseTest):
                     'value': 'other:all',
                 }
             ],
-            'permissions': [],
+            'permissions': [
+                {
+                    'owner': 'other:all',
+                    'can_read': True,
+                    'can_write': False,
+                    'can_manage': False,
+                }
+            ],
         })

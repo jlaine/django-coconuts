@@ -53,7 +53,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 import django.views.static
 
-from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessFormSet
+from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessForm
 from coconuts.models import NamedAcl, Share, OWNERS, PERMISSIONS
 
 ORIENTATIONS = {
@@ -328,63 +328,6 @@ def download(request, path):
     resp['Content-Disposition'] = 'attachment; filename="%s"' % urlquote(posixpath.basename(path))
     return resp
 
-@login_required
-def manage(request, path):
-    """
-    Manages the properties for the given folder.
-    """
-    path = clean_path(path)
-
-    # Check permissions
-    try:
-        share = Share.objects.get(path=path)
-    except Share.DoesNotExist:
-        share = Share(path=path)
-    if not share.has_perm('can_manage', request.user):
-        return HttpResponseForbidden()
-
-    # Process submission
-    if request.method == 'POST':
-        # properties
-        shareform = ShareForm(request.POST, instance=share)
-        if shareform.is_valid():
-            shareform.save()
-
-        # access
-        formset = ShareAccessFormSet(request.POST)
-        if formset.is_valid():
-            # access
-            acls = []
-            for data in formset.clean():
-                acl = NamedAcl("%s:" % data['owner'])
-                for perm in PERMISSIONS:
-                    if data[perm]: acl.add_perm(perm)
-                if acl.permissions: acls.append(acl)
-            share.set_acls(acls)
-
-            # Check we are not locking ourselves out before saving
-            if not share.has_perm('can_manage', request.user):
-                return HttpResponseForbidden()
-            share.save()
-            return redirect(reverse(browse, args=['']))
-
-    # fill form from database
-    data = []
-    for acl in share.acls():
-        entry = {'owner': "%s:%s" % (acl.type, acl.name)}
-        for perm in PERMISSIONS:
-            entry[perm] = acl.has_perm(perm)
-        data.append(entry)
-    shareform = ShareForm(instance=share)
-    formset = ShareAccessFormSet(initial=data)
-
-    return render(request, 'coconuts/manage.html', {
-        'formset': formset,
-        'share': share,
-        'shareform': shareform,
-        'title': _("Manage %(name)s") % {'name': posixpath.basename(path)},
-    })
-
 @auth_required
 def permission_list(request, path):
     """
@@ -405,13 +348,39 @@ def permission_list(request, path):
         try:
             data = json.loads(request.body)
         except ValueError:
-            raise HttpResponseBadRequest()
+            return HttpResponseBadRequest()
 
         # properties
         shareform = ShareForm(data, instance=share)
         if not shareform.is_valid():
-            raise HttpResponseBadRequest()
-        shareform.save()
+            return HttpResponseBadRequest()
+        shareform.save(commit=False)
+
+        # permissions
+        unique = {}
+        for blob in data['permissions']:
+            form = ShareAccessForm(blob)
+            if not form.is_valid():
+                return HttpResponseBadRequest()
+            permission = form.cleaned_data
+            owner = permission['owner']
+            if unique.has_key(owner):
+                for perm in PERMISSIONS:
+                    if permission[perm]: unique[owner][perm] = permission[perm]
+            else:
+                unique[owner] = permission
+        acls = []
+        for permission in unique.values():
+            acl = NamedAcl("%s:" % permission['owner'])
+            for perm in PERMISSIONS:
+                if permission[perm]: acl.add_perm(perm)
+            if acl.permissions: acls.append(acl)
+        share.set_acls(acls)
+
+        # check we are not locking ourselves out before saving
+        if not share.has_perm('can_manage', request.user):
+            return HttpResponseForbidden()
+        share.save()
 
     # serialise
     data = {
