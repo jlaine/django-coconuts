@@ -37,7 +37,6 @@ urlpatterns = patterns('coconuts.views',
     url(r'^images/delete/(?P<path>.*)$', 'delete'),
     url(r'^images/download/(?P<path>.*)$', 'download'),
     url(r'^images/manage/(?P<path>.*)$', 'manage'),
-    url(r'^images/owners/$', 'owner_list'),
     url(r'^images/permissions/(?P<path>.*)$', 'permission_list'),
     url(r'^images/render/(?P<path>.*)$', 'render_file'),
 

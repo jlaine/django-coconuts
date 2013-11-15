@@ -386,21 +386,6 @@ def manage(request, path):
     })
 
 @auth_required
-def owner_list(request):
-    """
-    Returns a list of possible owners for permissions.
-    """
-    opts = []
-    for klass, key in OWNERS:
-        for obj in klass.objects.all().order_by(key):
-            opts.append({
-                'group': klass.__name__,
-                'name': unicode(obj),
-                'value': "%s:%s" % (klass.__name__.lower(), getattr(obj, key))
-            })
-    return HttpResponse(json.dumps(opts), content_type='application/json')
-
-@auth_required
 def permission_list(request, path):
     """
     Manages the properties for the given folder.
