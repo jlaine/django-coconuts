@@ -30,7 +30,6 @@
 from operator import itemgetter
 
 from django import forms
-from django.forms.formsets import formset_factory, BaseFormSet
 from django.utils.translation import ugettext_lazy as _
 
 from coconuts.models import Share, OWNERS, PERMISSIONS, PERMISSION_NAMES
@@ -73,23 +72,3 @@ class ShareAccessForm(forms.Form):
         self.fields['owner'] = OwnerField(label=_('Who?'))
         for perm in [ x[0] for x in sorted(PERMISSIONS.items(), key=itemgetter(1))]:
             self.fields[perm] = forms.BooleanField(required=False, label=PERMISSION_NAMES[perm])
-
-class BaseShareAccessFormSet(BaseFormSet):
-    def clean(self):
-        """Merge permissions for each owner."""
-        unique = {}
-        for form in self.forms:
-            data = form.clean()
-            if not form.is_valid():
-                raise forms.ValidationError, u'An error occured.'
-            if data:
-                owner = data['owner']
-                if unique.has_key(owner):
-                    for perm in PERMISSIONS:
-                        if data[perm]: unique[owner][perm] = data[perm]
-                else:
-                    unique[owner] = data
-        return unique.values()
-
-ShareAccessFormSet = formset_factory(ShareAccessForm, formset=BaseShareAccessFormSet)
-
