@@ -1,6 +1,14 @@
 [
     {
         "pk": 1,
+        "model": "auth.group",
+        "fields": {
+            "name": "Test group 1",
+            "permissions": []
+        }
+    },
+    {
+        "pk": 1,
         "model": "auth.user",
         "fields": {
             "username": "test_user_1",
