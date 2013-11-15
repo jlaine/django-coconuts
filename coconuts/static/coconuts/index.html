@@ -147,6 +147,50 @@
         <button class="btn" ng-click="deleteTarget = undefined" co-translate>No, I'm not sure</button>
     </div>
 </div>
+
+<div class="modal form-inline ng-cloak" ng-show="managePrompt">
+    <div class="modal-header">
+        <button type="button" class="close" aria-hidden="true" ng-click="managePrompt = false">&times;</button>
+        <h3><i class="icon-folder-close"></i> <span co-translate>Manage a folder</span></h3>
+    </div>
+    <div class="modal-body">
+        <p>
+            <label for="id_description">Description:</label>
+            <input id="id_description" type="text" ng-model="description">
+        </p>
+        <label>Permissions</label>
+        <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Who?</th>
+            <th>Can read</th>
+            <th>Can write</th>
+            <th>Can manage</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="permission in permissions">
+            <td>
+                <select ng-model="permission.owner" ng-options="opt.value as opt.name group by opt.group for opt in owners" required></select>
+            </td>
+            <td>
+                <input type="checkbox" ng-model="permission.can_read"/>
+            </td>
+            <td>
+                <input type="checkbox" ng-model="permission.can_write"/>
+            </td>
+            <td>
+                <input type="checkbox" ng-model="permission.can_manage"/>
+            </td>
+        </tr>
+        </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="doManage()" co-translate>Save</button>
+    </div>
+</div>
+
 </div>
 </script>
 

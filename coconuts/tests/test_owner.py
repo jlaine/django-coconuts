@@ -48,13 +48,20 @@ class OwnerListTest(BaseTest):
         response = self.client.get('/images/owners/')
         self.assertJson(response, [
             {
-                'name': 'User',
-                'options': ['user:test_user_1', 'user:test_user_2'],
+                'group': 'User',
+                'name': 'test_user_1',
+                'value': 'user:test_user_1',
             }, {
-                'name': 'Group',
-                'options': ['group:Test group 1'],
+                'group': 'User',
+                'name': 'test_user_2',
+                'value': 'user:test_user_2',
             }, {
-                'name': 'Other',
-                'options': ['other:all'],
+                'group': 'Group',
+                'name': 'Test group 1',
+                'value': 'group:Test group 1',
+            }, {
+                'group': 'Other',
+                'name': 'all',
+                'value': 'other:all',
             }
         ])

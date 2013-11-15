@@ -390,14 +390,15 @@ def owner_list(request):
     """
     Returns a list of possible owners for permissions.
     """
-    choices = []
+    opts = []
     for klass, key in OWNERS:
-        opts = []
         for obj in klass.objects.all().order_by(key):
-            opts.append("%s:%s" % (klass.__name__.lower(), getattr(obj, key)))
-        if len(opts):
-            choices.append({'name': klass.__name__, 'options': opts})
-    return HttpResponse(json.dumps(choices), content_type='application/json')
+            opts.append({
+                'group': klass.__name__,
+                'name': unicode(obj),
+                'value': "%s:%s" % (klass.__name__.lower(), getattr(obj, key))
+            })
+    return HttpResponse(json.dumps(opts), content_type='application/json')
 
 @auth_required
 def render_file(request, path):

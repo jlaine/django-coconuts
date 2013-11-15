@@ -117,6 +117,27 @@ controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$
         });
     };
 
+    $scope.promptManage = function() {
+        $scope.managePrompt = true;
+        $http.get(settings.coconuts_root + 'owners/').success(function(owners) {
+            $scope.owners = owners;
+            $scope.description = 'bogus';
+            $scope.permissions = [
+                {
+                    owner: 'other:all',
+                    can_read: true,
+                    can_write: false,
+                    can_manage: false
+                }
+            ];
+        });
+    };
+    $scope.doManage = function() {
+        console.log('description: ' + $scope.description);
+        console.log($scope.permissions);
+        $scope.managePrompt = false;
+    };
+
     $timeout(function() {
         $rootScope.transitionClass = '';
     }, 600);
