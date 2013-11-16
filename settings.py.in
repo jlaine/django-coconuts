@@ -123,15 +123,3 @@ COCONUTS_DATA_ROOT = os.path.dirname(__file__) + '/data'
 
 # Absolute path to the directory that holds cache.
 COCONUTS_CACHE_ROOT = os.path.dirname(__file__) + '/cache'
-
-# Base URL for WebDAV access.
-#COCONUTS_WEBDAV_URL = 'http://photos.jerryweb.org/webdav/'
-
-# Extra links in the coconuts menu for staff.
-COCONUTS_STAFF_LINKS = (
-    {'url': '/admin/auth/user',
-     'text': 'Manage users',
-     'title': 'Manage user accounts',
-     'class': 'image-users'},
-)
-
