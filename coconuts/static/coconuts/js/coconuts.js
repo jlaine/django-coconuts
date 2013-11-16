@@ -216,20 +216,18 @@ filter('fileIcon', ['settings', function(settings) {
     };
 }]).
 filter('fileSize', [function() {
-    var MB = 1024 * 1024;
-    var KB = 1024;
+    var GiB = 1024 * 1024 * 1024,
+        MiB = 1024 * 1024,
+        KiB = 1024;
     return function(val) {
-        if (val > MB) {
-            return (val / MB).toFixed(1) + ' MB';
-        } else if (val > KB) {
-            return (val / KB).toFixed(1) + ' kB';
+        if (val >= GiB) {
+            return (val / GiB).toFixed(1) + ' GiB';
+        } else if (val >= MiB) {
+            return (val / MiB).toFixed(1) + ' MiB';
+        } else if (val >= KiB) {
+            return (val / KiB).toFixed(1) + ' kiB';
         } else {
             return val + ' B';
         }
-    };
-}]).
-filter('urlencode', [function() {
-    return function(val) {
-        return val;
     };
 }]);

@@ -38,4 +38,31 @@ describe('Filters', function() {
             expect(fileIcon('application/zip')).toBe('/static/coconuts/img/application-zip.png');
         });
     });
+
+    describe('fileSize', function() {
+        var fileSize;
+
+        beforeEach(inject(function($filter) {
+            fileSize = $filter('fileSize');
+        }));
+
+        it('should format size in bytes', function() {
+            expect(fileSize(0)).toBe('0 B');
+            expect(fileSize(1023)).toBe('1023 B');
+        });
+
+        it('should format size in kibibytes', function() {
+            expect(fileSize(1024)).toBe('1.0 kiB');
+            expect(fileSize(1048575)).toBe('1024.0 kiB');
+        });
+
+        it('should format size in mebibytes', function() {
+            expect(fileSize(1048576)).toBe('1.0 MiB');
+            expect(fileSize(1073741823)).toBe('1024.0 MiB');
+        });
+
+        it('should format size in gibibytes', function() {
+            expect(fileSize(1073741824)).toBe('1.0 GiB');
+        });
+    });
 });
