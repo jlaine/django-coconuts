@@ -96,7 +96,6 @@ describe('Controllers', function() {
                 files: [],
                 name: '',
                 folders: [],
-                photos: [],
                 path: '/'
             });
             $httpBackend.flush();
@@ -109,7 +108,6 @@ describe('Controllers', function() {
                 files: [],
                 folders: [],
                 name: '',
-                photos: [],
                 path: '/'
             }); 
         });
@@ -131,7 +129,6 @@ describe('Controllers', function() {
                 ],
                 folders: [],
                 name: '',
-                photos: [],
                 path: '/'
             });
  
@@ -159,7 +156,6 @@ describe('Controllers', function() {
                     }
                 ],
                 name: '',
-                photos: [],
                 path: '/'
             });
  
@@ -177,7 +173,6 @@ describe('Controllers', function() {
                 files: [],
                 folders: [],
                 name: '',
-                photos: [],
                 path: '/'
             });
 
