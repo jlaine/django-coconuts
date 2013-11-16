@@ -23,10 +23,11 @@ describe('Controllers', function() {
     });
 
     describe('CrumbCtrl', function() {
-        var scope, ctrl, $location;
+        var scope, ctrl, $location, $rootScope;
 
-        beforeEach(inject(function($controller, $injector, $rootScope) {
+        beforeEach(inject(function($controller, $injector, _$rootScope_) {
             $location = $injector.get('$location');
+            $rootScope = _$rootScope_;
             scope = $rootScope.$new();
             ctrl = $controller('CrumbCtrl', {
                 $scope: scope
@@ -41,7 +42,7 @@ describe('Controllers', function() {
         });
 
         it('should return crumbs for /foo.jpg', function() {
-            $location.path = function() { return '/foo.jpg'; };
+            $location.path('/foo.jpg');
             scope.$digest();
             expect(scope.crumbs).toEqual([
                 { name : 'Home', path : '/' },
@@ -50,7 +51,7 @@ describe('Controllers', function() {
         });
 
         it('should return crumbs for /foo/', function() {
-            $location.path = function() { return '/foo/'; };
+            $location.path('/foo/');
             scope.$digest();
             expect(scope.crumbs).toEqual([
                 { name : 'Home', path : '/' },
@@ -59,7 +60,7 @@ describe('Controllers', function() {
         });
 
         it('should return crumbs for /foo/bar.jpg', function() {
-            $location.path = function() { return '/foo/bar.jpg'; };
+            $location.path('/foo/bar.jpg');
             scope.$digest();
             expect(scope.crumbs).toEqual([
                 { name : 'Home', path : '/' },
@@ -69,7 +70,7 @@ describe('Controllers', function() {
         });
 
         it('should return crumbs for /foo/bar/baz.jpg', function() {
-            $location.path = function() { return '/foo/bar/baz.jpg'; };
+            $location.path('/foo/bar/baz.jpg');
             scope.$digest();
             expect(scope.crumbs).toEqual([
                 { name : 'Home', path : '/' },
@@ -77,6 +78,14 @@ describe('Controllers', function() {
                 { name : 'bar', path : '/foo/bar/' },
                 { name : 'baz.jpg', path : '/foo/bar/baz.jpg' }
             ]);
+        });
+
+        it('should navigate to home', function() {
+            $location.path('/foo/bar/baz.jpg');
+            scope.$digest();
+            scope.show(scope.crumbs[0]);
+            expect($location.path()).toBe('/');
+            expect($rootScope.transitionClass).toBe('slide-backward');
         });
     });
 
