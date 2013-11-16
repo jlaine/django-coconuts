@@ -80,6 +80,17 @@ h1 {
     height: 104px;
 }
 
+.photo-display {
+    position: relative;
+}
+
+.photo-display>img {
+    display: block;
+    max-width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 .photo-info {
     display: inline-block;
     margin: 0;
