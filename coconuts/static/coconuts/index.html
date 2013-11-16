@@ -9,19 +9,16 @@
 }
 </style>
 <link rel="stylesheet" type="text/css" href="/static/coconuts/css/bootstrap.min.css"/>
-<link rel="stylesheet" type="text/css" href="/static/coconuts/css/bootstrap-responsive.min.css"/>
 <link rel="stylesheet" type="text/css" href="/static/coconuts/css/font-awesome.min.css"/>
 <link rel="stylesheet" type="text/css" href="/static/coconuts/css/coconuts.css"/>
 </head>
 <body ng-app="coconuts">
-<div class="container">
-    <div class="breadcrumbs" ng-controller="CrumbCtrl">
-        <span ng-repeat="crumb in crumbs"><span ng-show="$index"> &rsaquo; </span><a href="" ng-click="show(crumb)">{{ crumb.name }}</a></span>
-    </div>
+<div class="breadcrumbs" ng-controller="CrumbCtrl">
+    <span ng-repeat="crumb in crumbs"><span ng-show="$index"> &rsaquo; </span><a href="" ng-click="show(crumb)">{{ crumb.name }}</a></span>
+</div>
 
-    <div style="position: relative">
-        <div class="{{ transitionClass }}" ng-view></div>
-    </div>
+<div style="position: relative">
+    <div class="{{ transitionClass }}" ng-view></div>
 </div>
 
 <script src="/static/coconuts/js/jquery.min.js"></script>
@@ -35,22 +32,22 @@
 <script type="text/ng-template" id="/folder.html">
 <div id="content">
 
-<h1 ng-hide="currentPhoto">{{ currentFolder.name || "Home" }}</h1>
+<div class="ng-cloak" style="padding-left: 20px; padding-right: 20px" ng-hide="currentPhoto">
+    <h1>{{ currentFolder.name || "Home" }}</h1>
 
-<div class="btn-group object-tools ng-cloak" ng-show="currentFolder.can_write && !currentPhoto">
-    <a class="btn dropdown-toggle" data-toggle="dropdown" href="">
-        <span co-translate>Operations</span>
-        <span class="caret"></span>
-    </a>
-    <ul class="dropdown-menu">
-        <li ng-show="currentFolder.can_write"><a href="" ng-click="addPrompt = true"><i class="icon-picture"></i> <span co-translate>Add a file</span></a></li>
-        <li ng-show="currentFolder.can_write"><a href="" ng-click="createPrompt = true"><i class="icon-folder-close"></i> <span co-translate>Create a folder</span></a></li>
-        <li ng-show="currentFolder.can_manage"><a href="" ng-click="promptManage()"><i class="icon-key"></i> <span co-translate>Manage this share's permissions</span></a></li>
-        <li ng-show="currentFolder.can_manage"><a href="/admin/auth/user/"><i class="icon-user"></i> <span co-translate>Manage user accounts</span></a></li>
-    </ul>
-</div>
+    <div class="btn-group object-tools" ng-show="currentFolder.can_write">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="">
+            <span co-translate>Operations</span>
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu pull-right">
+            <li ng-show="currentFolder.can_write"><a href="" ng-click="addPrompt = true"><i class="icon-picture"></i> <span co-translate>Add a file</span></a></li>
+            <li ng-show="currentFolder.can_write"><a href="" ng-click="createPrompt = true"><i class="icon-folder-close"></i> <span co-translate>Create a folder</span></a></li>
+            <li ng-show="currentFolder.can_manage"><a href="" ng-click="promptManage()"><i class="icon-key"></i> <span co-translate>Manage this share's permissions</span></a></li>
+            <li ng-show="currentFolder.can_manage"><a href="/admin/auth/user/"><i class="icon-user"></i> <span co-translate>Manage user accounts</span></a></li>
+        </ul>
+    </div>
 
-<div class="ng-cloak" ng-hide="currentPhoto">
     <p ng-show="currentFolder.files.length == 0 && currentFolder.folders.length == 0" co-translate>There are no files in this folder.</p>
 
     <div class="file" ng-repeat="folder in currentFolder.folders">
