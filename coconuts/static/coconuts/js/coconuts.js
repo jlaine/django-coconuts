@@ -135,7 +135,7 @@ controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$
     };
 
     $timeout(function() {
-        $rootScope.transitionClass = '';
+        $rootScope.transitionClass = undefined;
     }, 600);
 }]).
 directive('coFile', ['$parse', function($parse) {

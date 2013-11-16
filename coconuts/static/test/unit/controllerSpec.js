@@ -90,9 +90,11 @@ describe('Controllers', function() {
     });
 
     describe('FolderCtrl', function() {
-        var scope, ctrl;
+        var scope, ctrl, $rootScope, $timeout;
 
-        beforeEach(inject(function($controller, $rootScope) {
+        beforeEach(inject(function($controller, $injector, _$rootScope_) {
+            $rootScope = _$rootScope_;
+            $timeout = $injector.get('$timeout');
             scope = $rootScope.$new();
             ctrl = $controller('FolderCtrl', {
                 $routeParams: {path: '/'},
@@ -118,7 +120,12 @@ describe('Controllers', function() {
                 folders: [],
                 name: '',
                 path: '/'
-            }); 
+            });
+
+            // transition should get cleared
+            $rootScope.transitionClass = 'slide-forward';
+            $timeout.flush();
+            expect($rootScope.transitionClass).toBe(undefined);
         });
 
         it('should add file', function() {
