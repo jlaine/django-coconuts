@@ -181,5 +181,87 @@ describe('Controllers', function() {
             $httpBackend.flush();
             expect(scope.deleteTarget).toBe(undefined);
         });
+
+        it('should manage permissions', function() {
+            // get permissions
+            $httpBackend.expect('GET', 'images/permissions/').respond({
+                description: 'some description',
+                owners: [
+                    {
+                        group: 'User',
+                        name: 'test_user_1',
+                        value: 'user:test_user_1'
+                    }, {
+                        group: 'User',
+                        name: 'test_user_2',
+                        value: 'user:test_user_2'
+                    }, {
+                        group: 'Group',
+                        name: 'Test group 1',
+                        value: 'group:Test group 1'
+                    }, {
+                        group: 'Other',
+                        name: 'all',
+                        value: 'other:all'
+                    }
+                ],
+                permissions: []
+            });
+            scope.promptManage();
+            $httpBackend.flush();
+            expect(scope.description).toBe('some description');
+            expect(scope.owners).toEqual([
+                {
+                    group: 'User',
+                    name: 'test_user_1',
+                    value: 'user:test_user_1'
+                }, {
+                    group: 'User',
+                    name: 'test_user_2',
+                    value: 'user:test_user_2'
+                }, {
+                    group: 'Group',
+                    name: 'Test group 1',
+                    value: 'group:Test group 1'
+                }, {
+                    group: 'Other',
+                    name: 'all',
+                    value: 'other:all'
+                }
+            ]);
+            expect(scope.permissions).toEqual([]);
+            expect(scope.managePrompt).toBe(true);
+
+            // update permissions
+            scope.description = 'new description';
+            $httpBackend.expect('POST', 'images/permissions/', {
+                description: 'new description',
+                permissions: []
+            }).respond({
+                description: 'new description',
+                owners: [
+                    {
+                        group: 'User',
+                        name: 'test_user_1',
+                        value: 'user:test_user_1'
+                    }, {
+                        group: 'User',
+                        name: 'test_user_2',
+                        value: 'user:test_user_2'
+                    }, {
+                        group: 'Group',
+                        name: 'Test group 1',
+                        value: 'group:Test group 1'
+                    }, {
+                        group: 'Other',
+                        name: 'all',
+                        value: 'other:all'
+                    }
+                ],
+                permissions: []
+            });
+            scope.doManage();
+            $httpBackend.flush();
+        });
     });
 });
