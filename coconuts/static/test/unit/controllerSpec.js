@@ -89,11 +89,12 @@ describe('Controllers', function() {
         });
     });
 
-    describe('FolderCtrl', function() {
-        var scope, ctrl, $rootScope, $timeout;
+    describe('FolderCtrl (folder)', function() {
+        var scope, ctrl, $location, $rootScope, $timeout;
 
         beforeEach(inject(function($controller, $injector, _$rootScope_) {
             $rootScope = _$rootScope_;
+            $location = $injector.get('$location');
             $timeout = $injector.get('$timeout');
             scope = $rootScope.$new();
             ctrl = $controller('FolderCtrl', {
@@ -121,10 +122,31 @@ describe('Controllers', function() {
                 name: '',
                 path: '/'
             });
+            expect(scope.currentPhoto).toBe(undefined);
+            expect(scope.nextPhoto).toBe(undefined);
+            expect(scope.previousPhoto).toBe(undefined);
 
             // transition should get cleared
             $rootScope.transitionClass = 'slide-forward';
             $timeout.flush();
+            expect($rootScope.transitionClass).toBe(undefined);
+        });
+
+        it('should show folder', function() {
+            scope.show({path: '/foo/'});
+            expect($location.path()).toBe('/foo/');
+            expect($rootScope.transitionClass).toBe('slide-forward');
+        });
+
+        it('should not show next photo', function() {
+            scope.showNext();
+            expect($location.path()).toBe('');
+            expect($rootScope.transitionClass).toBe(undefined);
+        });
+
+        it('should not show previous photo', function() {
+            scope.showPrevious();
+            expect($location.path()).toBe('');
             expect($rootScope.transitionClass).toBe(undefined);
         });
 
@@ -278,6 +300,106 @@ describe('Controllers', function() {
             });
             scope.doManage();
             $httpBackend.flush();
+        });
+    });
+
+    describe('FolderCtrl (image)', function() {
+        var scope, ctrl, $location, $rootScope, $timeout;
+
+        beforeEach(inject(function($controller, $injector, _$rootScope_) {
+            $rootScope = _$rootScope_;
+            $location = $injector.get('$location');
+            $timeout = $injector.get('$timeout');
+            scope = $rootScope.$new();
+            ctrl = $controller('FolderCtrl', {
+                $routeParams: {path: '/foo/bar/bar.jpg'},
+                $scope: scope
+            });
+
+            $httpBackend.expect('GET', 'images/contents/foo/bar/').respond({
+                can_manage: true,
+                can_write: true,
+                files: [
+                    {
+                        image: {
+                            size: [1024, 683],
+                        },
+                        mimetype: 'image/jpeg',
+                        name: 'foo.jpg',
+                        path: '/foo/bar/foo.jpg',
+                        size: 186899,
+                    },
+                    {
+                        image: {
+                            size: [1024, 683],
+                        },
+                        mimetype: 'image/jpeg',
+                        name: 'bar.jpg',
+                        path: '/foo/bar/bar.jpg',
+                        size: 178631,
+                    },
+                    {
+                        image: {
+                            size: [1024, 683],
+                        },
+                        mimetype: 'image/jpeg',
+                        name: 'baz.jpg',
+                        path: '/foo/bar/baz.jpg',
+                        size: 193455,
+                    }
+                ],
+                name: 'bar',
+                folders: [],
+                path: '/foo/bar/'
+            });
+            $httpBackend.flush();
+        }));
+
+        it('should get contents', function() {
+            expect(scope.currentPhoto).toEqual({
+                image: {
+                    size: [1024, 683],
+                },
+                mimetype: 'image/jpeg',
+                name: 'bar.jpg',
+                path: '/foo/bar/bar.jpg',
+                size: 178631,
+            });
+            expect(scope.nextPhoto).toEqual({
+                image: {
+                    size: [1024, 683],
+                },
+                mimetype: 'image/jpeg',
+                name: 'baz.jpg',
+                path: '/foo/bar/baz.jpg',
+                size: 193455,
+            });
+            expect(scope.previousPhoto).toEqual({
+                image: {
+                    size: [1024, 683],
+                },
+                mimetype: 'image/jpeg',
+                name: 'foo.jpg',
+                path: '/foo/bar/foo.jpg',
+                size: 186899,
+            });
+
+            // transition should get cleared
+            $rootScope.transitionClass = 'slide-forward';
+            $timeout.flush();
+            expect($rootScope.transitionClass).toBe(undefined);
+        });
+
+        it('should show next photo', function() {
+            scope.showNext();
+            expect($location.path()).toBe('/foo/bar/baz.jpg');
+            expect($rootScope.transitionClass).toBe('slide-forward');
+        });
+
+        it('should show previous photo', function() {
+            scope.showPrevious();
+            expect($location.path()).toBe('/foo/bar/foo.jpg');
+            expect($rootScope.transitionClass).toBe('slide-backward');
         });
     });
 });
