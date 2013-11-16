@@ -194,6 +194,9 @@ factory('FormData', [function() {
     return FormData;
 }]).
 factory('settings', ['$http', '$rootScope', function($http, $rootScope) {
+    function getDisplayHeight() {
+        return $(window).height() - 29;
+    };
     function getImageSize() {
         var screenSize = Math.max($(window).width(), $(window).height());
         var sizes = [800, 1024, 1280];
@@ -207,12 +210,15 @@ factory('settings', ['$http', '$rootScope', function($http, $rootScope) {
 
     var settings = {
         coconuts_root: 'images/',
+        display_height: getDisplayHeight(),
         image_size: getImageSize()
     };
     $(window).resize(function() {
+        var newHeight = getDisplayHeight();
         var newSize = getImageSize();
-        if (newSize !== settings.image_size) {
+        if (newHeight != settings.display_height || newSize !== settings.image_size) {
             $rootScope.$apply(function() {
+                settings.display_height = newHeight;
                 settings.image_size = newSize;
             });
         }

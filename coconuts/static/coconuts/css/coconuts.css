@@ -1,6 +1,5 @@
 html {
     overflow-x: hidden;
-    overflow-y: scroll;
 }
 
 h1 {
@@ -86,7 +85,6 @@ h1 {
 
 .photo-display>img {
     display: block;
-    max-height: 95%;
     max-width: 100%;
     margin-right: auto;
     margin-left: auto;
