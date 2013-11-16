@@ -163,8 +163,8 @@ directive('coPhoto', ['settings', function(settings) {
                     elm.attr('alt', photo.name);
                     elm.attr('src', settings.coconuts_root + 'render' + photo.path + '?size=' + attrs.coSize);
                 } else {
-                    elm.attr('alt', '');
-                    elm.attr('src', '');
+                    elm.attr('alt', undefined);
+                    elm.attr('src', undefined);
                 }
             });
         }
