@@ -80,9 +80,9 @@
 
 <div class="ng-cloak" ng-show="currentPhoto" ng-swipe-left="showNext()" ng-swipe-right="showPrevious()">
     <div class="photo-display">
-        <img co-photo="currentPhoto" co-size="1024"/>
-        <img co-photo="nextPhoto" co-size="1024" style="display: none"/>
-        <img co-photo="previousPhoto" co-size="1024" style="display: none"/>
+        <img co-photo="currentPhoto" co-size="settings.image_size"/>
+        <img co-photo="nextPhoto" co-size="settings.image_size" style="display: none"/>
+        <img co-photo="previousPhoto" co-size="settings.image_size" style="display: none"/>
         <a class="left carousel-control" href="" ng-click="showPrevious()" ng-show="previousPhoto">&lsaquo;</a>
         <a class="right carousel-control" href="" ng-click="showNext()" ng-show="nextPhoto">&rsaquo;</a>
     </div>

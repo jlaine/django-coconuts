@@ -155,18 +155,19 @@ directive('coPhoto', ['settings', function(settings) {
     return {
         restrict: 'A',
         scope: {
-            photo: '=coPhoto'
+            photo: '=coPhoto',
+            size: '=coSize'
         },
         link: function(scope, elm, attrs) {
-            scope.$watch('photo', function(photo) {
-                if (photo !== undefined) {
-                    elm.attr('alt', photo.name);
-                    elm.attr('src', settings.coconuts_root + 'render' + photo.path + '?size=' + attrs.coSize);
+            scope.$watch('[photo, size]', function() {
+                if (scope.photo !== undefined) {
+                    elm.attr('alt', scope.photo.name);
+                    elm.attr('src', settings.coconuts_root + 'render' + scope.photo.path + '?size=' + scope.size);
                 } else {
                     elm.attr('alt', undefined);
                     elm.attr('src', undefined);
                 }
-            });
+            }, true);
         }
     };
 }]).
@@ -192,10 +193,31 @@ factory('Folder', ['$cacheFactory', '$http', 'settings', function($cacheFactory,
 factory('FormData', [function() {
     return FormData;
 }]).
-factory('settings', ['$http', function($http) {
-    return {
-        coconuts_root: 'images/'
+factory('settings', ['$http', '$rootScope', function($http, $rootScope) {
+    function getImageSize() {
+        var screenSize = Math.max($(window).width(), $(window).height());
+        var sizes = [800, 1024, 1280];
+        for (var i = 0; i < sizes.length; i++) {
+            if (screenSize <= sizes[i]) {
+                return sizes[i];
+            }
+        }
+        return sizes[sizes.length - 1];
+    }
+
+    var settings = {
+        coconuts_root: 'images/',
+        image_size: getImageSize()
     };
+    $(window).resize(function() {
+        var newSize = getImageSize();
+        if (newSize !== settings.image_size) {
+            $rootScope.$apply(function() {
+                settings.image_size = newSize;
+            });
+        }
+    });
+    return settings;
 }]).
 filter('fileIcon', ['settings', function(settings) {
     var mime_root = '/static/coconuts/img/';
