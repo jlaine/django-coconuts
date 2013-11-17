@@ -22,7 +22,7 @@
     </div>
 </div>
 
-<div style="position: relative">
+<div class="contents">
     <div class="{{ transitionClass }}" ng-view></div>
 </div>
 
@@ -35,9 +35,7 @@
 <script src="/static/coconuts/js/angular-touch.min.js" type="text/javascript"></script>
 <script src="/static/coconuts/js/coconuts.js" type="text/javascript"></script>
 <script type="text/ng-template" id="/folder.html">
-<div id="content">
-
-<div class="ng-cloak" style="padding-left: 20px; padding-right: 20px" ng-hide="currentPhoto">
+<div class="folder-view" ng-hide="currentPhoto">
     <h1>{{ currentFolder.name || "Home" }}</h1>
 
     <div class="btn-group object-tools" ng-show="currentFolder.can_write">
@@ -83,7 +81,7 @@
     </div>
 </div>
 
-<div class="ng-cloak" ng-show="currentPhoto" ng-swipe-left="showNext()" ng-swipe-right="showPrevious()">
+<div class="photo-view" ng-show="currentPhoto" ng-swipe-left="showNext()" ng-swipe-right="showPrevious()">
     <div class="photo-display">
         <img co-photo="currentPhoto" co-size="settings.image_size" style="max-height: {{ settings.display_height }}px"/>
         <img co-photo="nextPhoto" co-size="settings.image_size" style="display: none"/>
@@ -190,8 +188,6 @@
     <div class="modal-footer">
         <button class="btn btn-primary" ng-click="doManage()" co-translate>Save</button>
     </div>
-</div>
-
 </div>
 </script>
 
