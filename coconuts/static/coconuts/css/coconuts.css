@@ -22,6 +22,7 @@ h1 {
     border-bottom:1px solid #ccc;
     color:#999999;
     height: 31px;
+    line-height: 28px;
     position: fixed;
     text-align:left;
     overflow: hidden;
@@ -31,13 +32,15 @@ h1 {
 
 .breadcrumbs .crumbs {
     float: left;
-    line-height: 28px;
     margin-left: 8px;
 }
 
 .breadcrumbs .buttons {
     float: right;
-    margin-right: 8px;
+}
+
+.breadcrumbs .buttons a {
+    padding: 8px;
 }
 
 .contents {
