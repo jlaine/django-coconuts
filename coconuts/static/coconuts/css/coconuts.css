@@ -44,7 +44,10 @@ h1 {
 }
 
 .contents {
+    overflow-x: hidden;
+    overflow-y: auto;
     position: fixed;
+    bottom: 0px;
     top: 32px;
     width: 100%;
 }
