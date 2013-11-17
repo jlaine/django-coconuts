@@ -86,8 +86,8 @@
         <img co-photo="currentPhoto" co-size="settings.image_size" style="max-height: {{ settings.display_height }}px"/>
         <img co-photo="nextPhoto" co-size="settings.image_size" style="display: none"/>
         <img co-photo="previousPhoto" co-size="settings.image_size" style="display: none"/>
-        <a class="left carousel-control" href="" ng-click="showPrevious()" ng-show="previousPhoto">&lsaquo;</a>
-        <a class="right carousel-control" href="" ng-click="showNext()" ng-show="nextPhoto">&rsaquo;</a>
+        <a class="photo-control left" href="" ng-click="showPrevious()" ng-show="previousPhoto"><span>&lsaquo;</span></a>
+        <a class="photo-control right" href="" ng-click="showNext()" ng-show="nextPhoto"><span>&rsaquo;</span></a>
     </div>
 
     <div class="photo-info" style="display: none">
