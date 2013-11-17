@@ -199,7 +199,7 @@ factory('settings', ['$http', '$rootScope', function($http, $rootScope) {
     };
     function getImageSize() {
         var screenSize = Math.max($(window).width(), $(window).height());
-        var sizes = [800, 1024, 1280];
+        var sizes = [800, 1024, 1280, 1440];
         for (var i = 0; i < sizes.length; i++) {
             if (screenSize <= sizes[i]) {
                 return sizes[i];
