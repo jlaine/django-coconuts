@@ -124,6 +124,10 @@ h1 {
     top: 0px;
 }
 
+.photo-control:focus{
+    outline: 0;
+}
+
 .photo-control > span {
     background: none repeat scroll 0% 0% rgb(34, 34, 34);
     border: 3px solid rgb(255, 255, 255);
