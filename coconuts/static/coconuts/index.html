@@ -89,8 +89,7 @@
 
     <div class="photo-info">
         <ul class="photo-details nav nav-tabs nav-stacked">
-            <li title="The size of the original picture"><i class="icon-resize-full"></i> {{ currentPhoto.image.size[0] }} x {{ currentPhoto.image.size[1] }} pixels</li>
-            <li title="The size of the original picture"><i class="icon-file"></i> {{ currentPhoto.size | fileSize }}</li>
+            <li title="The size of the original picture"><i class="icon-resize-full"></i> {{ currentPhoto.image.size[0] }} x {{ currentPhoto.image.size[1] }} pixels - {{ currentPhoto.size | fileSize }}</li>
             <li ng-show="currentPhoto.image.camera" title="The camera used to take this picture"><i class="icon-camera"></i> {{ currentPhoto.image.camera }}</li>
             <li ng-show="currentPhoto.image.settings" title="The aperture and exposure time for this picture"><i class="icon-wrench"></i> {{ currentPhoto.image.settings }}</li>
         </ul>

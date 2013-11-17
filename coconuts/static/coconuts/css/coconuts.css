@@ -22,9 +22,10 @@ h1 {
   border-bottom:1px solid #ccc;
   border-top:1px solid white;
   color:#999999;
-  font-size:11px;
   padding:2px 8px 3px;
   text-align:left;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .object-tools {
@@ -92,8 +93,7 @@ h1 {
 
 .photo-info {
     background-color: rgb(245, 245, 245);
-    border: 1px solid rgb(227, 227, 227);
-    border-radius: 4px;
+    border-top: 1px solid rgb(227, 227, 227);
     padding: 19px;
 }
 
