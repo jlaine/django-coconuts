@@ -82,12 +82,14 @@ controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$
     }, true);
 
     $scope.show = function(photo) {
-        $rootScope.transitionClass = 'slide-forward';
-        $location.path(photo.path);
+        if (photo && !$rootScope.transitionClass) {
+            $rootScope.transitionClass = 'slide-forward';
+            $location.path(photo.path);
+        }
     };
 
     $scope.showNext = function() {
-        if ($scope.nextPhoto) {
+        if ($scope.nextPhoto && !$rootScope.transitionClass) {
             $rootScope.transitionClass = 'slide-forward';
             $location.path($scope.nextPhoto.path);
             $location.replace();
@@ -95,7 +97,7 @@ controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$
     };
 
     $scope.showPrevious = function() {
-        if ($scope.previousPhoto) {
+        if ($scope.previousPhoto && !$rootScope.transitionClass) {
             $rootScope.transitionClass = 'slide-backward';
             $location.path($scope.previousPhoto.path);
             $location.replace();
@@ -155,6 +157,30 @@ controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$
         });
     };
 
+    // keyboard navigation
+    function handleKeypress(evt) {
+        switch (evt.keyCode) {
+        case 0:
+        case 39:
+            $scope.$apply(function() {
+                $scope.showNext();
+            });
+            break;
+        case 8:
+        case 37:
+            $scope.$apply(function() {
+                $scope.showPrevious();
+            });
+            break;
+        }
+    }
+    angular.element(document).bind('keypress', handleKeypress);
+    $scope.$on('$destroy', function() {
+        angular.element(document).unbind('keypress', handleKeypress);
+    });
+
+    // clear the transition once it is finished, so that we do not re-play
+    // it if the user navigates with the browser's back or forward buttons
     $timeout(function() {
         $rootScope.transitionClass = undefined;
     }, 600);
