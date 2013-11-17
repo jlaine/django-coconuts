@@ -91,13 +91,21 @@ h1 {
 }
 
 .photo-info {
+    background-color: rgb(245, 245, 245);
+    border: 1px solid rgb(227, 227, 227);
+    border-radius: 4px;
+    padding: 19px;
+}
+
+.photo-info .photo-details {
     display: inline-block;
     margin: 0;
 }
 
-.photo-actions {
+.photo-info .photo-actions {
     display: inline-block;
     float: right;
+    margin-top: 20px;
 }
 
 /* transitions */
