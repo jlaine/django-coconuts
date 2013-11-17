@@ -46,7 +46,7 @@ class PhotoForm(forms.Form):
         (800, '800'),
         (1024, '1024'),
         (1280, '1280'),
-        (1440, '1440'),
+        (1600, '1600'),
     )
 
     size = forms.TypedChoiceField(choices=SIZE_CHOICES, coerce=int)
