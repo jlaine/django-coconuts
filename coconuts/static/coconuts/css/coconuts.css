@@ -22,10 +22,19 @@ h1 {
   border-bottom:1px solid #ccc;
   border-top:1px solid white;
   color:#999999;
-  padding:2px 8px 3px;
+  padding: 0px 8px;
   text-align:left;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.breadcrumbs .crumbs {
+    float: left;
+    line-height: 26px;
+}
+
+.breadcrumbs .buttons {
+    float: right;
 }
 
 .object-tools {
