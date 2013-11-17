@@ -81,7 +81,7 @@
     </div>
 </div>
 
-<div class="photo-view" ng-show="currentPhoto" ng-swipe-left="showNext()" ng-swipe-right="showPrevious()">
+<div class="photo-view" ng-show="currentPhoto">
     <div class="photo-display">
         <img co-photo="currentPhoto" co-size="settings.image_size" style="max-height: {{ settings.display_height }}px"/>
         <img co-photo="nextPhoto" co-size="settings.image_size" style="display: none"/>
