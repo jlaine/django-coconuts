@@ -20,6 +20,8 @@ controller('CrumbCtrl', ['$location', '$rootScope', '$scope', function($location
     $scope.location = $location;
     $scope.$watch('location.path()', function(path) {
         if (path === '') path = '/';
+
+        // build crumbs
         var crumbs = [];
         var crumbPath = '/';
         var bits = path.split('/');
@@ -32,7 +34,14 @@ controller('CrumbCtrl', ['$location', '$rootScope', '$scope', function($location
             crumbPath += bits[bits.length-1];
             crumbs.push({name: bits[bits.length-1], path: crumbPath});
         }
-        $scope.crumbs = crumbs;
+
+        // replace crumbs
+        for (i = 0; i < crumbs.length; i++) {
+            if (i >= $scope.crumbs.length || $scope.crumbs[i].path != crumbs[i].path) {
+                $scope.crumbs[i] = crumbs[i];
+            }
+        }
+        $scope.crumbs.splice(crumbs.length, $scope.crumbs.length - crumbs.length);
     });
 
     $scope.toggleFullScreen = function() {
@@ -243,7 +252,7 @@ factory('FormData', [function() {
 factory('settings', ['$http', '$rootScope', function($http, $rootScope) {
     function getDisplayHeight() {
         return $(window).height() - 32;
-    };
+    }
     function getImageSize() {
         var screenSize = Math.max($(window).width(), $(window).height());
         var sizes = [800, 1024, 1280, 1600];
