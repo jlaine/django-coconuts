@@ -12,6 +12,8 @@ config(['$httpProvider', '$routeProvider', function($httpProvider, $routeProvide
         otherwise({redirectTo: '/'});
 }]).
 controller('CrumbCtrl', ['$location', '$rootScope', '$scope', function($location, $rootScope, $scope) {
+    $scope.crumbs = [];
+
     $scope.show = function(crumb) {
         $rootScope.transitionClass = 'slide-backward';
         $location.path(crumb.path);
