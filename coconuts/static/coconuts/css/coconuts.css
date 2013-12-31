@@ -158,10 +158,20 @@ h1 {
     background-color: rgb(245, 245, 245);
     border-top: 1px solid rgb(227, 227, 227);
     padding: 19px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    right: 0;
+}
+
+.photo-info:hover {
+    opacity: 1;
 }
 
 .photo-info .photo-details {
     display: inline-block;
+    float: left;
     margin: 0;
 }
 

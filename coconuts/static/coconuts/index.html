@@ -89,8 +89,7 @@
         <a class="photo-control left" href="" ng-click="showPrevious()" ng-show="previousPhoto"><i class="icon-angle-left"></i></a>
         <a class="photo-control right" href="" ng-click="showNext()" ng-show="nextPhoto"><i class="icon-angle-right"></i></a>
     </div>
-
-    <div class="photo-info" style="display: none">
+    <div class="photo-info">
         <ul class="photo-details nav nav-tabs nav-stacked">
             <li title="The size of the original picture"><i class="icon-resize-full"></i> {{ currentPhoto.image.size[0] }} x {{ currentPhoto.image.size[1] }} pixels - {{ currentPhoto.size | fileSize }}</li>
             <li ng-show="currentPhoto.image.camera" title="The camera used to take this picture"><i class="icon-camera"></i> {{ currentPhoto.image.camera }}</li>
