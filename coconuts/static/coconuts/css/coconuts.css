@@ -137,13 +137,12 @@ h1 {
 .photo-control > i {
     font-size: 60px;
     font-weight: 100;
-    line-height: 24px;
     color: rgb(34, 34, 34);
     left: 15px;
-    margin-top: -20px;
+    margin-top: -30px;
     position: absolute;
     top: 50%;
-    width: 40px;
+    width: 30px;
 }
 
 .photo-control.right {
