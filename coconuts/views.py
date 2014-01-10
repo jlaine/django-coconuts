@@ -27,10 +27,6 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-try:
-    import EXIF
-except:
-    from coconuts import EXIF
 import json
 import mimetypes
 import os
@@ -274,7 +270,7 @@ def content_list(request, path):
                 'path': node_url,
                 'size': os.path.getsize(node_path),
             }
-            if not entry.startswith('lcj') and data['mimetype'] in ['image/jpeg', 'image/pjpeg', 'image/png']:
+            if data['mimetype'] in ['image/jpeg', 'image/pjpeg', 'image/png']:
                 data['image'] = get_image_info(node_path)
             files.append(data)
 
@@ -437,10 +433,10 @@ def render_file(request, path):
         img = Image.open(filepath)
 
         # rotate if needed
-        with open(filepath, 'rb') as fp:
-            tags = EXIF.process_file(fp, details=False)
-        if tags.has_key('Image Orientation'):
-            orientation = tags['Image Orientation'].values[0]
+        metadata = pyexiv2.ImageMetadata(filepath)
+        metadata.read()
+        if 'Exif.Image.Orientation' in metadata:
+            orientation = metadata['Exif.Image.Orientation'].value
             img = img.rotate(ORIENTATIONS[orientation][2])
 
         img.thumbnail(cachesize, Image.ANTIALIAS)
