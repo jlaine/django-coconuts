@@ -101,7 +101,7 @@ class FolderContentTest(BaseTest):
                 {
                     'image': {
                         'camera': 'Canon EOS 450D',
-                        'settings': u'f/10.0, 1/125\xa0sec, 48\xa0mm',
+                        'settings': u'f/10, 1/125\xa0sec, 48\xa0mm',
                         'size': [1024, 683],
                     },
                     'mimetype': 'image/jpeg',

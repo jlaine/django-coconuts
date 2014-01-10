@@ -41,6 +41,7 @@ try:
     from urllib.parse import unquote
 except ImportError:     # Python 2
     from urllib import unquote
+import pyexiv2
 import Image
 
 from django.conf import settings
@@ -115,16 +116,15 @@ def get_image_info(filepath):
         'size': image.size
     }
 
-    # get EXIF tags
-    with open(filepath, 'rb') as fp:
-        tags = EXIF.process_file(fp, details=False)
+    metadata = pyexiv2.ImageMetadata(filepath)
+    metadata.read()
 
     # camera
     camera = None
-    if tags.has_key('Image Model'):
-        camera = "%s" % tags['Image Model']
-    if tags.has_key('Image Make'):
-        make = "%s" % tags['Image Make']
+    if 'Exif.Image.Model' in metadata:
+        camera = metadata['Exif.Image.Model'].value
+    if 'Exif.Image.Make' in metadata:
+        make = metadata['Exif.Image.Make'].value
         if not camera:
             camera = make
         elif not camera.startswith(make):
@@ -134,13 +134,12 @@ def get_image_info(filepath):
 
     # settings
     bits = []
-    if tags.has_key('EXIF FNumber'):
-        v = eval("float(%s.0)" % tags['EXIF FNumber'])
-        bits.append("f/%s" % v)
-    if tags.has_key('EXIF ExposureTime'):
-        bits.append(u"%s sec" % tags['EXIF ExposureTime'])
-    if tags.has_key('EXIF FocalLength'):
-        bits.append(u"%s mm" % tags['EXIF FocalLength'])
+    if 'Exif.Photo.FNumber' in metadata:
+        bits.append("f/%s" % metadata['Exif.Photo.FNumber'].value)
+    if 'Exif.Photo.ExposureTime' in metadata:
+        bits.append(u"%s sec" % metadata['Exif.Photo.ExposureTime'].value)
+    if 'Exif.Photo.FocalLength' in metadata:
+        bits.append(u"%s mm" % metadata['Exif.Photo.FocalLength'].value)
     if bits:
         info['settings'] = ', '.join(bits)
 
@@ -275,7 +274,7 @@ def content_list(request, path):
                 'path': node_url,
                 'size': os.path.getsize(node_path),
             }
-            if data['mimetype'] in ['image/jpeg', 'image/pjpeg', 'image/png']:
+            if not entry.startswith('lcj') and data['mimetype'] in ['image/jpeg', 'image/pjpeg', 'image/png']:
                 data['image'] = get_image_info(node_path)
             files.append(data)
 
