@@ -11,7 +11,7 @@ install:
   - sudo ln -s /usr/lib/`uname -i`-linux-gnu/libjpeg.so /usr/lib/
   - sudo ln -s /usr/lib/`uname -i`-linux-gnu/libz.so /usr/lib/
   - pip install -q Django==$DJANGO --use-mirrors
-  - pip install -q PIL --use-mirrors
+  - pip install -q Pillow --use-mirrors
   - cd coconuts/static
   - npm install
   - npm install grunt-cli
