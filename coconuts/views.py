@@ -429,7 +429,12 @@ def render_file(request, path):
     if not os.path.exists(cachefile):
         cachedir = os.path.dirname(cachefile)
         if not os.path.exists(cachedir):
-            os.makedirs(cachedir)
+            try:
+                os.makedirs(cachedir)
+            except OSError:
+                # FIXME: checking then creating creates a race condition,
+                # the directory can be created between these two steps
+                pass
         img = Image.open(filepath)
 
         # rotate if needed
