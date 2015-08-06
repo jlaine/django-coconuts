@@ -272,6 +272,8 @@ def content_list(request, path):
             }
             if data['mimetype'] in ['image/jpeg', 'image/pjpeg', 'image/png']:
                 data['image'] = get_image_info(node_path)
+            elif data['mimetype'] in ['video/mp4']:
+                data['image'] = {}
             files.append(data)
 
     return HttpResponse(json.dumps({

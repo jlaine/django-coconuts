@@ -109,7 +109,7 @@ h1 {
     height: 104px;
 }
 
-.photo-display>img {
+.photo-display>img, .photo-display>video {
     display: block;
     max-width: 100%;
     margin-right: auto;
