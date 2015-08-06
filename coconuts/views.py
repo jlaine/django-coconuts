@@ -316,9 +316,13 @@ def download(request, path):
     if not has_permission(posixpath.dirname(path), 'can_read', request.user):
         return HttpResponseForbidden()
 
-    resp = django.views.static.serve(request,
-        path,
-        document_root=settings.COCONUTS_DATA_ROOT)
+    if hasattr(settings, 'COCONUTS_ACCEL_URL'):
+        resp = HttpResponse()
+        resp['X-Accel-Redirect'] = settings.COCONUTS_ACCEL_URL + path
+    else:
+        resp = django.views.static.serve(request,
+            path,
+            document_root=settings.COCONUTS_DATA_ROOT)
     resp['Content-Disposition'] = 'attachment; filename="%s"' % urlquote(posixpath.basename(path))
     return resp
 
