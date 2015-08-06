@@ -296,6 +296,8 @@ filter('fileIcon', ['settings', function(settings) {
             return mime_root + 'application-zip.png';
         } else if (mimetype.indexOf('text/') === 0) {
             return mime_root + 'text-x-generic.png';
+        } else if (mimetype.indexOf('video/') === 0) {
+            return mime_root + 'video-x-generic.png';
         } else {
             return mime_root + 'unknown.png';
         }
