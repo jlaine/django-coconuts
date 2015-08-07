@@ -326,6 +326,7 @@ def download(request, path):
             path,
             document_root=settings.COCONUTS_DATA_ROOT)
     resp['Content-Disposition'] = 'attachment; filename="%s"' % urlquote(posixpath.basename(path))
+    resp['Expires'] = http_date(time.time() + 3600 * 24 * 365)
     return resp
 
 @auth_required
