@@ -165,7 +165,7 @@ h1 {
     right: 0;
 }
 
-.photo-info:hover {
+.photo-info-visible .photo-info {
     opacity: 1;
 }
 

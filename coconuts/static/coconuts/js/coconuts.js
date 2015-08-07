@@ -11,8 +11,9 @@ config(['$httpProvider', '$routeProvider', function($httpProvider, $routeProvide
         }).
         otherwise({redirectTo: '/'});
 }]).
-controller('CrumbCtrl', ['$location', '$rootScope', '$scope', function($location, $rootScope, $scope) {
+controller('CrumbCtrl', ['$location', '$rootScope', '$scope', 'settings', function($location, $rootScope, $scope, settings) {
     $scope.crumbs = [];
+    $scope.settings = settings;
 
     $scope.show = function(crumb) {
         $rootScope.transitionClass = 'slide-backward';
@@ -65,6 +66,10 @@ controller('CrumbCtrl', ['$location', '$rootScope', '$scope', function($location
                 document.webkitCancelFullScreen();
             }
         }
+    };
+
+    $scope.toggleInformation = function() {
+        $('body').toggleClass('photo-info-visible');
     };
 }]).
 controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$scope', '$timeout', 'Folder', 'FormData', 'settings', function($http, $location, $rootScope, $routeParams, $scope, $timeout, Folder, FormData, settings) {
@@ -253,7 +258,8 @@ factory('FormData', [function() {
 }]).
 factory('settings', ['$http', '$rootScope', function($http, $rootScope) {
     function getDisplayHeight() {
-        return $(window).height() - 32;
+        var foot = $('body').hasClass('photo-info-visible') ? 89 : 0;
+        return $(window).height() - 32 - foot;
     }
     function getImageSize() {
         var screenSize = Math.max($(window).width(), $(window).height());
@@ -269,7 +275,12 @@ factory('settings', ['$http', '$rootScope', function($http, $rootScope) {
     var settings = {
         coconuts_root: 'images/',
         display_height: getDisplayHeight(),
-        image_size: getImageSize()
+        image_size: getImageSize(),
+        toggleInformation: function() {
+            $('body').toggleClass('photo-info-visible');
+            settings.display_height = getDisplayHeight();
+            settings.image_size = getImageSize();
+        }
     };
     $(window).resize(function() {
         var newHeight = getDisplayHeight();
