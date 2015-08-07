@@ -161,12 +161,12 @@ h1 {
     position: absolute;
     bottom: 0;
     left: 0;
-    opacity: 0;
     right: 0;
+    display: none;
 }
 
 .photo-info-visible .photo-info {
-    opacity: 1;
+    display: block;
 }
 
 .photo-info .photo-details {
