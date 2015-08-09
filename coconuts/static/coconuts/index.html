@@ -10,7 +10,7 @@
 </style>
 <link rel="stylesheet" type="text/css" href="/static/coconuts/css/bootstrap.min.css"/>
 <link rel="stylesheet" type="text/css" href="/static/coconuts/css/font-awesome.min.css"/>
-<link rel="stylesheet" type="text/css" href="/static/coconuts/css/coconuts.css"/>
+<link rel="stylesheet" type="text/css" href="/static/coconuts/css/coconuts.css?v=2"/>
 </head>
 <body ng-app="coconuts">
 <div class="breadcrumbs ng-cloak" ng-controller="CrumbCtrl">
@@ -34,7 +34,7 @@
 <script src="/static/coconuts/js/angular-resource.min.js" type="text/javascript"></script>
 <script src="/static/coconuts/js/angular-route.min.js" type="text/javascript"></script>
 <script src="/static/coconuts/js/angular-touch.min.js" type="text/javascript"></script>
-<script src="/static/coconuts/js/coconuts.js" type="text/javascript"></script>
+<script src="/static/coconuts/js/coconuts.js?v=2" type="text/javascript"></script>
 <script type="text/ng-template" id="/folder.html">
 <div class="folder-view" ng-hide="currentPhoto">
     <h1>{{ currentFolder.name || "Home" }}</h1>
@@ -85,7 +85,7 @@
 <div class="photo-view" ng-show="currentPhoto">
     <div class="photo-display">
         <img co-photo="currentPhoto" co-size="settings.image_size" style="max-height: {{ settings.display_height }}px"/>
-        <video ng-if="currentPhoto.mimetype.indexOf('video/') === 0" style="max-height: {{ settings.display_height }}px" autoplay>
+        <video ng-if="currentPhoto.mimetype.indexOf('video/') === 0" style="max-height: {{ settings.display_height }}px" autoplay controls>
             <source ng-src="{{ settings.coconuts_root + 'download' + currentPhoto.path }}" type="video/mp4"></source>
         </video>
         <img co-photo="nextPhoto" co-size="settings.image_size" style="display: none"/>
