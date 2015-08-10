@@ -318,16 +318,16 @@ def download(request, path):
     if not has_permission(posixpath.dirname(path), 'can_read', request.user):
         return HttpResponseForbidden()
 
-    if hasattr(settings, 'COCONUTS_ACCEL_URL'):
-        resp = HttpResponse()
-        resp['X-Accel-Redirect'] = settings.COCONUTS_ACCEL_URL + path
+    if hasattr(settings, 'COCONUTS_DATA_ACCEL'):
+        response = HttpResponse()
+        response['X-Accel-Redirect'] = posixpath.join(settings.COCONUTS_DATA_ACCEL, path)
     else:
-        resp = django.views.static.serve(request,
+        response = django.views.static.serve(request,
             path,
             document_root=settings.COCONUTS_DATA_ROOT)
-    resp['Content-Disposition'] = 'attachment; filename="%s"' % urlquote(posixpath.basename(path))
-    resp['Expires'] = http_date(time.time() + 3600 * 24 * 365)
-    return resp
+    response['Content-Disposition'] = 'attachment; filename="%s"' % urlquote(posixpath.basename(path))
+    response['Expires'] = http_date(time.time() + 3600 * 24 * 365)
+    return response
 
 @auth_required
 def permission_list(request, path):
@@ -455,8 +455,12 @@ def render_file(request, path):
         img.save(cachefile, quality=90)
 
     # serve the photo
-    response = django.views.static.serve(request,
-        posixpath.join(str(size), path),
-        document_root=settings.COCONUTS_CACHE_ROOT)
-    response["Expires"] = http_date(time.time() + 3600 * 24 * 365)
+    if hasattr(settings, 'COCONUTS_CACHE_ACCEL'):
+        response = HttpResponse()
+        response['X-Accel-Redirect'] = posixpath.join(settings.COCONUTS_CACHE_ACCEL, str(size), path)
+    else:
+        response = django.views.static.serve(request,
+            posixpath.join(str(size), path),
+            document_root=settings.COCONUTS_CACHE_ROOT)
+    #response['Expires'] = http_date(time.time() + 3600 * 24 * 365)
     return response
