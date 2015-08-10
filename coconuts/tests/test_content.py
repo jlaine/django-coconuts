@@ -130,7 +130,6 @@ class FolderContentTest(BaseTest):
                     'mimetype': 'inode/directory',
                     'name': 'Foo',
                     'path': '/Foo/',
-                    'size': 4096,
                 },
             ],
             'name': '',

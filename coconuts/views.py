@@ -274,7 +274,6 @@ def content_list(request, path):
                     'mimetype': 'inode/directory',
                     'name': entry,
                     'path': node_url + '/',
-                    'size': os.path.getsize(node_path),
                 })
         else:
             data = {

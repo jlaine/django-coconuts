@@ -144,7 +144,6 @@ class AddFolderTest(BaseTest):
                     'mimetype': 'inode/directory',
                     'name': 'New folder',
                     'path': '/New folder/',
-                    'size': 4096,
                 },
             ],
             'name': '',
