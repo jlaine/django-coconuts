@@ -52,6 +52,7 @@ import django.views.static
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessForm
 from coconuts.models import NamedAcl, Share, OWNERS, PERMISSIONS
 
+EXIF_ORIENTATION = 274
 ORIENTATIONS = {
     1: [ False, False, 0   ], # Horizontal (normal)
     2: [ True,  False, 0   ], # Mirrored horizontal
@@ -445,10 +446,11 @@ def render_file(request, path):
         img = Image.open(filepath)
 
         # rotate if needed
-        metadata = pyexiv2.ImageMetadata(filepath)
-        metadata.read()
-        if 'Exif.Image.Orientation' in metadata:
-            orientation = metadata['Exif.Image.Orientation'].value
+        if hasattr(img, '_getexif'):
+            orientation = img._getexif().get(EXIF_ORIENTATION)
+        else:
+            orientation = None
+        if orientation:
             img = img.rotate(ORIENTATIONS[orientation][2])
 
         img.thumbnail(cachesize, Image.ANTIALIAS)
