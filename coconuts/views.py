@@ -37,7 +37,7 @@ try:
     from urllib.parse import unquote
 except ImportError:     # Python 2
     from urllib import unquote
-import Image
+from PIL import Image
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
