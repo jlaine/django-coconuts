@@ -462,5 +462,5 @@ def render_file(request, path):
         response = django.views.static.serve(request,
             posixpath.join(str(size), path),
             document_root=settings.COCONUTS_CACHE_ROOT)
-    #response['Expires'] = http_date(time.time() + 3600 * 24 * 365)
+    response['Expires'] = http_date(time.time() + 3600 * 24 * 365)
     return response
