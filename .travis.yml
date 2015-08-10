@@ -2,11 +2,12 @@ language: python
 python:
   - "2.7"
 env:
-  - DJANGO=1.4
-  - DJANGO=1.5
-  - DJANGO=1.6
+  - DJANGO="Django>=1.4,<1.5"
+  - DJANGO="Django>=1.5,<1.6"
+  - DJANGO="Django>=1.6,<1.7"
+  - DJANGO="Django>=1.7,<1.8"
 install:
-  - pip install Django==$DJANGO pillow
+  - pip install $DJANGO pillow
   - cd coconuts/static
   - npm install
   - npm install grunt-cli
