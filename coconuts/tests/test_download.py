@@ -48,7 +48,7 @@ class DownloadFileTest(BaseTest):
         self.assertEquals(response.status_code, 200)
         self.assertEquals(response['Content-Type'], 'image/jpeg')
         self.assertEquals(response['Content-Disposition'], 'attachment; filename="test.jpg"')
-        self.assertFalse('Expires' in response)
+        self.assertTrue('Expires' in response)
         self.assertTrue('Last-Modified' in response)
 
     def test_as_user(self):
