@@ -37,7 +37,6 @@ try:
     from urllib.parse import unquote
 except ImportError:     # Python 2
     from urllib import unquote
-import pyexiv2
 import Image
 
 from django.conf import settings
@@ -52,7 +51,13 @@ import django.views.static
 from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessForm
 from coconuts.models import NamedAcl, Share, OWNERS, PERMISSIONS
 
+EXIF_MAKE = 271
+EXIF_MODEL = 272
 EXIF_ORIENTATION = 274
+EXIF_FOCALLENGTH = 37386
+EXIF_EXPOSURETIME = 33434
+EXIF_FNUMBER = 33437
+
 ORIENTATIONS = {
     1: [ False, False, 0   ], # Horizontal (normal)
     2: [ True,  False, 0   ], # Mirrored horizontal
@@ -112,16 +117,23 @@ def get_image_info(filepath):
     info = {
         'size': image.size
     }
+    if not hasattr(image, '_getexif'):
+        return info
 
-    metadata = pyexiv2.ImageMetadata(filepath)
-    metadata.read()
+    metadata = image._getexif()
+
+    def rational(x):
+        if x[1] == 1:
+            return unicode(x[0])
+        else:
+            return u'%i/%i' % x
 
     # camera
     camera = None
-    if 'Exif.Image.Model' in metadata:
-        camera = metadata['Exif.Image.Model'].value
-    if 'Exif.Image.Make' in metadata:
-        make = metadata['Exif.Image.Make'].value
+    if EXIF_MODEL in metadata:
+        camera = metadata[EXIF_MODEL]
+    if EXIF_MAKE in metadata:
+        make = metadata[EXIF_MAKE]
         if not camera:
             camera = make
         elif not camera.startswith(make):
@@ -131,12 +143,12 @@ def get_image_info(filepath):
 
     # settings
     bits = []
-    if 'Exif.Photo.FNumber' in metadata:
-        bits.append("f/%s" % metadata['Exif.Photo.FNumber'].value)
-    if 'Exif.Photo.ExposureTime' in metadata:
-        bits.append(u"%s sec" % metadata['Exif.Photo.ExposureTime'].value)
-    if 'Exif.Photo.FocalLength' in metadata:
-        bits.append(u"%s mm" % metadata['Exif.Photo.FocalLength'].value)
+    if EXIF_FNUMBER in metadata:
+        bits.append("f/%s" % rational(metadata[EXIF_FNUMBER]))
+    if EXIF_EXPOSURETIME in metadata:
+        bits.append(u"%s sec" % rational(metadata[EXIF_EXPOSURETIME]))
+    if EXIF_FOCALLENGTH in metadata:
+        bits.append(u"%s mm" % rational(metadata[EXIF_FOCALLENGTH]))
     if bits:
         info['settings'] = ', '.join(bits)
 
