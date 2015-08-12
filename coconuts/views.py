@@ -109,6 +109,19 @@ def clean_path(path):
         raise ValueError
     return newpath
 
+def get_image_exif(image):
+    """
+    Gets an image's EXIF tags as a dict.
+    """
+    if not hasattr(image, '_getexif'):
+        return {}
+
+    metadata = image._getexif()
+    if metadata is None:
+        return {}
+
+    return metadata
+
 def get_image_info(filepath):
     """
     Gets an image's information.
@@ -117,10 +130,8 @@ def get_image_info(filepath):
     info = {
         'size': image.size
     }
-    if not hasattr(image, '_getexif'):
-        return info
 
-    metadata = image._getexif()
+    metadata = get_image_exif(image)
 
     def rational(x):
         if x[1] == 1:
@@ -457,10 +468,7 @@ def render_file(request, path):
         img = Image.open(filepath)
 
         # rotate if needed
-        if hasattr(img, '_getexif'):
-            orientation = img._getexif().get(EXIF_ORIENTATION)
-        else:
-            orientation = None
+        orientation = get_image_exif(img).get(EXIF_ORIENTATION)
         if orientation:
             img = img.rotate(ORIENTATIONS[orientation][2])
 
