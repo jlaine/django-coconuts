@@ -70,6 +70,9 @@ ORIENTATIONS = {
     8: [ False, False, 90 ], # Rotated 90 CCW
 }
 
+IMAGE_TYPES = ['image/jpeg', 'image/pjpeg', 'image/png']
+VIDEO_TYPES = ['video/mp4']
+
 def auth_required(function):
     """
     Decorator to check the agent is authenticated.
@@ -311,9 +314,9 @@ def content_list(request, path):
                 'path': node_url,
                 'size': os.path.getsize(node_path),
             }
-            if data['mimetype'] in ['image/jpeg', 'image/pjpeg', 'image/png']:
+            if data['mimetype'] in IMAGE_TYPES:
                 data['image'] = get_image_info(node_path)
-            elif data['mimetype'] in ['video/mp4']:
+            elif data['mimetype'] in VIDEO_TYPES:
                 data['video'] = get_video_info(node_path)
             files.append(data)
 
@@ -470,28 +473,33 @@ def render_file(request, path):
     if not os.path.exists(filepath):
         raise Http404
 
-    # check thumbnail
-    size = form.cleaned_data['size']
-    cachesize = size, int(size * 0.75)
-    cachefile = os.path.join(settings.COCONUTS_CACHE_ROOT, str(size), url2path(path))
-    if not os.path.exists(cachefile):
-        cachedir = os.path.dirname(cachefile)
-        if not os.path.exists(cachedir):
-            try:
-                os.makedirs(cachedir)
-            except OSError:
-                # FIXME: checking then creating creates a race condition,
-                # the directory can be created between these two steps
-                pass
-        img = Image.open(filepath)
+    mimetype = mimetypes.guess_type(filepath)[0]
+    if mimetype in IMAGE_TYPES:
+        # check thumbnail
+        size = form.cleaned_data['size']
+        cachesize = size, int(size * 0.75)
+        cachefile = os.path.join(settings.COCONUTS_CACHE_ROOT, str(size), url2path(path))
+        if not os.path.exists(cachefile):
+            cachedir = os.path.dirname(cachefile)
+            if not os.path.exists(cachedir):
+                try:
+                    os.makedirs(cachedir)
+                except OSError:
+                    # FIXME: checking then creating creates a race condition,
+                    # the directory can be created between these two steps
+                    pass
+            img = Image.open(filepath)
 
-        # rotate if needed
-        orientation = get_image_exif(img).get(EXIF_ORIENTATION)
-        if orientation:
-            img = img.rotate(ORIENTATIONS[orientation][2])
+            # rotate if needed
+            orientation = get_image_exif(img).get(EXIF_ORIENTATION)
+            if orientation:
+                img = img.rotate(ORIENTATIONS[orientation][2])
 
-        img.thumbnail(cachesize, Image.ANTIALIAS)
-        img.save(cachefile, quality=90)
+            img.thumbnail(cachesize, Image.ANTIALIAS)
+            img.save(cachefile, quality=90)
+    else:
+        # unhandled file type
+        return HttpResponseBadRequest()
 
     # serve the photo
     if hasattr(settings, 'COCONUTS_CACHE_ACCEL'):

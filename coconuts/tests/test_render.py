@@ -30,7 +30,7 @@
 from coconuts.tests import BaseTest
 
 class RenderFileTest(BaseTest):
-    files = ['test.jpg', 'test.png']
+    files = ['test.jpg', 'test.png', 'test.txt']
     fixtures = ['test_users.json']
 
     def test_as_anonymous(self):
@@ -43,6 +43,10 @@ class RenderFileTest(BaseTest):
 
         # bad size
         response = self.client.get('/images/render/test.jpg?size=123')
+        self.assertEquals(response.status_code, 401)
+
+        # good size, bad type
+        response = self.client.get('/images/render/test.txt?size=1024')
         self.assertEquals(response.status_code, 401)
 
         # good size, good path
@@ -70,6 +74,10 @@ class RenderFileTest(BaseTest):
         # good size, bad path
         response = self.client.get('/images/render/notfound.jpg?size=1024')
         self.assertEquals(response.status_code, 404)
+
+        # good size, bad type
+        response = self.client.get('/images/render/test.txt?size=1024')
+        self.assertEquals(response.status_code, 400)
 
         # good size, good path
         response = self.client.get('/images/render/test.jpg?size=1024')
