@@ -3,6 +3,21 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        copy: {
+            main: {
+                files: [
+                    {
+                        expand: true,
+                        flatten: true,
+                        cwd: 'bower_components',
+                        src: [
+                            '**/angular*.min.js'
+                        ],
+                        dest: 'coconuts/js'
+                    }
+                ]
+            }
+        },
         jshint: {
             files: ['coconuts/js/coconuts.js']
         },
@@ -22,6 +37,7 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-karma');
