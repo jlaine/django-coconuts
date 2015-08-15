@@ -11,7 +11,8 @@ module.exports = function (grunt) {
                         flatten: true,
                         cwd: 'bower_components',
                         src: [
-                            '**/angular*.min.js'
+                            '**/angular*.min.js',
+                            '**/jquery.min.js'
                         ],
                         dest: 'coconuts/js'
                     }
