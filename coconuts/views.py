@@ -135,10 +135,14 @@ def get_image_info(filepath):
     metadata = get_image_exif(image)
 
     def rational(x):
-        if x[1] == 1:
-            return unicode(x[0])
-        else:
+        if x[1] == 0:
+            return 0
+        elif x[0] == 1:
             return u'%i/%i' % x
+        elif x[0] % x[1] == 0:
+            return x[0] / x[1]
+        else:
+            return float(x[0]) / float(x[1])
 
     # camera
     camera = None
