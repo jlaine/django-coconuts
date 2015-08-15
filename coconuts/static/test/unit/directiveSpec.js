@@ -36,4 +36,67 @@ describe('Directives', function() {
             expect(elem.attr('src')).toBe('images/render/foo/bar.jpg?size=128');
         });
     });
+
+    describe('coThumbnail', function() {
+        var elem, scope;
+        beforeEach(inject(function($compile, $rootScope) {
+            var compiled = $compile('<div co-thumbnail="some_file"></div>');
+            scope = $rootScope.$new();
+            elem = compiled(scope);
+        }));
+
+        it('should handle image file', function() {
+            scope.some_file = {
+                image: { width: 1024, height: 768 },
+                mimetype: 'image/jpeg',
+                name: 'bar.jpg',
+                path: '/foo/bar.jpg'
+            };
+            scope.$digest();
+
+            var img = elem.find('img');
+            expect(img.attr('alt')).toBe('bar.jpg');
+            expect(img.attr('src')).toBe('images/render/foo/bar.jpg?size=128');
+        });
+
+        it('should handle video file', function() {
+            scope.some_file = {
+                video: { width: 1024, height: 768 },
+                mimetype: 'video/mp4',
+                name: 'bar.jpg',
+                path: '/foo/bar.mp4'
+            };
+            scope.$digest();
+
+            var img = elem.find('img');
+            expect(img.attr('alt')).toBe(undefined);
+            expect(img.attr('src')).toBe('/static/coconuts/img/video-x-generic.png');
+        });
+
+        it('should handle text file', function() {
+            scope.some_file = {
+                mimetype: 'text/plain',
+                name: 'bar.txt',
+                path: '/foo/bar.txt'
+            };
+            scope.$digest();
+
+            var img = elem.find('img');
+            expect(img.attr('alt')).toBe(undefined);
+            expect(img.attr('src')).toBe('/static/coconuts/img/text-x-generic.png');
+        });
+
+        it('should handle other file', function() {
+            scope.some_file = {
+                mimetype: 'application/octet-stream',
+                name: 'bar.dat',
+                path: '/foo/bar.dat'
+            };
+            scope.$digest();
+
+            var img = elem.find('img');
+            expect(img.attr('alt')).toBe(undefined);
+            expect(img.attr('src')).toBe('/static/coconuts/img/unknown.png');
+        });
+    });
 });
