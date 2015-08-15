@@ -69,7 +69,8 @@ class AddFileTest(BaseTest):
             'files': [
                 {
                     'image': {
-                        'size': [24, 24],
+                        'width': 24,
+                        'height': 24,
                     },
                     'mimetype': 'image/png',
                     'name': 'test.png',

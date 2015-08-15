@@ -100,9 +100,10 @@ class FolderContentTest(BaseTest):
             'files': [
                 {
                     'image': {
+                        'width': 1024,
+                        'height': 683,
                         'camera': 'Canon EOS 450D',
                         'settings': u'f/10, 1/125\xa0sec, 48\xa0mm',
-                        'size': [1024, 683],
                     },
                     'mimetype': 'image/jpeg',
                     'name': 'test.jpg',
@@ -111,7 +112,8 @@ class FolderContentTest(BaseTest):
                 },
                 {
                     'image': {
-                        'size': [24, 24],
+                        'width': 24,
+                        'height': 24
                     },
                     'mimetype': 'image/png',
                     'name': 'test.png',

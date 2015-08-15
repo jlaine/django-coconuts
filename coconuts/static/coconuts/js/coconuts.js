@@ -81,7 +81,7 @@ controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$
     $scope.currentFolder = Folder.get(dirPath);
     $scope.$watch('currentFolder', function() {
         var photos = $scope.currentFolder.files.filter(function(x) {
-            return x.image !== undefined;
+            return x.image !== undefined || x.video !== undefined;
         });
         $scope.showThumbnails = (photos.length == $scope.currentFolder.files.length);
         for (var i = 0; i < photos.length; i++) {
@@ -231,6 +231,18 @@ directive('coPhoto', ['settings', function(settings) {
                     elm.attr('src', undefined);
                 }
             }, true);
+        }
+    };
+}]).
+directive('coThumbnail', [function() {
+    return {
+        restrict: 'A',
+        template: '<img co-photo="file" co-size="128" ng-if="file.image !== undefined"/>'
+                + '<img ng-src="{{ file.mimetype | fileIcon }}" ng-if="file.image === undefined"/>',
+        scope: {
+            file: '=coThumbnail',
+        },
+        link: function(scope, elm, attrs) {
         }
     };
 }]).

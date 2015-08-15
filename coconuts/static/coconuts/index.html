@@ -10,7 +10,7 @@
 </style>
 <link rel="stylesheet" type="text/css" href="/static/coconuts/css/bootstrap.min.css"/>
 <link rel="stylesheet" type="text/css" href="/static/coconuts/css/font-awesome.min.css"/>
-<link rel="stylesheet" type="text/css" href="/static/coconuts/css/coconuts.css?v=2"/>
+<link rel="stylesheet" type="text/css" href="/static/coconuts/css/coconuts.css?v=3"/>
 </head>
 <body ng-app="coconuts">
 <div class="breadcrumbs ng-cloak" ng-controller="CrumbCtrl">
@@ -34,7 +34,7 @@
 <script src="/static/coconuts/js/angular-resource.min.js" type="text/javascript"></script>
 <script src="/static/coconuts/js/angular-route.min.js" type="text/javascript"></script>
 <script src="/static/coconuts/js/angular-touch.min.js" type="text/javascript"></script>
-<script src="/static/coconuts/js/coconuts.js?v=2" type="text/javascript"></script>
+<script src="/static/coconuts/js/coconuts.js?v=3" type="text/javascript"></script>
 <script type="text/ng-template" id="/folder.html">
 <div class="folder-view" ng-hide="currentPhoto">
     <h1>{{ currentFolder.name || "Home" }}</h1>
@@ -75,7 +75,7 @@
         <div ng-switch-when="true">
             <ul class="thumbnails">
                 <li ng-repeat="file in currentFolder.files">
-                    <a class="thumbnail" href="" ng-click="show(file)"><img co-photo="file" co-size="128"/><img ng-src="{{ file.mimetype | fileIcon }}" ng-if="file.mimetype.indexOf('image/') !== 0"/></a>
+                    <a class="thumbnail" href="" ng-click="show(file)" co-thumbnail="file"></a>
                 </li>
             </ul>
         </div>
@@ -85,7 +85,7 @@
 <div class="photo-view" ng-show="currentPhoto">
     <div class="photo-display">
         <img co-photo="currentPhoto" co-size="settings.image_size" style="max-height: {{ settings.display_height }}px"/>
-        <video ng-if="currentPhoto.mimetype.indexOf('video/') === 0" style="max-height: {{ settings.display_height }}px" controls>
+        <video ng-if="currentPhoto.video" style="max-height: {{ settings.display_height }}px" controls>
             <source ng-src="{{ settings.coconuts_root + 'download' + currentPhoto.path }}" type="video/mp4"></source>
         </video>
         <img co-photo="nextPhoto" co-size="settings.image_size" style="display: none"/>
@@ -95,9 +95,9 @@
     </div>
     <div class="photo-info">
         <ul class="photo-details nav nav-tabs nav-stacked">
-            <li title="The size of the original picture"><i class="icon-resize-full"></i> {{ currentPhoto.image.size[0] }} x {{ currentPhoto.image.size[1] }} pixels - {{ currentPhoto.size | fileSize }}</li>
-            <li ng-show="currentPhoto.image.camera" title="The camera used to take this picture"><i class="icon-camera"></i> {{ currentPhoto.image.camera }}</li>
-            <li ng-show="currentPhoto.image.settings" title="The aperture and exposure time for this picture"><i class="icon-wrench"></i> {{ currentPhoto.image.settings }}</li>
+            <li ng-if="currentPhoto.image.width" title="The size of the original picture"><i class="icon-resize-full"></i> {{ currentPhoto.image.width }} x {{ currentPhoto.image.height }} pixels - {{ currentPhoto.size | fileSize }}</li>
+            <li ng-if="currentPhoto.image.camera" title="The camera used to take this picture"><i class="icon-camera"></i> {{ currentPhoto.image.camera }}</li>
+            <li ng-if="currentPhoto.image.settings" title="The aperture and exposure time for this picture"><i class="icon-wrench"></i> {{ currentPhoto.image.settings }}</li>
         </ul>
         <div class="photo-actions">
             <a class="btn btn-danger" href="" ng-click="promptDelete(currentPhoto)" ng-show="currentFolder.can_write"><i class="icon-remove"></i> <span co-translate>Delete</a>

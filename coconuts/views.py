@@ -128,7 +128,8 @@ def get_image_info(filepath):
     """
     image = Image.open(filepath)
     info = {
-        'size': image.size
+        'width': image.size[0],
+        'height': image.size[1],
     }
 
     metadata = get_image_exif(image)
@@ -164,6 +165,12 @@ def get_image_info(filepath):
         info['settings'] = ', '.join(bits)
 
     return info
+
+def get_video_info(filepath):
+    """
+    Gets a video's information.
+    """
+    return {}
 
 def has_permission(path, perm, user):
     """
@@ -296,7 +303,7 @@ def content_list(request, path):
             if data['mimetype'] in ['image/jpeg', 'image/pjpeg', 'image/png']:
                 data['image'] = get_image_info(node_path)
             elif data['mimetype'] in ['video/mp4']:
-                data['image'] = {}
+                data['video'] = get_video_info(node_path)
             files.append(data)
 
     return HttpResponse(json.dumps({
