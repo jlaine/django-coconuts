@@ -111,11 +111,14 @@ class FolderContentTest(BaseTest):
                     'size': 186899,
                 },
                 {
-                    'mimetype': u'video/mp4',
-                    'name': u'test.mp4',
-                    'path': u'/test.mp4',
+                    'mimetype': 'video/mp4',
+                    'name': 'test.mp4',
+                    'path': '/test.mp4',
                     'size': 1055736,
                     'video': {
+                        'duration': 5.28,
+                        'height': 720,
+                        'width': 1280,
                     }
                 },
                 {

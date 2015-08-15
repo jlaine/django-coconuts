@@ -32,6 +32,7 @@ import mimetypes
 import os
 import posixpath
 import shutil
+import subprocess
 import time
 try:
     from urllib.parse import unquote
@@ -174,7 +175,13 @@ def get_video_info(filepath):
     """
     Gets a video's information.
     """
-    return {}
+    data = json.loads(subprocess.check_output(['avprobe', '-of', 'json', '-loglevel', 'quiet', '-show_streams', '-show_format', filepath]))
+    stream = data['streams'][0]
+    return {
+        'duration': float(stream['duration']),
+        'height': stream['height'],
+        'width': stream['width'],
+    }
 
 def has_permission(path, perm, user):
     """
