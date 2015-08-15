@@ -65,7 +65,7 @@
     <div ng-switch="showThumbnails">
         <div ng-switch-when="false">
             <div class="file" ng-repeat="file in currentFolder.files">
-                <div class="filename"><a href="{{ settings.coconuts_root }}download{{ file.path }}"><img ng-src="{{ file.mimetype | fileIcon }}"/>{{ file.name }}</a></div>
+                <div class="filename"><a ng-href="{{ file | fileDownload }}"><img ng-src="{{ file.mimetype | fileIcon }}"/>{{ file.name }}</a></div>
                 <div class="filesize">{{ file.size | fileSize }}</div>
                 <div class="fileactions" ng-show="currentFolder.can_write">
                     <a href="" ng-click="promptDelete(file)"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
@@ -98,7 +98,7 @@
         </ul>
         <div class="photo-actions">
             <a class="btn btn-danger" href="" ng-click="promptDelete(currentPhoto)" ng-show="currentFolder.can_write"><i class="icon-remove"></i> <span co-translate>Delete</a>
-            <a class="btn" href="{{ settings.coconuts_root }}download{{ currentPhoto.path }}"><i class="icon-download"></i> <span co-translate>Download</span></a>
+            <a class="btn" ng-href="{{ currentPhoto | fileDownload }}"><i class="icon-download"></i> <span co-translate>Download</span></a>
         </div>
     </div>
 </div>
