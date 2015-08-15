@@ -223,7 +223,7 @@ directive('coPhoto', ['settings', function(settings) {
         },
         link: function(scope, elm, attrs) {
             scope.$watch('[photo, size]', function() {
-                if (scope.photo !== undefined && scope.photo.mimetype.indexOf('image/') === 0) {
+                if (scope.photo !== undefined && scope.photo.image !== undefined) {
                     elm.attr('alt', scope.photo.name);
                     elm.attr('src', settings.coconuts_root + 'render' + scope.photo.path + '?size=' + scope.size);
                 } else {
