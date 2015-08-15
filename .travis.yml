@@ -8,6 +8,7 @@ env:
   - DJANGO="Django>=1.7,<1.8"
   - DJANGO="Django>=1.8,<1.9"
 install:
+  - sudo apt-get update
   - sudo apt-get install libav-tools
   - pip install $DJANGO pillow
   - cd coconuts/static
