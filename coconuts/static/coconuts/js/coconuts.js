@@ -217,17 +217,12 @@ directive('coFile', ['$parse', function($parse) {
 directive('coDisplay', ['settings', function(settings) {
     return {
         restrict: 'A',
-        scope: {
-            file: '=coDisplay',
-        },
         template: '<img ng-src="{{ file | fileRender }}" ng-if="file.image">'
                 + '<video controls poster="{{ file | fileRender }}" ng-if="file.video">'
-                + '<source ng-src="{{ videoUrl(file) }}" type="video/mp4"></source>'
+                + '<source ng-src="{{ file | fileDownload }}" type="video/mp4"></source>'
                 + '</video>',
-        link: function(scope, elm, attrs) {
-            scope.downloadUrl = function(file) {
-                return settings.coconuts_root + 'download' + file.path;
-            };
+        scope: {
+            file: '=coDisplay'
         }
     };
 }]).
@@ -237,7 +232,7 @@ directive('coThumbnail', ['settings', function(settings) {
         template: '<img class="thumb" ng-src="{{ file | fileRender:128 }}" ng-if="file.image !== undefined || file.video !== undefined"/>'
                 + '<img class="icon" ng-src="{{ file.mimetype | fileIcon }}" ng-if="file.image === undefined">',
         scope: {
-            file: '=coThumbnail',
+            file: '=coThumbnail'
         }
     };
 }]).
@@ -335,6 +330,11 @@ filter('fileSize', [function() {
         } else {
             return val + ' B';
         }
+    };
+}]).
+filter('fileDownload', ['settings', function(settings) {
+    return function(file) {
+        return settings.coconuts_root + 'download' + file.path;
     };
 }]).
 filter('fileRender', ['settings', function(settings) {
