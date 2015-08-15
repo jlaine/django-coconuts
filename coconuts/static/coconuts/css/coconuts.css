@@ -109,6 +109,18 @@ h1 {
     height: 104px;
 }
 
+.thumbnail {
+    position: relative;
+    width: 128px;
+    height: 96px;
+}
+
+.thumbnail > img.icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
 .photo-display>img, .photo-display>video {
     display: block;
     max-width: 100%;

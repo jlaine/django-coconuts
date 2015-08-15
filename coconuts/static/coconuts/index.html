@@ -84,12 +84,12 @@
 
 <div class="photo-view" ng-show="currentPhoto">
     <div class="photo-display">
-        <img co-photo="currentPhoto" co-size="settings.image_size" style="max-height: {{ settings.display_height }}px"/>
+        <img co-photo="currentPhoto" co-size="settings.image_size" style="max-height: {{ settings.display_height }}px"/ ng-if="currentPhoto.image">
         <video ng-if="currentPhoto.video" style="max-height: {{ settings.display_height }}px" controls>
             <source ng-src="{{ settings.coconuts_root + 'download' + currentPhoto.path }}" type="video/mp4"></source>
         </video>
-        <img co-photo="nextPhoto" co-size="settings.image_size" style="display: none"/>
-        <img co-photo="previousPhoto" co-size="settings.image_size" style="display: none"/>
+        <img co-photo="nextPhoto" co-size="settings.image_size" style="display: none" ng-if="nextPhoto.image"/>
+        <img co-photo="previousPhoto" co-size="settings.image_size" style="display: none" ng-if="previousPhoto.image"/>
         <a class="photo-control left" href="" ng-click="showPrevious()" ng-show="previousPhoto"><i class="icon-angle-left"></i></a>
         <a class="photo-control right" href="" ng-click="showNext()" ng-show="nextPhoto"><i class="icon-angle-right"></i></a>
     </div>

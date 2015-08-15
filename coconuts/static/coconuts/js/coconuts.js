@@ -223,7 +223,7 @@ directive('coPhoto', ['settings', function(settings) {
         },
         link: function(scope, elm, attrs) {
             scope.$watch('[photo, size]', function() {
-                if (scope.photo !== undefined && scope.photo.image !== undefined) {
+                if (scope.photo !== undefined && (scope.photo.image !== undefined || scope.photo.video !== undefined)) {
                     elm.attr('alt', scope.photo.name);
                     elm.attr('src', settings.coconuts_root + 'render' + scope.photo.path + '?size=' + scope.size);
                 } else {
@@ -234,15 +234,18 @@ directive('coPhoto', ['settings', function(settings) {
         }
     };
 }]).
-directive('coThumbnail', [function() {
+directive('coThumbnail', ['settings', function(settings) {
     return {
         restrict: 'A',
-        template: '<img co-photo="file" co-size="128" ng-if="file.image !== undefined"/>'
-                + '<img ng-src="{{ file.mimetype | fileIcon }}" ng-if="file.image === undefined"/>',
+        template: '<img class="thumb" ng-src="{{ thumbnail() }}" ng-if="file.image !== undefined || file.video !== undefined"/>'
+                + '<img class="icon" ng-src="{{ file.mimetype | fileIcon }}" ng-if="file.image === undefined">',
         scope: {
             file: '=coThumbnail',
         },
         link: function(scope, elm, attrs) {
+            scope.thumbnail = function() {
+                return settings.coconuts_root + 'render' + scope.file.path + '?size=128';
+            };
         }
     };
 }]).

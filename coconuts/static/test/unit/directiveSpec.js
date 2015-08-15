@@ -59,9 +59,11 @@ describe('Directives', function() {
             };
             scope.$digest();
 
-            var img = elem.find('img');
-            expect(img.attr('alt')).toBe('bar.jpg');
+            var img = elem.find('img.thumb');
             expect(img.attr('src')).toBe('images/render/foo/bar.jpg?size=128');
+
+            img = elem.find('img.icon');
+            expect(img.length).toBe(0);
         });
 
         it('should handle video file', function() {
@@ -73,8 +75,10 @@ describe('Directives', function() {
             };
             scope.$digest();
 
-            var img = elem.find('img');
-            expect(img.attr('alt')).toBe(undefined);
+            var img = elem.find('img.thumb');
+            expect(img.attr('src')).toBe('images/render/foo/bar.mp4?size=128');
+
+            img = elem.find('img.icon');
             expect(img.attr('src')).toBe('/static/coconuts/img/video-x-generic.png');
         });
 
@@ -86,8 +90,10 @@ describe('Directives', function() {
             };
             scope.$digest();
 
-            var img = elem.find('img');
-            expect(img.attr('alt')).toBe(undefined);
+            var img = elem.find('img.thumb');
+            expect(img.length).toBe(0);
+
+            img = elem.find('img.icon');
             expect(img.attr('src')).toBe('/static/coconuts/img/text-x-generic.png');
         });
 
@@ -99,8 +105,10 @@ describe('Directives', function() {
             };
             scope.$digest();
 
-            var img = elem.find('img');
-            expect(img.attr('alt')).toBe(undefined);
+            var img = elem.find('img.thumb');
+            expect(img.length).toBe(0);
+
+            img = elem.find('img.icon');
             expect(img.attr('src')).toBe('/static/coconuts/img/unknown.png');
         });
     });
