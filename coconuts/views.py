@@ -473,21 +473,26 @@ def render_file(request, path):
     if not os.path.exists(filepath):
         raise Http404
 
+    def create_cache_dir(cachefile):
+        cachedir = os.path.dirname(cachefile)
+        if not os.path.exists(cachedir):
+            try:
+                os.makedirs(cachedir)
+            except OSError:
+                # FIXME: checking then creating creates a race condition,
+                # the directory can be created between these two steps
+                pass
+
     mimetype = mimetypes.guess_type(filepath)[0]
+    ratio = 0.75
+    size = form.cleaned_data['size']
+    cachesize = size, int(size * ratio)
+
     if mimetype in IMAGE_TYPES:
         # check thumbnail
-        size = form.cleaned_data['size']
-        cachesize = size, int(size * 0.75)
         cachefile = os.path.join(settings.COCONUTS_CACHE_ROOT, str(size), url2path(path))
         if not os.path.exists(cachefile):
-            cachedir = os.path.dirname(cachefile)
-            if not os.path.exists(cachedir):
-                try:
-                    os.makedirs(cachedir)
-                except OSError:
-                    # FIXME: checking then creating creates a race condition,
-                    # the directory can be created between these two steps
-                    pass
+            create_cache_dir(cachefile)
             img = Image.open(filepath)
 
             # rotate if needed
@@ -497,6 +502,20 @@ def render_file(request, path):
 
             img.thumbnail(cachesize, Image.ANTIALIAS)
             img.save(cachefile, quality=90)
+    elif mimetype in VIDEO_TYPES:
+        path += '.jpg'
+        cachefile = os.path.join(settings.COCONUTS_CACHE_ROOT, str(size), url2path(path))
+        if not os.path.exists(cachefile):
+            create_cache_dir(cachefile)
+            info = get_video_info(filepath)
+            pic_ratio = float(info['height']) / float(info['width'])
+            if pic_ratio > ratio:
+                width = int(cachesize[1] / pic_ratio)
+                height = cachesize[1]
+            else:
+                width = cachesize[0]
+                height = int(cachesize[0] * pic_ratio)
+            subprocess.check_call(['avconv', '-loglevel', 'quiet', '-i', filepath, '-s', '%sx%s' % (width, height), '-vframes', '1', cachefile])
     else:
         # unhandled file type
         return HttpResponseBadRequest()
