@@ -43,6 +43,10 @@ h1 {
     padding: 8px;
 }
 
+.breadcrumbs .buttons a:hover {
+    text-decoration: none;
+}
+
 .contents {
     overflow-x: hidden;
     overflow-y: auto;
@@ -106,19 +110,35 @@ h1 {
 /* photos */
 
 .thumbnails > li {
-    height: 104px;
+    list-style: none;
+    float: left;
+    margin-bottom: 20px;
+    margin-left: 20px;
 }
 
-.thumbnail {
+.thumbnails > li a {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: block;
     position: relative;
-    width: 128px;
-    height: 96px;
+    padding: 0;
+    width: 138px;
+    height: 106px;
+    margin: 0;
 }
 
-.thumbnail > img.icon {
+.thumbnails > li img.icon {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 4px;
+    right: 4px;
+}
+
+.thumbnails > li img.thumb {
+    position: relative;
+    margin: 0;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
 }
 
 .display {
@@ -130,8 +150,10 @@ h1 {
     display: block;
     max-height: 100%;
     max-width: 100%;
-    margin-right: auto;
-    margin-left: auto;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
 }
 
 .photo-control {
@@ -201,52 +223,49 @@ h1 {
 
 /* transitions */
 
-.slide-forward,
-.slide-backward {
+.slide-animate {
     position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
+    opacity: 1;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
 }
 
-.slide-forward.ng-enter,
-.slide-backward.ng-enter,
-.slide-forward.ng-leave,
-.slide-backward.ng-leave {
+.slide-animate.ng-enter {
+    z-index: 10;
+}
+
+.slide-animate.ng-enter,
+.slide-animate.ng-leave {
     -webkit-transition: 0.5s ease all;
     -moz-transition: 0.5s ease all;
     transition: 0.5s ease all;
 }
 
 .slide-forward.ng-enter {
-    -webkit-transform: translateX(25%);
-    -moz-transform: translateX(25%);
-    transform: translateX(25%);
+    -webkit-transform: translateX(15%);
+    -moz-transform: translateX(15%);
+    transform: translateX(15%);
     opacity: 0;
 }
-.slide-forward.ng-enter-active {
+.slide-forward.ng-enter.ng-enter-active {
     -webkit-transform: translateX(0%);
     -moz-transform: translateX(0%);
     transform: translateX(0%);
     opacity: 1;
 }
 .slide-forward.ng-leave {
-    -webkit-transform: translateX(0%);
-    -moz-transform: translateX(0%);
-    transform: translateX(0%);
-    opacity: 1;
-}
-.slide-forward.ng-leave-active {
-    -webkit-transform: translateX(-25%);
-    -moz-transform: translateX(-25%);
-    transform: translateX(-25%);
+     opacity: 1;
+ }
+.slide-forward.ng-leave.ng-leave-active {
     opacity: 0;
 }
 
 .slide-backward.ng-enter {
-    -webkit-transform: translateX(-25%);
-    -moz-transform: translateX(-25%);
-    transform: translateX(-25%);
+    -webkit-transform: translateX(-15%);
+    -moz-transform: translateX(-15%);
+    transform: translateX(-15%);
     opacity: 0;
 }
 .slide-backward.ng-enter-active {
@@ -256,14 +275,8 @@ h1 {
     opacity: 1;
 }
 .slide-backward.ng-leave {
-    -webkit-transform: translateX(0%);
-    -moz-transform: translateX(0%);
-    transform: translateX(0%);
     opacity: 1;
 }
 .slide-backward.ng-leave-active {
-    -webkit-transform: translateX(25%);
-    -moz-transform: translateX(25%);
-    transform: translateX(25%);
     opacity: 0;
 }

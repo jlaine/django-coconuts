@@ -24,7 +24,7 @@
 </div>
 
 <div class="contents">
-    <div class="{{ transitionClass }}" ng-view></div>
+    <div class="slide-animate {{ transitionClass }}" ng-view></div>
 </div>
 
 <script src="/static/coconuts/js/jquery.min.js"></script>
@@ -75,7 +75,7 @@
         <div ng-switch-when="true">
             <ul class="thumbnails">
                 <li ng-repeat="file in currentFolder.files">
-                    <a class="thumbnail" href="" ng-click="show(file)" co-thumbnail="file"></a>
+                    <a href="" ng-click="show(file)" co-thumbnail="file"></a>
                 </li>
             </ul>
         </div>
