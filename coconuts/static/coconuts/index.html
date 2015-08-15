@@ -98,7 +98,7 @@
         </ul>
         <div class="photo-actions">
             <a class="btn btn-danger" href="" ng-click="promptDelete(currentPhoto)" ng-show="currentFolder.can_write"><i class="icon-remove"></i> <span co-translate>Delete</a>
-            <a class="btn" ng-href="{{ currentPhoto | fileDownload }}"><i class="icon-download"></i> <span co-translate>Download</span></a>
+            <a class="btn btn-default" ng-href="{{ currentPhoto | fileDownload }}"><i class="icon-download"></i> <span co-translate>Download</span></a>
         </div>
     </div>
 </div>
@@ -143,7 +143,7 @@
     </div>
     <div class="modal-footer">
         <button class="btn btn-danger" ng-click="doDelete()" co-translate>Yes, I'm sure</button>
-        <button class="btn" ng-click="deleteTarget = undefined" co-translate>No, I'm not sure</button>
+        <button class="btn btn-default" ng-click="deleteTarget = undefined" co-translate>No, I'm not sure</button>
     </div>
 </div>
 
