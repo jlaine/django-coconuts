@@ -30,7 +30,12 @@ describe('Directives', function() {
         });
 
         it('should handle defined photo', function() {
-            scope.some_photo = {mimetype: 'image/jpeg', name: 'bar.jpg', path: '/foo/bar.jpg'};
+            scope.some_photo = {
+                image: { width: 1024, height: 768 },
+                mimetype: 'image/jpeg',
+                name: 'bar.jpg',
+                path: '/foo/bar.jpg'
+            };
             scope.$digest();
             expect(elem.attr('alt')).toBe('bar.jpg');
             expect(elem.attr('src')).toBe('images/render/foo/bar.jpg?size=128');
