@@ -218,7 +218,7 @@ directive('coDisplay', ['settings', function(settings) {
     return {
         restrict: 'A',
         template: '<img ng-src="{{ file | fileRender }}" ng-if="file.image">'
-                + '<video controls poster="{{ file | fileRender }}" ng-if="file.video">'
+                + '<video controls ng-if="file.video">'
                 + '<source ng-src="{{ file | fileDownload }}" type="video/mp4"></source>'
                 + '</video>',
         scope: {
