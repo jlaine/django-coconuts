@@ -4,7 +4,20 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         copy: {
-            main: {
+            css: {
+                files: [
+                    {
+                        expand: true,
+                        flatten: true,
+                        cwd: 'bower_components',
+                        src: [
+                            '**/bootstrap.min.css'
+                        ],
+                        dest: 'coconuts/css'
+                    }
+                ]
+            },
+            js: {
                 files: [
                     {
                         expand: true,
@@ -12,6 +25,7 @@ module.exports = function (grunt) {
                         cwd: 'bower_components',
                         src: [
                             '**/angular*.min.js',
+                            '**/bootstrap.min.js',
                             '**/jquery.min.js'
                         ],
                         dest: 'coconuts/js'
