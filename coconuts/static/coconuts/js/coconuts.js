@@ -214,38 +214,30 @@ directive('coFile', ['$parse', function($parse) {
         }
     };
 }]).
-directive('coPhoto', ['settings', function(settings) {
+directive('coDisplay', ['settings', function(settings) {
     return {
         restrict: 'A',
         scope: {
-            photo: '=coPhoto',
-            size: '=coSize'
+            file: '=coDisplay',
         },
+        template: '<img ng-src="{{ file | fileRender }}" ng-if="file.image">'
+                + '<video controls poster="{{ file | fileRender }}" ng-if="file.video">'
+                + '<source ng-src="{{ videoUrl(file) }}" type="video/mp4"></source>'
+                + '</video>',
         link: function(scope, elm, attrs) {
-            scope.$watch('[photo, size]', function() {
-                if (scope.photo !== undefined && (scope.photo.image !== undefined || scope.photo.video !== undefined)) {
-                    elm.attr('alt', scope.photo.name);
-                    elm.attr('src', settings.coconuts_root + 'render' + scope.photo.path + '?size=' + scope.size);
-                } else {
-                    elm.attr('alt', undefined);
-                    elm.attr('src', undefined);
-                }
-            }, true);
+            scope.downloadUrl = function(file) {
+                return settings.coconuts_root + 'download' + file.path;
+            };
         }
     };
 }]).
 directive('coThumbnail', ['settings', function(settings) {
     return {
         restrict: 'A',
-        template: '<img class="thumb" ng-src="{{ thumbnail() }}" ng-if="file.image !== undefined || file.video !== undefined"/>'
+        template: '<img class="thumb" ng-src="{{ file | fileRender:128 }}" ng-if="file.image !== undefined || file.video !== undefined"/>'
                 + '<img class="icon" ng-src="{{ file.mimetype | fileIcon }}" ng-if="file.image === undefined">',
         scope: {
             file: '=coThumbnail',
-        },
-        link: function(scope, elm, attrs) {
-            scope.thumbnail = function() {
-                return settings.coconuts_root + 'render' + scope.file.path + '?size=128';
-            };
         }
     };
 }]).
@@ -343,5 +335,13 @@ filter('fileSize', [function() {
         } else {
             return val + ' B';
         }
+    };
+}]).
+filter('fileRender', ['settings', function(settings) {
+    return function(file, size) {
+        if (size === undefined) {
+            size = settings.image_size;
+        }
+        return settings.coconuts_root + 'render' + file.path + '?size=' + size;
     };
 }]);

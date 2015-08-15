@@ -83,13 +83,10 @@
 </div>
 
 <div class="photo-view" ng-show="currentPhoto">
-    <div class="photo-display">
-        <img co-photo="currentPhoto" co-size="settings.image_size" style="max-height: {{ settings.display_height }}px"/ ng-if="currentPhoto.image">
-        <video ng-if="currentPhoto.video" style="max-height: {{ settings.display_height }}px" controls>
-            <source ng-src="{{ settings.coconuts_root + 'download' + currentPhoto.path }}" type="video/mp4"></source>
-        </video>
-        <img co-photo="nextPhoto" co-size="settings.image_size" style="display: none" ng-if="nextPhoto.image"/>
-        <img co-photo="previousPhoto" co-size="settings.image_size" style="display: none" ng-if="previousPhoto.image"/>
+    <div class="photo-display" style="height: {{ settings.display_height }}px">
+        <div class="display" co-display="currentPhoto"></div>
+        <img ng-src="{{ nextPhoto | fileRender }}" style="display: none" ng-if="nextPhoto.image"/>
+        <img ng-src="{{ previousPhoto | fileRender }}" style="display: none" ng-if="previousPhoto.image"/>
         <a class="photo-control left" href="" ng-click="showPrevious()" ng-show="previousPhoto"><i class="icon-angle-left"></i></a>
         <a class="photo-control right" href="" ng-click="showNext()" ng-show="nextPhoto"><i class="icon-angle-right"></i></a>
     </div>
@@ -140,7 +137,7 @@
         <h3 co-translate>Really delete "{{ deleteTarget.name }}"?</h3>
     </div>
     <div class="modal-body">
-        <img co-photo="deleteTarget" co-size="128" style="vertical-align: center; display: inline"/>
+        <img ng-src="{{ deleteTarget | fileRender:128 }}" style="vertical-align: center; display: inline"/>
         <p co-translate ng-show="deleteFolder">Are you sure you want to delete the folder "{{ deleteTarget.name }}" and all its contents?</p>
         <p co-translate ng-hide="deleteFolder">Are you sure you want to delete the file "{{ deleteTarget.name }}"?</p>
     </div>

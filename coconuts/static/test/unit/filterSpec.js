@@ -39,6 +39,22 @@ describe('Filters', function() {
         });
     });
 
+    describe('fileRender', function() {
+        var fileRender;
+
+        beforeEach(inject(function($filter) {
+            fileRender = $filter('fileRender');
+        }));
+
+        it('should get thumbnail', function() {
+            expect(fileRender({'path': '/foo/bar.jpg'}, 128)).toBe('images/render/foo/bar.jpg?size=128');
+        });
+
+        it('should get image', function() {
+            expect(fileRender({'path': '/foo/bar.jpg'})).toBe('images/render/foo/bar.jpg?size=800');
+        });
+    });
+
     describe('fileSize', function() {
         var fileSize;
 

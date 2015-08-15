@@ -15,33 +15,6 @@ describe('Directives', function() {
         });
     });
 
-    describe('coPhoto', function() {
-        var elem, scope;
-        beforeEach(inject(function($compile, $rootScope) {
-            var compiled = $compile('<img co-photo="some_photo" co-size="128"/>');
-            scope = $rootScope.$new();
-            elem = compiled(scope);
-        }));
-
-        it('should handle undefined photo', function() {
-            scope.$digest();
-            expect(elem.attr('alt')).toBe(undefined);
-            expect(elem.attr('src')).toBe(undefined);
-        });
-
-        it('should handle defined photo', function() {
-            scope.some_photo = {
-                image: { width: 1024, height: 768 },
-                mimetype: 'image/jpeg',
-                name: 'bar.jpg',
-                path: '/foo/bar.jpg'
-            };
-            scope.$digest();
-            expect(elem.attr('alt')).toBe('bar.jpg');
-            expect(elem.attr('src')).toBe('images/render/foo/bar.jpg?size=128');
-        });
-    });
-
     describe('coThumbnail', function() {
         var elem, scope;
         beforeEach(inject(function($compile, $rootScope) {
