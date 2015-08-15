@@ -82,9 +82,9 @@
     </div>
 </div>
 
-<div class="photo-view" ng-show="currentPhoto">
+<div class="photo-view" ng-if="currentPhoto">
     <div class="photo-display" style="height: {{ settings.display_height }}px">
-        <div class="display" co-display="currentPhoto"></div>
+        <div class="display" co-display="currentPhoto" style="height: {{ settings.display_height }}px"></div>
         <img ng-src="{{ nextPhoto | fileRender }}" style="display: none" ng-if="nextPhoto.image"/>
         <img ng-src="{{ previousPhoto | fileRender }}" style="display: none" ng-if="previousPhoto.image"/>
         <a class="photo-control left" href="" ng-click="showPrevious()" ng-show="previousPhoto"><i class="icon-angle-left"></i></a>
@@ -131,13 +131,13 @@
     </div>
 </div>
 
-<div class="modal form-inline ng-cloak" ng-show="deleteTarget">
+<div class="modal form-inline ng-cloak" ng-if="deleteTarget">
     <div class="modal-header">
         <button type="button" class="close" aria-hidden="true" ng-click="deleteTarget = undefined">&times;</button>
         <h3 co-translate>Really delete "{{ deleteTarget.name }}"?</h3>
     </div>
     <div class="modal-body">
-        <img ng-src="{{ deleteTarget | fileRender:128 }}" style="vertical-align: center; display: inline" ng-if="deleteTarget.path"/>
+        <div class="thumbnail" co-thumbnail="deleteTarget"></div>
         <p co-translate ng-show="deleteFolder">Are you sure you want to delete the folder "{{ deleteTarget.name }}" and all its contents?</p>
         <p co-translate ng-hide="deleteFolder">Are you sure you want to delete the file "{{ deleteTarget.name }}"?</p>
     </div>

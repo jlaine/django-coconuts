@@ -260,7 +260,7 @@ factory('FormData', [function() {
 }]).
 factory('settings', ['$http', '$rootScope', function($http, $rootScope) {
     function getDisplayHeight() {
-        var foot = $('body').hasClass('photo-info-visible') ? 89 : 0;
+        var foot = $('body').hasClass('photo-info-visible') ? 96 : 0;
         return $(window).height() - 32 - foot;
     }
     function getImageSize() {
