@@ -370,6 +370,7 @@ def download(request, path):
             path,
             document_root=settings.COCONUTS_DATA_ROOT)
     response['Content-Disposition'] = 'attachment; filename="%s"' % urlquote(posixpath.basename(path))
+    response['Content-Type'] = mimetypes.guess_type(path)
     response['Expires'] = http_date(time.time() + 3600 * 24 * 365)
     return response
 
@@ -528,5 +529,6 @@ def render_file(request, path):
         response = django.views.static.serve(request,
             posixpath.join(str(size), path),
             document_root=settings.COCONUTS_CACHE_ROOT)
+    response['Content-Type'] = mimetype
     response['Expires'] = http_date(time.time() + 3600 * 24 * 365)
     return response
