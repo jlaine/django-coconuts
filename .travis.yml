@@ -9,7 +9,7 @@ env:
   - DJANGO="Django>=1.9,<1.10"
 install:
   - sudo apt-get update
-  - sudo apt-get install libav-tools
+  - sudo apt-get -y install libav-tools
   - pip install $DJANGO pillow
   - cd coconuts/static
   - npm install
