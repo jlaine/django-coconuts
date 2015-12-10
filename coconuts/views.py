@@ -126,6 +126,16 @@ def get_image_exif(image):
 
     return metadata
 
+def format_rational(x):
+    if len(x) == 1 or x[1] == 0:
+        return u'%f' % x[0]
+    elif x[1] % x[0] == 0:
+        return u'1/%i' % (x[1] / x[0])
+    elif x[0] % x[1] == 0:
+        return u'%d' % (x[0] / x[1])
+    else:
+        return u'%.1f' % (float(x[0]) / float(x[1]))
+
 def get_image_info(filepath):
     """
     Gets an image's information.
@@ -137,16 +147,6 @@ def get_image_info(filepath):
     }
 
     metadata = get_image_exif(image)
-
-    def rational(x):
-        if x[1] == 0:
-            return 0
-        elif x[0] == 1:
-            return u'%i/%i' % x
-        elif x[0] % x[1] == 0:
-            return x[0] / x[1]
-        else:
-            return float(x[0]) / float(x[1])
 
     # camera
     camera = None
@@ -164,11 +164,11 @@ def get_image_info(filepath):
     # settings
     bits = []
     if EXIF_FNUMBER in metadata:
-        bits.append("f/%s" % rational(metadata[EXIF_FNUMBER]))
+        bits.append("f/%s" % format_rational(metadata[EXIF_FNUMBER]))
     if EXIF_EXPOSURETIME in metadata:
-        bits.append(u"%s sec" % rational(metadata[EXIF_EXPOSURETIME]))
+        bits.append(u"%s sec" % format_rational(metadata[EXIF_EXPOSURETIME]))
     if EXIF_FOCALLENGTH in metadata:
-        bits.append(u"%s mm" % rational(metadata[EXIF_FOCALLENGTH]))
+        bits.append(u"%s mm" % format_rational(metadata[EXIF_FOCALLENGTH]))
     if bits:
         info['settings'] = ', '.join(bits)
 
