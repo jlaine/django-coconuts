@@ -30,17 +30,44 @@
 from coconuts.views import format_rational
 from coconuts.tests import BaseTest
 
-class ExifTest(BaseTest):
+class ExifOldPilTest(BaseTest):
     fixtures = ['test_users.json']
 
-    def test_old_pil(self):
+    def test_canon(self):
+        """
+        IMG_8232.JPG
+        """
+        # fnumber
+        self.assertEqual(format_rational((4, 1)), '4')
+
+        # exposure time
+        self.assertEqual(format_rational((1, 80)), '1/80')
+
+    def test_fujifilm(self):
+        """
+        DSCF1900.JPG
+        """
         # fnumber
         self.assertEqual(format_rational((560, 100)), '5.6')
 
         # exposure time
         self.assertEqual(format_rational((10, 1400)), '1/140')
 
-    def test_new_pil(self):
+
+class ExifNewPilTest(BaseTest):
+    fixtures = ['test_users.json']
+
+    def test_canon(self):
+        # fnumber
+        self.assertEqual(format_rational((4.0,)), '4.0')
+
+        # FIXME: exposure time!
+        self.assertEqual(format_rational((0.0125,)), '0.0')
+
+    def test_fujifilm(self):
+        """
+        DSCF1900.JPG
+        """
         # fnumber
         self.assertEqual(format_rational((5.6,)), '5.6')
 
