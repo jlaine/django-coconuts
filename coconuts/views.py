@@ -128,7 +128,7 @@ def get_image_exif(image):
 
 def format_rational(x):
     if len(x) == 1 or x[1] == 0:
-        return u'%f' % x[0]
+        return u'%.1f' % x[0]
     elif x[1] % x[0] == 0:
         return u'1/%i' % (x[1] / x[0])
     elif x[0] % x[1] == 0:

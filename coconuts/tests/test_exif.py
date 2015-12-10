@@ -33,13 +33,16 @@ from coconuts.tests import BaseTest
 class ExifTest(BaseTest):
     fixtures = ['test_users.json']
 
-    def test_new_pil(self):
-        """
-        Anonymous users need to login.
-        """
+    def test_old_pil(self):
         # fnumber
         self.assertEqual(format_rational((560, 100)), '5.6')
 
         # exposure time
         self.assertEqual(format_rational((10, 1400)), '1/140')
 
+    def test_new_pil(self):
+        # fnumber
+        self.assertEqual(format_rational((5.6,)), '5.6')
+
+        # FIXME: exposure time!
+        self.assertEqual(format_rational((0.007142857142857143,)), '0.0')
