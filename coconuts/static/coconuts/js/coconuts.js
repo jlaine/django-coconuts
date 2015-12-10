@@ -226,13 +226,20 @@ directive('coDisplay', ['settings', function(settings) {
         }
     };
 }]).
-directive('coThumbnail', ['settings', function(settings) {
+directive('coThumbnail', ['$window', function($window) {
     return {
         restrict: 'A',
-        template: '<img class="thumb" ng-src="{{ file | fileRender:128 }}" ng-if="file.image !== undefined || file.video !== undefined"/>'
+        template: '<img class="thumb" ng-src="{{ file | fileRender:resolution }}" ng-if="file.image !== undefined || file.video !== undefined"/>'
                 + '<img class="icon" ng-src="{{ file.mimetype | fileIcon }}" ng-if="file.image === undefined">',
         scope: {
             file: '=coThumbnail'
+        },
+        link: function(scope, elm, attrs) {
+            if (angular.isNumber($window.devicePixelRatio) && $window.devicePixelRatio > 1) {
+                scope.resolution = 256;
+            } else {
+                scope.resolution = 128;
+            }
         }
     };
 }]).

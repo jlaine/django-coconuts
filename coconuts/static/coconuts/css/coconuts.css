@@ -139,6 +139,8 @@ h1 {
 }
 
 .thumbnails > li img.thumb {
+    max-width: 128px;
+    max-height: 96px;
     position: relative;
     margin: 0;
     left: 50%;
