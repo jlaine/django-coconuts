@@ -43,6 +43,7 @@ class AddFolderForm(forms.Form):
 class PhotoForm(forms.Form):
     SIZE_CHOICES = (
         (128, '128'),
+        (256, '256'),
         (800, '800'),
         (1024, '1024'),
         (1280, '1280'),
