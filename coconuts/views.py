@@ -504,6 +504,7 @@ def render_file(request, path):
             img.thumbnail(cachesize, Image.ANTIALIAS)
             img.save(cachefile, quality=90)
     elif mimetype in VIDEO_TYPES:
+        mimetype = 'image/jpeg'
         path += '.jpg'
         cachefile = os.path.join(settings.COCONUTS_CACHE_ROOT, str(size), url2path(path))
         if not os.path.exists(cachefile):
