@@ -5,6 +5,7 @@ addons:
   apt:
     packages:
       - libav-tools
+dist: trusty
 sudo: false
 env:
   - DJANGO="Django>=1.4,<1.5"
