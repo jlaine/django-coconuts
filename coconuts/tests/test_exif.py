@@ -43,6 +43,13 @@ class ExifOldPilTest(BaseTest):
         # exposure time
         self.assertEqual(format_rational((1, 80)), '1/80')
 
+    def test_canon_450d(self):
+        # fnumber
+        self.assertEqual(format_rational((10, 1)), '10')
+
+        # exposure time
+        self.assertEqual(format_rational((1, 125)), '1/125')
+
     def test_fujifilm(self):
         """
         DSCF1900.JPG
@@ -59,10 +66,17 @@ class ExifNewPilTest(BaseTest):
 
     def test_canon(self):
         # fnumber
-        self.assertEqual(format_rational((4.0,)), '4.0')
+        self.assertEqual(format_rational((4.0,)), '4')
 
-        # FIXME: exposure time!
-        self.assertEqual(format_rational((0.0125,)), '0.0')
+        # exposure time
+        self.assertEqual(format_rational((0.0125,)), '1/80')
+
+    def test_canon_450d(self):
+        # fnumber
+        self.assertEqual(format_rational((10.0,)), '10')
+
+        # exposure time
+        self.assertEqual(format_rational((0.008,)), '1/125')
 
     def test_fujifilm(self):
         """
@@ -72,4 +86,4 @@ class ExifNewPilTest(BaseTest):
         self.assertEqual(format_rational((5.6,)), '5.6')
 
         # FIXME: exposure time!
-        self.assertEqual(format_rational((0.007142857142857143,)), '0.0')
+        self.assertEqual(format_rational((0.007142857142857143,)), '1/140')

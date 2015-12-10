@@ -127,14 +127,22 @@ def get_image_exif(image):
     return metadata
 
 def format_rational(x):
-    if len(x) == 1 or x[1] == 0:
-        return u'%.1f' % x[0]
-    elif x[1] % x[0] == 0:
-        return u'1/%i' % (x[1] / x[0])
-    elif x[0] % x[1] == 0:
-        return u'%d' % (x[0] / x[1])
+    if len(x) == 1:
+        # new PIL
+        if x[0] < 1:
+            return '1/%d' % int(1/x[0])
+        elif int(x[0]) == x[0]:
+            return u'%d' % x[0]
+        else:
+            return u'%.1f' % x[0]
     else:
-        return u'%.1f' % (float(x[0]) / float(x[1]))
+        # old PIL
+        if x[1] % x[0] == 0:
+            return u'1/%i' % (x[1] / x[0])
+        elif x[0] % x[1] == 0:
+            return u'%d' % (x[0] / x[1])
+        else:
+            return u'%.1f' % (float(x[0]) / float(x[1]))
 
 def get_image_info(filepath):
     """
