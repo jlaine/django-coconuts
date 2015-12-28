@@ -176,13 +176,12 @@ controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$
     // keyboard navigation
     function handleKeypress(evt) {
         switch (evt.keyCode) {
-        case 0:
+        case 32:
         case 39:
             $scope.$apply(function() {
                 $scope.showNext();
             });
             break;
-        case 8:
         case 37:
             $scope.$apply(function() {
                 $scope.showPrevious();
@@ -190,9 +189,9 @@ controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$
             break;
         }
     }
-    angular.element(document).bind('keypress', handleKeypress);
+    angular.element(document).bind('keydown', handleKeypress);
     $scope.$on('$destroy', function() {
-        angular.element(document).unbind('keypress', handleKeypress);
+        angular.element(document).unbind('keydown', handleKeypress);
     });
 
     // clear the transition once it is finished, so that we do not re-play
