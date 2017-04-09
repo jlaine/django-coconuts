@@ -27,12 +27,26 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+import six
+from PIL import Image
+
 from tests import BaseTest
 
 
 class RenderFileTest(BaseTest):
-    files = ['test.jpg', 'test.mp4', 'test.png', 'test.txt']
+    files = ['test.jpg', 'test.mp4', 'test.png', 'test.txt', 'test_portrait.jpg']
     fixtures = ['test_users.json']
+
+    def assertImage(self, response, content_type, expected_size):
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response['Content-Type'], content_type)
+        self.assertTrue('Expires' in response)
+        self.assertTrue('Last-Modified' in response)
+
+        # check size
+        fp = six.BytesIO(b''.join(response.streaming_content))
+        img = Image.open(fp)
+        self.assertEqual(img.size, expected_size)
 
     def test_as_anonymous(self):
         """
@@ -80,26 +94,20 @@ class RenderFileTest(BaseTest):
         response = self.client.get('/images/render/test.txt?size=1024')
         self.assertEquals(response.status_code, 400)
 
-        # good size, good path
+    def test_as_superuser_good(self):
+        self.client.login(username="test_user_1", password="test")
+
         response = self.client.get('/images/render/test.jpg?size=1024')
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(response['Content-Type'], 'image/jpeg')
-        self.assertTrue('Expires' in response)
-        self.assertTrue('Last-Modified' in response)
+        self.assertImage(response, 'image/jpeg', (1024, 682))
 
-        # good size, good path
+        response = self.client.get('/images/render/test_portrait.jpg?size=1024')
+        self.assertImage(response, 'image/jpeg', (512, 768))
+
         response = self.client.get('/images/render/test.png?size=1024')
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(response['Content-Type'], 'image/png')
-        self.assertTrue('Expires' in response)
-        self.assertTrue('Last-Modified' in response)
+        self.assertImage(response, 'image/png', (24, 24))
 
-        # good size, good path
         response = self.client.get('/images/render/test.mp4?size=1024')
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(response['Content-Type'], 'image/jpeg')
-        self.assertTrue('Expires' in response)
-        self.assertTrue('Last-Modified' in response)
+        self.assertImage(response, 'image/jpeg', (1024, 576))
 
     def test_as_user(self):
         """

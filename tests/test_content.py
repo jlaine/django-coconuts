@@ -102,15 +102,15 @@ class FolderContentTest(BaseTest):
             'files': [
                 {
                     'image': {
-                        'width': 1024,
-                        'height': 683,
+                        'width': 4272,
+                        'height': 2848,
                         'camera': 'Canon EOS 450D',
                         'settings': u'f/10, 1/125\xa0sec, 48\xa0mm',
                     },
                     'mimetype': 'image/jpeg',
                     'name': 'test.jpg',
                     'path': '/test.jpg',
-                    'size': 186899,
+                    'size': 5370940,
                 },
                 {
                     'mimetype': 'video/mp4',
