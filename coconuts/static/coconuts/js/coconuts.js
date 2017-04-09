@@ -216,10 +216,10 @@ directive('coFile', ['$parse', function($parse) {
 directive('coDisplay', ['settings', function(settings) {
     return {
         restrict: 'A',
-        template: '<img ng-src="{{ file | fileRender }}" ng-if="file.image">'
-                + '<video controls ng-if="file.video">'
-                + '<source ng-src="{{ file | fileDownload }}" type="video/mp4"></source>'
-                + '</video>',
+        template: '<img ng-src="{{ file | fileRender }}" ng-if="file.image">' +
+                  '<video controls ng-if="file.video">' +
+                  '<source ng-src="{{ file | fileDownload }}" type="video/mp4"></source>' +
+                  '</video>',
         scope: {
             file: '=coDisplay'
         }
@@ -228,8 +228,8 @@ directive('coDisplay', ['settings', function(settings) {
 directive('coThumbnail', ['$window', function($window) {
     return {
         restrict: 'A',
-        template: '<img class="thumb" ng-src="{{ file | fileRender:resolution }}" ng-if="file.image !== undefined || file.video !== undefined"/>'
-                + '<img class="icon" ng-src="{{ file.mimetype | fileIcon }}" ng-if="file.image === undefined">',
+        template: '<img class="thumb" ng-src="{{ file | fileRender:resolution }}" ng-if="file.image !== undefined || file.video !== undefined"/>' +
+                  '<img class="icon" ng-src="{{ file.mimetype | fileIcon }}" ng-if="file.image === undefined">',
         scope: {
             file: '=coThumbnail'
         },
