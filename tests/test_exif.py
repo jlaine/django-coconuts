@@ -27,38 +27,64 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from coconuts.tests import BaseTest
+from tests import BaseTest
+from coconuts.views import format_rational
 
 
-class HomeTest(BaseTest):
+class ExifOldPilTest(BaseTest):
     fixtures = ['test_users.json']
 
-    def test_home_as_anonymous(self):
+    def test_canon(self):
         """
-        Anonymous user needs to login.
+        IMG_8232.JPG
         """
-        response = self.client.get('/')
-        self.assertRedirects(response, '/accounts/login/?next=/')
+        # fnumber
+        self.assertEqual(format_rational((4, 1)), '4')
 
-    def test_home_as_user(self):
-        """
-        Authenticated user can browse home folder.
-        """
-        self.client.login(username="test_user_2", password="test")
-        response = self.client.get('/')
-        self.assertEquals(response.status_code, 200)
+        # exposure time
+        self.assertEqual(format_rational((1, 80)), '1/80')
 
-    def test_other_as_anonymous(self):
-        """
-        Anonymous user needs to login.
-        """
-        response = self.client.get('/other/')
-        self.assertRedirects(response, '/accounts/login/?next=/other/')
+    def test_canon_450d(self):
+        # fnumber
+        self.assertEqual(format_rational((10, 1)), '10')
 
-    def test_other_as_user(self):
+        # exposure time
+        self.assertEqual(format_rational((1, 125)), '1/125')
+
+    def test_fujifilm(self):
         """
-        Authenticated user can browse other folder.
+        DSCF1900.JPG
         """
-        self.client.login(username="test_user_2", password="test")
-        response = self.client.get('/other/')
-        self.assertRedirects(response, '/#/other/')
+        # fnumber
+        self.assertEqual(format_rational((560, 100)), '5.6')
+
+        # exposure time
+        self.assertEqual(format_rational((10, 1400)), '1/140')
+
+
+class ExifNewPilTest(BaseTest):
+    fixtures = ['test_users.json']
+
+    def test_canon(self):
+        # fnumber
+        self.assertEqual(format_rational((4.0,)), '4')
+
+        # exposure time
+        self.assertEqual(format_rational((0.0125,)), '1/80')
+
+    def test_canon_450d(self):
+        # fnumber
+        self.assertEqual(format_rational((10.0,)), '10')
+
+        # exposure time
+        self.assertEqual(format_rational((0.008,)), '1/125')
+
+    def test_fujifilm(self):
+        """
+        DSCF1900.JPG
+        """
+        # fnumber
+        self.assertEqual(format_rational((5.6,)), '5.6')
+
+        # FIXME: exposure time!
+        self.assertEqual(format_rational((0.007142857142857143,)), '1/140')

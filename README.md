@@ -19,3 +19,12 @@ Some of Coconuts' features:
  * _thumbnails_: thumbnails are automatically generated as users browse albums
  * _touch friendly_: Coconuts features a clean and simple user interface which
    works well on tablets and smartphones. You can swipe between photos.
+
+Settings
+--------
+
+You need to define the following settings:
+
+ * _COCONUTS_DATA_ROOT_: absolute path to the directory that holds photos
+
+ * _COCONUTS_CACHE_ROOT_: absolute path to the directory that holds cache

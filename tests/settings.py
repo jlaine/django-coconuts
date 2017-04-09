@@ -85,7 +85,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.dirname(__file__) + '/../../templates',
+            os.path.dirname(__file__) + '/../templates',
         ]
     }
 ]
@@ -100,7 +100,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'coconuts.tests.urls'
+ROOT_URLCONF = 'tests.urls'
 
 INSTALLED_APPS = (
     'django.contrib.auth',

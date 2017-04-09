@@ -27,7 +27,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from coconuts.tests import BaseTest
+from tests import BaseTest
 
 
 class RenderFileTest(BaseTest):

@@ -27,64 +27,41 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from coconuts.tests import BaseTest
-from coconuts.views import format_rational
+from tests import BaseTest
 
 
-class ExifOldPilTest(BaseTest):
+class DownloadFileTest(BaseTest):
+    files = ['test.jpg']
     fixtures = ['test_users.json']
 
-    def test_canon(self):
+    def test_as_superuser(self):
         """
-        IMG_8232.JPG
+        Authenticated super-user can download a file.
         """
-        # fnumber
-        self.assertEqual(format_rational((4, 1)), '4')
+        self.client.login(username="test_user_1", password="test")
 
-        # exposure time
-        self.assertEqual(format_rational((1, 80)), '1/80')
+        # bad path
+        response = self.client.get('/images/download/notfound.jpg')
+        self.assertEquals(response.status_code, 404)
 
-    def test_canon_450d(self):
-        # fnumber
-        self.assertEqual(format_rational((10, 1)), '10')
+        # good path
+        response = self.client.get('/images/download/test.jpg')
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response['Content-Type'], 'image/jpeg')
+        self.assertEquals(response['Content-Disposition'], 'attachment; filename="test.jpg"')
+        self.assertTrue('Expires' in response)
+        self.assertTrue('Last-Modified' in response)
 
-        # exposure time
-        self.assertEqual(format_rational((1, 125)), '1/125')
-
-    def test_fujifilm(self):
+    def test_as_user(self):
         """
-        DSCF1900.JPG
+        Authenticated user cannot download a file.
         """
-        # fnumber
-        self.assertEqual(format_rational((560, 100)), '5.6')
+        self.client.login(username="test_user_2", password="test")
 
-        # exposure time
-        self.assertEqual(format_rational((10, 1400)), '1/140')
+        # bad path
+        response = self.client.get('/images/download/notfound.jpg')
+        self.assertEquals(response.status_code, 403)
 
-
-class ExifNewPilTest(BaseTest):
-    fixtures = ['test_users.json']
-
-    def test_canon(self):
-        # fnumber
-        self.assertEqual(format_rational((4.0,)), '4')
-
-        # exposure time
-        self.assertEqual(format_rational((0.0125,)), '1/80')
-
-    def test_canon_450d(self):
-        # fnumber
-        self.assertEqual(format_rational((10.0,)), '10')
-
-        # exposure time
-        self.assertEqual(format_rational((0.008,)), '1/125')
-
-    def test_fujifilm(self):
-        """
-        DSCF1900.JPG
-        """
-        # fnumber
-        self.assertEqual(format_rational((5.6,)), '5.6')
-
-        # FIXME: exposure time!
-        self.assertEqual(format_rational((0.007142857142857143,)), '1/140')
+        # good path
+        response = self.client.get('/images/download/test.jpg')
+        self.assertEquals(response.status_code, 403)

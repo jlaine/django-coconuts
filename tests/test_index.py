@@ -27,41 +27,38 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from coconuts.tests import BaseTest
+from tests import BaseTest
 
 
-class DownloadFileTest(BaseTest):
-    files = ['test.jpg']
+class HomeTest(BaseTest):
     fixtures = ['test_users.json']
 
-    def test_as_superuser(self):
+    def test_home_as_anonymous(self):
         """
-        Authenticated super-user can download a file.
+        Anonymous user needs to login.
         """
-        self.client.login(username="test_user_1", password="test")
+        response = self.client.get('/')
+        self.assertRedirects(response, '/accounts/login/?next=/')
 
-        # bad path
-        response = self.client.get('/images/download/notfound.jpg')
-        self.assertEquals(response.status_code, 404)
-
-        # good path
-        response = self.client.get('/images/download/test.jpg')
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(response['Content-Type'], 'image/jpeg')
-        self.assertEquals(response['Content-Disposition'], 'attachment; filename="test.jpg"')
-        self.assertTrue('Expires' in response)
-        self.assertTrue('Last-Modified' in response)
-
-    def test_as_user(self):
+    def test_home_as_user(self):
         """
-        Authenticated user cannot download a file.
+        Authenticated user can browse home folder.
         """
         self.client.login(username="test_user_2", password="test")
+        response = self.client.get('/')
+        self.assertEquals(response.status_code, 200)
 
-        # bad path
-        response = self.client.get('/images/download/notfound.jpg')
-        self.assertEquals(response.status_code, 403)
+    def test_other_as_anonymous(self):
+        """
+        Anonymous user needs to login.
+        """
+        response = self.client.get('/other/')
+        self.assertRedirects(response, '/accounts/login/?next=/other/')
 
-        # good path
-        response = self.client.get('/images/download/test.jpg')
-        self.assertEquals(response.status_code, 403)
+    def test_other_as_user(self):
+        """
+        Authenticated user can browse other folder.
+        """
+        self.client.login(username="test_user_2", password="test")
+        response = self.client.get('/other/')
+        self.assertRedirects(response, '/#/other/')
