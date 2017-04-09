@@ -6,7 +6,6 @@ install:
   - pip install tox
   - cd coconuts/static
   - npm install
-  - npm install grunt-cli
   - cd ../..
 script:
   - tox
