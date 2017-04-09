@@ -42,6 +42,7 @@ from django.core.urlresolvers import reverse
 from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
                          HttpResponseForbidden)
 from django.shortcuts import redirect
+from django.utils.encoding import force_text
 from django.utils.http import http_date, urlquote
 from django.views.decorators.http import require_http_methods
 from PIL import Image
@@ -197,7 +198,7 @@ def get_video_info(filepath):
     Gets a video's information.
     """
     data = json.loads(subprocess.check_output([
-        'avprobe', '-of', 'json', '-loglevel', 'quiet', '-show_streams', '-show_format', filepath]))
+        'avprobe', '-of', 'json', '-loglevel', 'quiet', '-show_streams', '-show_format', filepath]).decode('utf8'))
     for stream in data['streams']:
         if stream['codec_type'] == 'video':
             return {
@@ -249,7 +250,7 @@ def add_file(request, path):
     if os.path.exists(filepath):
         return HttpResponseBadRequest()
 
-    fp = file(filepath, 'wb')
+    fp = open(filepath, 'wb')
     for chunk in request.FILES['upload'].chunks():
         fp.write(chunk)
     fp.close()
@@ -421,7 +422,7 @@ def permission_list(request, path):
     # process submission
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)
+            data = json.loads(request.body.decode('utf8'))
         except ValueError:
             return HttpResponseBadRequest()
 
@@ -472,7 +473,7 @@ def permission_list(request, path):
         for obj in klass.objects.all().order_by(key):
             data['owners'].append({
                 'group': klass.__name__,
-                'name': unicode(obj),
+                'name': force_text(obj),
                 'value': "%s:%s" % (klass.__name__.lower(), getattr(obj, key))
             })
 

@@ -46,7 +46,7 @@ class BaseTest(TestCase):
         """
         self.assertEquals(response.status_code, status_code)
         self.assertEquals(response['Content-Type'], 'application/json')
-        self.assertEquals(json.loads(response.content), data)
+        self.assertEquals(json.loads(response.content.decode('utf8')), data)
 
     def postJson(self, url, data):
         """

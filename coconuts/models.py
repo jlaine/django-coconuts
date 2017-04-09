@@ -29,6 +29,7 @@
 
 from django.contrib.auth.models import Group, User
 from django.db import models
+from django.utils.encoding import force_text, python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -40,13 +41,14 @@ class OtherManager:
         return [Other('all')]
 
 
+@python_2_unicode_compatible
 class Other:
     objects = OtherManager()
 
     def __init__(self, name):
         self.name = name
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -68,11 +70,12 @@ PERMISSION_NAMES = {
     'can_manage': _('Can manage')}
 
 
+@python_2_unicode_compatible
 class NamedAcl:
     def __init__(self, acl):
         self.type, self.name, self.permissions = acl.split(':')
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s:%s:%s" % (self.type, self.name, self.permissions)
 
     def add_perm(self, perm):
@@ -87,6 +90,7 @@ class NamedAcl:
         return self.permissions.count(bit) > 0
 
 
+@python_2_unicode_compatible
 class Share(models.Model):
     path = models.CharField(max_length=50, primary_key=True)
     description = models.CharField(max_length=200, verbose_name=_("Description"))
@@ -100,7 +104,7 @@ class Share(models.Model):
 
     def set_acls(self, acls):
         """Set the ACLs associated with this share."""
-        self.access = ",".join([unicode(x) for x in acls])
+        self.access = ",".join([force_text(x) for x in acls])
 
     def has_perm(self, perm, user):
         """Check whether a user has a given permission."""
@@ -120,5 +124,5 @@ class Share(models.Model):
 
         return False
 
-    def __unicode__(self):
+    def __str__(self):
         return self.path
