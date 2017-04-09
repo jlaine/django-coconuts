@@ -34,23 +34,27 @@ import posixpath
 import shutil
 import subprocess
 import time
-try:
-    from urllib.parse import unquote
-except ImportError:     # Python 2
-    from urllib import unquote
-from PIL import Image
 
+import django.views.static
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+                         HttpResponseForbidden)
 from django.shortcuts import redirect
 from django.utils.http import http_date, urlquote
 from django.views.decorators.http import require_http_methods
-import django.views.static
+from PIL import Image
 
-from coconuts.forms import AddFileForm, AddFolderForm, PhotoForm, ShareForm, ShareAccessForm
-from coconuts.models import NamedAcl, Share, OWNERS, PERMISSIONS
+from coconuts.forms import (AddFileForm, AddFolderForm, PhotoForm,
+                            ShareAccessForm, ShareForm)
+from coconuts.models import OWNERS, PERMISSIONS, NamedAcl, Share
+
+try:
+    from urllib.parse import unquote
+except ImportError:  # Python 2
+    from urllib import unquote
+
 
 EXIF_MAKE = 271
 EXIF_MODEL = 272

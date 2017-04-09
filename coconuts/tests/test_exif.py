@@ -27,8 +27,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from coconuts.views import format_rational
 from coconuts.tests import BaseTest
+from coconuts.views import format_rational
 
 
 class ExifOldPilTest(BaseTest):

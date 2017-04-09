@@ -32,7 +32,7 @@ from operator import itemgetter
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from coconuts.models import Share, OWNERS, PERMISSIONS, PERMISSION_NAMES
+from coconuts.models import OWNERS, PERMISSION_NAMES, PERMISSIONS, Share
 
 
 class AddFileForm(forms.Form):

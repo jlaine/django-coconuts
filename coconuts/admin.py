@@ -28,6 +28,7 @@
 #
 
 from django.contrib import admin
+
 from coconuts.models import Share
 
 admin.site.register(Share)
