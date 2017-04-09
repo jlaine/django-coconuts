@@ -27,18 +27,21 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
-urlpatterns = patterns('coconuts.views',
+from coconuts import views
+
+
+urlpatterns = [
     # files
-    url(r'^images/add_file/(?P<path>.*)$', 'add_file'),
-    url(r'^images/add_folder/(?P<path>.*)$', 'add_folder'),
-    url(r'^images/contents/(?P<path>.*)$', 'content_list'),
-    url(r'^images/delete/(?P<path>.*)$', 'delete'),
-    url(r'^images/download/(?P<path>.*)$', 'download'),
-    url(r'^images/permissions/(?P<path>.*)$', 'permission_list'),
-    url(r'^images/render/(?P<path>.*)$', 'render_file'),
+    url(r'^images/add_file/(?P<path>.*)$', views.add_file),
+    url(r'^images/add_folder/(?P<path>.*)$', views.add_folder),
+    url(r'^images/contents/(?P<path>.*)$', views.content_list),
+    url(r'^images/delete/(?P<path>.*)$', views.delete),
+    url(r'^images/download/(?P<path>.*)$', views.download),
+    url(r'^images/permissions/(?P<path>.*)$', views.permission_list),
+    url(r'^images/render/(?P<path>.*)$', views.render_file),
 
     # folders
-    url(r'^(?P<path>.*)$', 'browse'),
-)
+    url(r'^(?P<path>.*)$', views.browse),
+]

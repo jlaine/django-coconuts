@@ -27,13 +27,15 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
+from django.contrib.auth import views
 
-urlpatterns = patterns('',
+
+urlpatterns = [
     # accounts
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login', ),
-    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
+    url(r'^accounts/login/$', views.login),
+    url(r'^accounts/logout/$', views.logout),
 
     # folders
     url(r'', include('coconuts.urls')),
-)
+]

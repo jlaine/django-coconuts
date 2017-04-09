@@ -4,7 +4,6 @@ python:
 dist: trusty
 sudo: required
 env:
-  - DJANGO="Django>=1.7,<1.8"
   - DJANGO="Django>=1.8,<1.9"
   - DJANGO="Django>=1.9,<1.10"
 install:
