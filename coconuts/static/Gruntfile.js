@@ -33,9 +33,6 @@ module.exports = function (grunt) {
                 ]
             }
         },
-        jshint: {
-            files: ['coconuts/js/coconuts.js']
-        },
         uglify: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
@@ -48,7 +45,6 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.registerTask('default', ['jshint', 'uglify']);
+    grunt.registerTask('default', ['copy', 'uglify']);
 };
