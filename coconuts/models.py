@@ -31,12 +31,14 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 from django.utils.translation import ugettext_lazy as _
 
+
 class OtherManager:
     def all(self):
         return self
 
     def order_by(self, key):
         return [Other('all')]
+
 
 class Other:
     objects = OtherManager()
@@ -46,6 +48,7 @@ class Other:
 
     def __unicode__(self):
         return self.name
+
 
 USERS_DIR = 'users'
 
@@ -63,6 +66,7 @@ PERMISSION_NAMES = {
     'can_read': _('Can read'),
     'can_write': _('Can write'),
     'can_manage': _('Can manage')}
+
 
 class NamedAcl:
     def __init__(self, acl):
@@ -82,6 +86,7 @@ class NamedAcl:
         bit = PERMISSIONS[perm]
         return self.permissions.count(bit) > 0
 
+
 class Share(models.Model):
     path = models.CharField(max_length=50, primary_key=True)
     description = models.CharField(max_length=200, verbose_name=_("Description"))
@@ -90,7 +95,8 @@ class Share(models.Model):
     def acls(self):
         """Return the ACLs associated with this share."""
         for acl in self.access.split(","):
-            if acl: yield NamedAcl(acl)
+            if acl:
+                yield NamedAcl(acl)
 
     def set_acls(self, acls):
         """Set the ACLs associated with this share."""
@@ -102,7 +108,7 @@ class Share(models.Model):
             return True
 
         username = user.username
-        groupnames = [ x.name for x in user.groups.all() ]
+        groupnames = [x.name for x in user.groups.all()]
         for acl in self.acls():
             if acl.has_perm(perm):
                 if acl.type == "other":

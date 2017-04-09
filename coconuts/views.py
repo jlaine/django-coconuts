@@ -60,18 +60,19 @@ EXIF_EXPOSURETIME = 33434
 EXIF_FNUMBER = 33437
 
 ORIENTATIONS = {
-    1: [ False, False, 0   ], # Horizontal (normal)
-    2: [ True,  False, 0   ], # Mirrored horizontal
-    3: [ False, False, 180 ], # Rotated 180
-    4: [ False, True,  0   ], # Mirrored vertical
-    5: [ True,  False, 90 ], # Mirrored horizontal then rotated 90 CCW
-    6: [ False, False, -90  ], # Rotated 90 CW
-    7: [ True,  False, -90  ], # Mirrored horizontal then rotated 90 CW
-    8: [ False, False, 90 ], # Rotated 90 CCW
+    1: [False, False, 0],    # Horizontal (normal)
+    2: [True, False, 0],     # Mirrored horizontal
+    3: [False, False, 180],  # Rotated 180
+    4: [False, True, 0],     # Mirrored vertical
+    5: [True, False, 90],    # Mirrored horizontal then rotated 90 CCW
+    6: [False, False, -90],  # Rotated 90 CW
+    7: [True, False, -90],   # Mirrored horizontal then rotated 90 CW
+    8: [False, False, 90],   # Rotated 90 CCW
 }
 
 IMAGE_TYPES = ['image/jpeg', 'image/pjpeg', 'image/png']
 VIDEO_TYPES = ['video/mp4']
+
 
 def auth_required(function):
     """
@@ -88,6 +89,7 @@ def auth_required(function):
         resp.status_code = 401
         return resp
     return wrap
+
 
 def clean_path(path):
     """
@@ -113,6 +115,7 @@ def clean_path(path):
         raise ValueError
     return newpath
 
+
 def get_image_exif(image):
     """
     Gets an image's EXIF tags as a dict.
@@ -125,6 +128,7 @@ def get_image_exif(image):
         return {}
 
     return metadata
+
 
 def format_rational(x):
     if len(x) == 1:
@@ -143,6 +147,7 @@ def format_rational(x):
             return u'%d' % (x[0] / x[1])
         else:
             return u'%.1f' % (float(x[0]) / float(x[1]))
+
 
 def get_image_info(filepath):
     """
@@ -169,7 +174,7 @@ def get_image_info(filepath):
     if camera:
         info['camera'] = camera
 
-    # settings
+    # settings
     bits = []
     if EXIF_FNUMBER in metadata:
         bits.append("f/%s" % format_rational(metadata[EXIF_FNUMBER]))
@@ -182,11 +187,13 @@ def get_image_info(filepath):
 
     return info
 
+
 def get_video_info(filepath):
     """
     Gets a video's information.
     """
-    data = json.loads(subprocess.check_output(['avprobe', '-of', 'json', '-loglevel', 'quiet', '-show_streams', '-show_format', filepath]))
+    data = json.loads(subprocess.check_output([
+        'avprobe', '-of', 'json', '-loglevel', 'quiet', '-show_streams', '-show_format', filepath]))
     for stream in data['streams']:
         if stream['codec_type'] == 'video':
             return {
@@ -194,6 +201,7 @@ def get_video_info(filepath):
                 'height': stream['height'],
                 'width': stream['width'],
             }
+
 
 def has_permission(path, perm, user):
     """
@@ -206,8 +214,10 @@ def has_permission(path, perm, user):
         share = Share(path=sharepath)
     return share.has_perm(perm, user)
 
+
 def url2path(url):
     return url.replace('/', os.path.sep)
+
 
 @auth_required
 @require_http_methods(['POST'])
@@ -231,7 +241,6 @@ def add_file(request, path):
     if not os.path.isdir(folder_path):
         raise Http404
 
-    filename = request.FILES['upload'].name
     filepath = os.path.join(folder_path, request.FILES['upload'].name)
     if os.path.exists(filepath):
         return HttpResponseBadRequest()
@@ -242,6 +251,7 @@ def add_file(request, path):
     fp.close()
 
     return content_list(request, path)
+
 
 @auth_required
 @require_http_methods(['POST'])
@@ -271,6 +281,7 @@ def add_folder(request, path):
 
     return content_list(request, path)
 
+
 @login_required
 def browse(request, path):
     """
@@ -280,6 +291,7 @@ def browse(request, path):
         return redirect(reverse(browse, args=['']) + '#/' + path)
     template_path = os.path.join(os.path.dirname(__file__), 'static', 'coconuts', 'index.html')
     return HttpResponse(open(template_path, 'rb').read())
+
 
 @auth_required
 def content_list(request, path):
@@ -338,6 +350,7 @@ def content_list(request, path):
         'path': folder_url,
     }), content_type='application/json')
 
+
 @auth_required
 @require_http_methods(['POST'])
 def delete(request, path):
@@ -360,6 +373,7 @@ def delete(request, path):
 
     return content_list(request, posixpath.dirname(path))
 
+
 @login_required
 def download(request, path):
     """
@@ -375,13 +389,15 @@ def download(request, path):
         response = HttpResponse()
         response['X-Accel-Redirect'] = posixpath.join(settings.COCONUTS_DATA_ACCEL, path)
     else:
-        response = django.views.static.serve(request,
+        response = django.views.static.serve(
+            request,
             path,
             document_root=settings.COCONUTS_DATA_ROOT)
     response['Content-Disposition'] = 'attachment; filename="%s"' % urlquote(posixpath.basename(path))
     response['Content-Type'] = mimetypes.guess_type(path)[0]
     response['Expires'] = http_date(time.time() + 3600 * 24 * 365)
     return response
+
 
 @auth_required
 def permission_list(request, path):
@@ -419,17 +435,20 @@ def permission_list(request, path):
                 return HttpResponseBadRequest()
             permission = form.cleaned_data
             owner = permission['owner']
-            if unique.has_key(owner):
+            if owner in unique:
                 for perm in PERMISSIONS:
-                    if permission[perm]: unique[owner][perm] = permission[perm]
+                    if permission[perm]:
+                        unique[owner][perm] = permission[perm]
             else:
                 unique[owner] = permission
         acls = []
         for permission in unique.values():
             acl = NamedAcl("%s:" % permission['owner'])
             for perm in PERMISSIONS:
-                if permission[perm]: acl.add_perm(perm)
-            if acl.permissions: acls.append(acl)
+                if permission[perm]:
+                    acl.add_perm(perm)
+            if acl.permissions:
+                acls.append(acl)
         share.set_acls(acls)
 
         # check we are not locking ourselves out before saving
@@ -461,6 +480,7 @@ def permission_list(request, path):
         data['permissions'].append(entry)
 
     return HttpResponse(json.dumps(data), content_type='application/json')
+
 
 @auth_required
 def render_file(request, path):
@@ -526,7 +546,9 @@ def render_file(request, path):
             else:
                 width = cachesize[0]
                 height = int(cachesize[0] * pic_ratio)
-            subprocess.check_call(['avconv', '-loglevel', 'quiet', '-i', filepath, '-s', '%sx%s' % (width, height), '-vframes', '1', cachefile])
+            subprocess.check_call([
+                'avconv', '-loglevel', 'quiet', '-i', filepath,
+                '-s', '%sx%s' % (width, height), '-vframes', '1', cachefile])
     else:
         # unhandled file type
         return HttpResponseBadRequest()
@@ -536,7 +558,8 @@ def render_file(request, path):
         response = HttpResponse()
         response['X-Accel-Redirect'] = posixpath.join(settings.COCONUTS_CACHE_ACCEL, str(size), path)
     else:
-        response = django.views.static.serve(request,
+        response = django.views.static.serve(
+            request,
             posixpath.join(str(size), path),
             document_root=settings.COCONUTS_CACHE_ROOT)
     response['Content-Type'] = mimetype

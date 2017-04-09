@@ -30,6 +30,7 @@
 from coconuts.tests import BaseTest
 from coconuts.views import clean_path
 
+
 class PathTest(BaseTest):
     def test_clean(self):
         self.assertEquals(clean_path(''), '')

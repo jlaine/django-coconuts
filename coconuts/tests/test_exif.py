@@ -30,6 +30,7 @@
 from coconuts.views import format_rational
 from coconuts.tests import BaseTest
 
+
 class ExifOldPilTest(BaseTest):
     fixtures = ['test_users.json']
 

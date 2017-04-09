@@ -29,6 +29,7 @@
 
 from coconuts.tests import BaseTest
 
+
 class HomeTest(BaseTest):
     fixtures = ['test_users.json']
 

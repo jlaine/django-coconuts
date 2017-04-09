@@ -29,6 +29,7 @@
 
 from coconuts.tests import BaseTest
 
+
 class DownloadFileTest(BaseTest):
     files = ['test.jpg']
     fixtures = ['test_users.json']
@@ -43,7 +44,7 @@ class DownloadFileTest(BaseTest):
         response = self.client.get('/images/download/notfound.jpg')
         self.assertEquals(response.status_code, 404)
 
-        # good path
+        # good path
         response = self.client.get('/images/download/test.jpg')
         self.assertEquals(response.status_code, 200)
         self.assertEquals(response['Content-Type'], 'image/jpeg')
@@ -61,6 +62,6 @@ class DownloadFileTest(BaseTest):
         response = self.client.get('/images/download/notfound.jpg')
         self.assertEquals(response.status_code, 403)
 
-        # good path
+        # good path
         response = self.client.get('/images/download/test.jpg')
         self.assertEquals(response.status_code, 403)

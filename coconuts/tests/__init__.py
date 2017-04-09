@@ -34,6 +34,7 @@ import shutil
 from django.conf import settings
 from django.test import TestCase
 
+
 class BaseTest(TestCase):
     maxDiff = None
     files = []
@@ -51,8 +52,7 @@ class BaseTest(TestCase):
         """
         Posts data as JSON.
         """
-        return self.client.post(url, json.dumps(data),
-            content_type='application/json')
+        return self.client.post(url, json.dumps(data), content_type='application/json')
 
     def setUp(self):
         """

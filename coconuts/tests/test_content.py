@@ -29,6 +29,7 @@
 
 from coconuts.tests import BaseTest
 
+
 class EmptyFolderContentTest(BaseTest):
     fixtures = ['test_users.json']
 
@@ -61,6 +62,7 @@ class EmptyFolderContentTest(BaseTest):
         self.client.login(username="test_user_2", password="test")
         response = self.client.get('/images/contents/')
         self.assertEquals(response.status_code, 403)
+
 
 class FolderContentTest(BaseTest):
     files = ['test.jpg', 'test.mp4', 'test.png', 'test.txt']

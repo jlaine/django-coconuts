@@ -29,6 +29,7 @@
 
 from coconuts.tests import BaseTest
 
+
 class PermissionListTest(BaseTest):
     fixtures = ['test_users.json']
 
@@ -68,6 +69,7 @@ class PermissionListTest(BaseTest):
             ],
             'permissions': [],
         })
+
 
 class PermissionUpdateTest(BaseTest):
     fixtures = ['test_users.json']

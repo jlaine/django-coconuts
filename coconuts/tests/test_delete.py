@@ -33,6 +33,7 @@ from django.conf import settings
 
 from coconuts.tests import BaseTest
 
+
 class DeleteFileTest(BaseTest):
     files = ['test.jpg']
     fixtures = ['test_users.json']
@@ -43,7 +44,7 @@ class DeleteFileTest(BaseTest):
         """
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'test.jpg')
 
-        # GET fails
+        # GET fails
         response = self.client.get('/images/delete/test.jpg')
         self.assertEquals(response.status_code, 401)
         self.assertTrue(os.path.exists(data_path))
@@ -60,7 +61,7 @@ class DeleteFileTest(BaseTest):
         self.client.login(username="test_user_1", password="test")
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'test.jpg')
 
-        # GET fails
+        # GET fails
         response = self.client.get('/images/delete/test.jpg')
         self.assertEquals(response.status_code, 405)
         self.assertTrue(os.path.exists(data_path))
@@ -84,7 +85,7 @@ class DeleteFileTest(BaseTest):
         self.client.login(username="test_user_2", password="test")
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'test.jpg')
 
-        # GET fails
+        # GET fails
         response = self.client.get('/images/delete/test.jpg')
         self.assertEquals(response.status_code, 405)
         self.assertTrue(os.path.exists(data_path))
@@ -93,6 +94,7 @@ class DeleteFileTest(BaseTest):
         response = self.client.post('/images/delete/test.jpg')
         self.assertEquals(response.status_code, 403)
         self.assertTrue(os.path.exists(data_path))
+
 
 class DeleteFolderTest(BaseTest):
     folders = ['Foo']
@@ -104,7 +106,7 @@ class DeleteFolderTest(BaseTest):
         """
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo')
 
-        # GET fails
+        # GET fails
         response = self.client.get('/images/delete/Foo/')
         self.assertEquals(response.status_code, 401)
         self.assertTrue(os.path.exists(data_path))
@@ -121,7 +123,7 @@ class DeleteFolderTest(BaseTest):
         self.client.login(username="test_user_1", password="test")
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo')
 
-        # GET fails
+        # GET fails
         response = self.client.get('/images/delete/Foo/')
         self.assertEquals(response.status_code, 405)
         self.assertTrue(os.path.exists(data_path))
@@ -145,7 +147,7 @@ class DeleteFolderTest(BaseTest):
         self.client.login(username="test_user_2", password="test")
         data_path = os.path.join(settings.COCONUTS_DATA_ROOT, 'Foo')
 
-        # GET fails
+        # GET fails
         response = self.client.get('/images/delete/Foo/')
         self.assertEquals(response.status_code, 405)
         self.assertTrue(os.path.exists(data_path))

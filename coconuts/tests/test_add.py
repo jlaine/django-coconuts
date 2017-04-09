@@ -33,6 +33,7 @@ from django.conf import settings
 
 from coconuts.tests import BaseTest
 
+
 class AddFileTest(BaseTest):
     fixtures = ['test_users.json']
 
@@ -102,6 +103,7 @@ class AddFileTest(BaseTest):
         self.assertEquals(response.status_code, 403)
         self.assertFalse(os.path.exists(data_path))
 
+
 class AddFolderTest(BaseTest):
     fixtures = ['test_users.json']
 
@@ -117,7 +119,6 @@ class AddFolderTest(BaseTest):
         self.assertFalse(os.path.exists(data_path))
 
         # POST fails
-        source_path = os.path.join(os.path.dirname(__file__), 'test.png')
         response = self.client.post('/images/add_folder/', {'name': 'New folder'})
         self.assertEquals(response.status_code, 401)
         self.assertFalse(os.path.exists(data_path))

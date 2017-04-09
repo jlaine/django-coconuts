@@ -29,6 +29,7 @@
 
 from coconuts.tests import BaseTest
 
+
 class RenderFileTest(BaseTest):
     files = ['test.jpg', 'test.mp4', 'test.png', 'test.txt']
     fixtures = ['test_users.json']
@@ -45,15 +46,15 @@ class RenderFileTest(BaseTest):
         response = self.client.get('/images/render/test.jpg?size=123')
         self.assertEquals(response.status_code, 401)
 
-        # good size, bad type
+        # good size, bad type
         response = self.client.get('/images/render/test.txt?size=1024')
         self.assertEquals(response.status_code, 401)
 
-        # good size, good path
+        # good size, good path
         response = self.client.get('/images/render/test.jpg?size=1024')
         self.assertEquals(response.status_code, 401)
 
-        # good size, good path
+        # good size, good path
         response = self.client.get('/images/render/test.png?size=1024')
         self.assertEquals(response.status_code, 401)
 
@@ -75,25 +76,25 @@ class RenderFileTest(BaseTest):
         response = self.client.get('/images/render/notfound.jpg?size=1024')
         self.assertEquals(response.status_code, 404)
 
-        # good size, bad type
+        # good size, bad type
         response = self.client.get('/images/render/test.txt?size=1024')
         self.assertEquals(response.status_code, 400)
 
-        # good size, good path
+        # good size, good path
         response = self.client.get('/images/render/test.jpg?size=1024')
         self.assertEquals(response.status_code, 200)
         self.assertEquals(response['Content-Type'], 'image/jpeg')
         self.assertTrue('Expires' in response)
         self.assertTrue('Last-Modified' in response)
 
-        # good size, good path
+        # good size, good path
         response = self.client.get('/images/render/test.png?size=1024')
         self.assertEquals(response.status_code, 200)
         self.assertEquals(response['Content-Type'], 'image/png')
         self.assertTrue('Expires' in response)
         self.assertTrue('Last-Modified' in response)
 
-        # good size, good path
+        # good size, good path
         response = self.client.get('/images/render/test.mp4?size=1024')
         self.assertEquals(response.status_code, 200)
         self.assertEquals(response['Content-Type'], 'image/jpeg')
@@ -118,10 +119,10 @@ class RenderFileTest(BaseTest):
         response = self.client.get('/images/render/notfound.jpg?size=1024')
         self.assertEquals(response.status_code, 403)
 
-        # good size, good path
+        # good size, good path
         response = self.client.get('/images/render/test.jpg?size=1024')
         self.assertEquals(response.status_code, 403)
 
-        # good size, good path
+        # good size, good path
         response = self.client.get('/images/render/test.png?size=1024')
         self.assertEquals(response.status_code, 403)
