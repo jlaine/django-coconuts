@@ -106,22 +106,22 @@ describe('Controllers', function() {
                 can_manage: true,
                 can_write: true,
                 files: [],
-                name: '',
                 folders: [],
+                name: '',
                 path: '/'
             });
             $httpBackend.flush();
         }));
 
         it('should get contents', function() {
-            expect(scope.currentFolder).toEqual({
+            expect(angular.equals(scope.currentFolder, {
                 can_manage: true,
                 can_write: true,
                 files: [],
                 folders: [],
                 name: '',
                 path: '/'
-            });
+            })).toBe(true);
             expect(scope.currentPhoto).toBe(undefined);
             expect(scope.nextPhoto).toBe(undefined);
             expect(scope.previousPhoto).toBe(undefined);
@@ -348,8 +348,8 @@ describe('Controllers', function() {
                         size: 193455,
                     }
                 ],
-                name: 'bar',
                 folders: [],
+                name: 'bar',
                 path: '/foo/bar/'
             });
             $httpBackend.flush();

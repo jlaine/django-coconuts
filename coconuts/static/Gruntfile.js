@@ -36,11 +36,6 @@ module.exports = function (grunt) {
         jshint: {
             files: ['coconuts/js/coconuts.js']
         },
-        karma: {
-            unit: {
-                configFile: 'config/karma-unit.conf.js'
-            }
-        },
         uglify: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
@@ -55,6 +50,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-karma');
     grunt.registerTask('default', ['jshint', 'uglify']);
 };

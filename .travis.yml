@@ -10,4 +10,4 @@ install:
 script:
   - tox
   - cd coconuts/static
-  - node_modules/grunt-cli/bin/grunt karma
+  - npm test
