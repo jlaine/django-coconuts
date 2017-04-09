@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # django-coconuts
-# Copyright (c) 2008-2013, Jeremy Lainé
+# Copyright (c) 2008-2017, Jeremy Lainé
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -26,19 +26,4 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-
-"""
-Coconuts
-
-@author: Jeremy Lainé <jeremy.laine@m4x.org>
-"""
-__docformat__ = 'epytext en'
-
-__version__ = '0.2.1'
-__url__ = 'http://www.jerryweb.org/projects/coconuts/'
-__copyright__ = '(C) 2008-2013 Jeremy Lainé'
-__license__ = 'GPL'
-__license_long__ = """
- Copyright (C) 2008-2013 Jeremy Lainé
- All rights reserved."""
 

@@ -1,5 +1,5 @@
 django-coconuts  
-Copyright (C) 2008-2013 Jeremy Lainé
+Copyright (C) 2008-2017 Jeremy Lainé
 
 [![Build Status](https://travis-ci.org/jlaine/django-coconuts.png)](https://travis-ci.org/jlaine/django-coconuts)
 

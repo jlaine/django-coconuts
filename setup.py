@@ -2,13 +2,11 @@
 
 from distutils.core import setup
 
-import coconuts
-
 setup(
-    name = "coconuts",
-    version = str(coconuts.__version__),
-    license = coconuts.__license__,
-    url = coconuts.__url__,
+    name = 'coconuts',
+    version = '0.3.0',
+    license = 'GPL',
+    url = 'https://github.com/jlaine/django-coconuts',
     packages = ['coconuts'],
     package_data = {
         'coconuts': [
