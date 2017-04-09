@@ -9,7 +9,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        cwd: 'bower_components',
+                        cwd: 'node_modules',
                         src: [
                             '**/bootstrap.min.css'
                         ],
@@ -22,7 +22,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        cwd: 'bower_components',
+                        cwd: 'node_modules',
                         src: [
                             '**/angular*.min.js',
                             '**/bootstrap.min.js',
