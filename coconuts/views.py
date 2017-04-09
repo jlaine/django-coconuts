@@ -533,7 +533,7 @@ def render_file(request, path):
             # rotate if needed
             orientation = get_image_exif(img).get(EXIF_ORIENTATION)
             if orientation:
-                img = img.rotate(ORIENTATIONS[orientation][2])
+                img = img.rotate(ORIENTATIONS[orientation][2], Image.NEAREST, True)
 
             img.thumbnail(cachesize, Image.ANTIALIAS)
             img.save(cachefile, quality=90)
