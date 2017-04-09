@@ -24,7 +24,11 @@ module.exports = function (grunt) {
                         flatten: true,
                         cwd: 'node_modules',
                         src: [
-                            '**/angular*.min.js',
+                            '**/angular.min.js',
+                            '**/angular-animate.min.js',
+                            '**/angular-resource.min.js',
+                            '**/angular-route.min.js',
+                            '**/angular-touch.min.js',
                             '**/bootstrap.min.js',
                             '**/jquery.min.js'
                         ],
