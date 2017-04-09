@@ -31,7 +31,6 @@ import getpass
 import os
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -82,12 +81,14 @@ STATIC_URL = '/static/'
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'i!8c$-3sc+6+t$rma%l6(ux9ma8pq7f!h03=y!kx_hdf#*!y%o'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.dirname(__file__) + '/../../templates',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.dirname(__file__) + '/../../templates',
+        ]
+    }
+]
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
