@@ -1,6 +1,5 @@
 module.exports = function(config) {
     config.set({
-        basePath: '..',
         files: [
             'coconuts/js/jquery.min.js',
             'coconuts/js/angular.min.js',

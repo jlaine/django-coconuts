@@ -24,6 +24,6 @@
   },
   "scripts": {
     "lint": "jshint coconuts/js/coconuts.js",
-    "test": "karma start config/karma.conf.js"
+    "test": "karma start"
   }
 }
