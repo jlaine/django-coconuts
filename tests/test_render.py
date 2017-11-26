@@ -34,7 +34,7 @@ from tests import BaseTest
 
 
 class RenderFileTest(BaseTest):
-    files = ['test.jpg', 'test.mp4', 'test.png', 'test.txt', 'test_portrait.jpg', 'test_rotated.jpg']
+    files = ['test.jpg', 'test.mp4', 'test.png', 'test.txt', 'test_portrait.jpg', 'test_rotated.jpg', 'test_rotated.mp4']
     fixtures = ['test_users.json']
 
     def assertImage(self, response, content_type, expected_size):
@@ -105,6 +105,9 @@ class RenderFileTest(BaseTest):
 
         response = self.client.get('/images/render/test_rotated.jpg?size=1024')
         self.assertImage(response, 'image/jpeg', (512, 768))
+
+        response = self.client.get('/images/render/test_rotated.mp4?size=1024')
+        self.assertImage(response, 'image/jpeg', (432, 768))
 
         response = self.client.get('/images/render/test.png?size=1024')
         self.assertImage(response, 'image/png', (24, 24))

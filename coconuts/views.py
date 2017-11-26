@@ -201,11 +201,16 @@ def get_video_info(filepath):
         'avprobe', '-of', 'json', '-loglevel', 'quiet', '-show_streams', '-show_format', filepath]).decode('utf8'))
     for stream in data['streams']:
         if stream['codec_type'] == 'video':
-            return {
+            info = {
                 'duration': float(stream['duration']),
-                'height': stream['height'],
-                'width': stream['width'],
             }
+            if stream['tags'].get('rotate') in ['90', '270']:
+                info['height'] = stream['width']
+                info['width'] = stream['height']
+            else:
+                info['height'] = stream['height']
+                info['width'] = stream['width']
+            return info
 
 
 def has_permission(path, perm, user):
