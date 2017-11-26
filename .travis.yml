@@ -1,19 +1,21 @@
+addons:
+  apt:
+    packages:
+    - libav-tools
+after_success: coveralls --merge coconuts/static/coverage/coveralls.json
 cache:
   directories:
     - coconuts/static/node_modules
   pip: true
 dist: trusty
-language: python
 install:
-  - sudo apt-get update
-  - sudo apt-get -y install libav-tools
-  - pip install coveralls tox
+  - pip install python-coveralls tox
   - cd coconuts/static
   - npm install
   - cd ../..
+language: python
 script:
   - tox
   - cd coconuts/static
   - npm test -- --single-run
   - cd ../..
-after_success: coveralls

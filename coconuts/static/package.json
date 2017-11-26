@@ -13,6 +13,7 @@
     "jquery": "1.11.1"
   },
   "devDependencies": {
+    "coveralls": "^3.0.0",
     "jasmine-core": "^2.5.2",
     "jshint": "^2.9.4",
     "karma": "^1.3.0",
@@ -23,6 +24,7 @@
   },
   "scripts": {
     "lint": "jshint coconuts/js/coconuts.js",
-    "test": "karma start"
+    "test": "karma start",
+    "posttest": "node scripts/lcov-to-coveralls.js"
   }
 }
