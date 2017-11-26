@@ -10,5 +10,6 @@ install:
 script:
   - tox
   - cd coconuts/static
-  - npm test
+  - npm test -- --single-run
+  - cd ../..
 after_success: coveralls
