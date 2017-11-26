@@ -1,5 +1,13 @@
 module.exports = function(config) {
     config.set({
+        browsers: ['ChromeHeadless'],
+        captureTimeout: 10000,
+        colors: false,
+        coverageReporter: {
+            type: 'lcovonly',
+            dir: 'coverage',
+            subdir: '.'
+        },
         files: [
             'coconuts/js/jquery.min.js',
             'coconuts/js/angular.min.js',
@@ -12,27 +20,9 @@ module.exports = function(config) {
             'test/unit/*.js'
         ],
         frameworks: ['jasmine'],
-        plugins: [
-            'karma-chrome-launcher',
-            'karma-coverage',
-            'karma-jasmine',
-            'karma-junit-reporter',
-            'karma-phantomjs-launcher'
-        ],
         preprocessors: {
             'coconuts/js/coconuts.js': 'coverage',
         },
-
-        // FIXME: why the extra ".." ?
-        coverageReporter: { type: 'cobertura', file: '../../../coverage-unit.xml' },
-        junitReporter: { outputFile: '../../test-unit.xml', suite: 'unit' },
-
-        // common settings
-        browsers: ['PhantomJS'],
-        captureTimeout: 10000,
-        colors: false,
-        //logLevel: LOG_INFO,
-        reporters: ['coverage', 'dots', 'junit'],
-        singleRun: true
+        reporters: ['coverage', 'spec']
     });
 };
