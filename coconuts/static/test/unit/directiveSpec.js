@@ -1,3 +1,7 @@
+function path(url) {
+    return '/' + url.split('/').slice(3).join('/');
+}
+
 describe('Directives', function() {
     beforeEach(module('coconuts'));
 
@@ -32,11 +36,11 @@ describe('Directives', function() {
             };
             scope.$digest();
 
-            var img = elem.find('img.thumb');
-            expect(img.attr('src')).toBe('images/render/foo/bar.jpg?size=128');
+            var img = elem.find('img');
+            expect(img.length).toBe(1);
 
-            img = elem.find('img.icon');
-            expect(img.length).toBe(0);
+            expect(img[0].className).toBe('thumb ng-scope');
+            expect(path(img[0].src)).toBe('/images/render/foo/bar.jpg?size=128');
         });
 
         it('should handle video file', function() {
@@ -48,11 +52,14 @@ describe('Directives', function() {
             };
             scope.$digest();
 
-            var img = elem.find('img.thumb');
-            expect(img.attr('src')).toBe('images/render/foo/bar.mp4?size=128');
+            var img = elem.find('img');
+            expect(img.length).toBe(2);
 
-            img = elem.find('img.icon');
-            expect(img.attr('src')).toBe('/static/coconuts/img/video-x-generic.png');
+            expect(img[0].className).toBe('thumb ng-scope');
+            expect(path(img[0].src)).toBe('/images/render/foo/bar.mp4?size=128');
+
+            expect(img[1].className).toBe('icon ng-scope');
+            expect(path(img[1].src)).toBe('/static/coconuts/img/video-x-generic.png');
         });
 
         it('should handle text file', function() {
@@ -63,11 +70,11 @@ describe('Directives', function() {
             };
             scope.$digest();
 
-            var img = elem.find('img.thumb');
-            expect(img.length).toBe(0);
+            var img = elem.find('img');
+            expect(img.length).toBe(1);
 
-            img = elem.find('img.icon');
-            expect(img.attr('src')).toBe('/static/coconuts/img/text-x-generic.png');
+            expect(img[0].className).toBe('icon ng-scope');
+            expect(path(img[0].src)).toBe('/static/coconuts/img/text-x-generic.png');
         });
 
         it('should handle other file', function() {
@@ -78,11 +85,11 @@ describe('Directives', function() {
             };
             scope.$digest();
 
-            var img = elem.find('img.thumb');
-            expect(img.length).toBe(0);
+            var img = elem.find('img');
+            expect(img.length).toBe(1);
 
-            img = elem.find('img.icon');
-            expect(img.attr('src')).toBe('/static/coconuts/img/unknown.png');
+            expect(img[0].className).toBe('icon ng-scope');
+            expect(path(img[0].src)).toBe('/static/coconuts/img/unknown.png');
         });
     });
 });

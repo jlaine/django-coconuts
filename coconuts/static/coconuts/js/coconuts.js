@@ -67,10 +67,6 @@ controller('CrumbCtrl', ['$location', '$rootScope', '$scope', 'settings', functi
             }
         }
     };
-
-    $scope.toggleInformation = function() {
-        $('body').toggleClass('photo-info-visible');
-    };
 }]).
 controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$scope', '$timeout', 'Folder', 'FormData', 'settings', function($http, $location, $rootScope, $routeParams, $scope, $timeout, Folder, FormData, settings) {
     $scope.settings = settings;
@@ -266,11 +262,13 @@ factory('FormData', [function() {
 }]).
 factory('settings', ['$http', '$rootScope', function($http, $rootScope) {
     function getDisplayHeight() {
-        var foot = $('body').hasClass('photo-info-visible') ? 96 : 0;
-        return $(window).height() - 32 - foot;
+        var foot = document.body.classList.contains('photo-info-visible') ? 96 : 0;
+        return document.documentElement.clientHeight - 32 - foot;
     }
     function getImageSize() {
-        var screenSize = Math.max($(window).width(), $(window).height());
+        var screenSize = Math.max(
+            document.documentElement.clientWidth,
+            document.documentElement.clientHeight);
         var sizes = [800, 1024, 1280, 1600];
         for (var i = 0; i < sizes.length; i++) {
             if (screenSize <= sizes[i]) {
@@ -285,12 +283,12 @@ factory('settings', ['$http', '$rootScope', function($http, $rootScope) {
         display_height: getDisplayHeight(),
         image_size: getImageSize(),
         toggleInformation: function() {
-            $('body').toggleClass('photo-info-visible');
+            document.body.classList.toggle('photo-info-visible');
             settings.display_height = getDisplayHeight();
             settings.image_size = getImageSize();
         }
     };
-    $(window).resize(function() {
+    window.addEventListener('resize', function() {
         var newHeight = getDisplayHeight();
         var newSize = getImageSize();
         if (newHeight != settings.display_height || newSize !== settings.image_size) {

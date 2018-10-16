@@ -9,7 +9,6 @@ module.exports = function(config) {
             subdir: '.'
         },
         files: [
-            'coconuts/js/jquery.min.js',
             'coconuts/js/angular.min.js',
             'coconuts/js/angular-animate.min.js',
             'coconuts/js/angular-resource.min.js',
