@@ -31,7 +31,6 @@ import json
 import mimetypes
 import os
 import posixpath
-import shutil
 import subprocess
 import time
 
@@ -42,14 +41,11 @@ from django.core.urlresolvers import reverse
 from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
                          HttpResponseForbidden)
 from django.shortcuts import redirect
-from django.utils.encoding import force_text
 from django.utils.http import http_date, urlquote
-from django.views.decorators.http import require_http_methods
 from PIL import Image
 
-from coconuts.forms import (AddFileForm, AddFolderForm, PhotoForm,
-                            ShareAccessForm, ShareForm)
-from coconuts.models import OWNERS, PERMISSIONS, NamedAcl, Share
+from coconuts.forms import PhotoForm
+from coconuts.models import Share
 
 try:
     from urllib.parse import unquote
@@ -229,69 +225,6 @@ def url2path(url):
     return url.replace('/', os.path.sep)
 
 
-@auth_required
-@require_http_methods(['POST'])
-def add_file(request, path):
-    """
-    Adds a file to the given folder.
-    """
-    path = clean_path(path)
-
-    # check input
-    form = AddFileForm(request.POST, request.FILES)
-    if not form.is_valid():
-        return HttpResponseBadRequest()
-
-    # check permissions
-    if not has_permission(path, 'can_write', request.user):
-        return HttpResponseForbidden()
-
-    # check folder exists
-    folder_path = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
-    if not os.path.isdir(folder_path):
-        raise Http404
-
-    filepath = os.path.join(folder_path, request.FILES['upload'].name)
-    if os.path.exists(filepath):
-        return HttpResponseBadRequest()
-
-    fp = open(filepath, 'wb')
-    for chunk in request.FILES['upload'].chunks():
-        fp.write(chunk)
-    fp.close()
-
-    return content_list(request, path)
-
-
-@auth_required
-@require_http_methods(['POST'])
-def add_folder(request, path):
-    """
-    Creates a sub-folder in the given folder.
-    """
-    path = clean_path(path)
-
-    # check input
-    form = AddFolderForm(request.POST)
-    if not form.is_valid():
-        return HttpResponseBadRequest()
-
-    # check permissions
-    if not has_permission(path, 'can_write', request.user):
-        return HttpResponseForbidden()
-
-    # check folder exists
-    folder_path = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
-    if not os.path.isdir(folder_path):
-        raise Http404
-
-    # create directory
-    filepath = os.path.join(folder_path, form.cleaned_data['name'])
-    os.mkdir(filepath)
-
-    return content_list(request, path)
-
-
 @login_required
 def browse(request, path):
     """
@@ -361,29 +294,6 @@ def content_list(request, path):
     }), content_type='application/json')
 
 
-@auth_required
-@require_http_methods(['POST'])
-def delete(request, path):
-    """
-    Deletes the given file or folder.
-    """
-    # check permissions
-    path = clean_path(path)
-    if not path:
-        return HttpResponseForbidden()
-    if not has_permission(posixpath.dirname(path), 'can_write', request.user):
-        return HttpResponseForbidden()
-
-    # delete file or folder
-    filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
-    if os.path.isdir(filepath):
-        shutil.rmtree(filepath)
-    else:
-        os.unlink(filepath)
-
-    return content_list(request, posixpath.dirname(path))
-
-
 @login_required
 def download(request, path):
     """
@@ -407,89 +317,6 @@ def download(request, path):
     response['Content-Type'] = mimetypes.guess_type(path)[0]
     response['Expires'] = http_date(time.time() + 3600 * 24 * 365)
     return response
-
-
-@auth_required
-def permission_list(request, path):
-    """
-    Manages the properties for the given folder.
-    """
-    path = clean_path(path)
-
-    # check permissions
-    try:
-        share = Share.objects.get(path=path)
-    except Share.DoesNotExist:
-        share = Share(path=path)
-    if not share.has_perm('can_manage', request.user):
-        return HttpResponseForbidden()
-
-    # process submission
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body.decode('utf8'))
-        except ValueError:
-            return HttpResponseBadRequest()
-
-        # properties
-        shareform = ShareForm(data, instance=share)
-        if not shareform.is_valid():
-            return HttpResponseBadRequest()
-        shareform.save(commit=False)
-
-        # permissions
-        unique = {}
-        for blob in data['permissions']:
-            form = ShareAccessForm(blob)
-            if not form.is_valid():
-                return HttpResponseBadRequest()
-            permission = form.cleaned_data
-            owner = permission['owner']
-            if owner in unique:
-                for perm in PERMISSIONS:
-                    if permission[perm]:
-                        unique[owner][perm] = permission[perm]
-            else:
-                unique[owner] = permission
-        acls = []
-        for permission in unique.values():
-            acl = NamedAcl("%s:" % permission['owner'])
-            for perm in PERMISSIONS:
-                if permission[perm]:
-                    acl.add_perm(perm)
-            if acl.permissions:
-                acls.append(acl)
-        share.set_acls(acls)
-
-        # check we are not locking ourselves out before saving
-        if not share.has_perm('can_manage', request.user):
-            return HttpResponseForbidden()
-        share.save()
-
-    # serialise
-    data = {
-        'description': share.description,
-        'owners': [],
-        'permissions': [],
-    }
-
-    # owners
-    for klass, key in OWNERS:
-        for obj in klass.objects.all().order_by(key):
-            data['owners'].append({
-                'group': klass.__name__,
-                'name': force_text(obj),
-                'value': "%s:%s" % (klass.__name__.lower(), getattr(obj, key))
-            })
-
-    # permissions
-    for acl in share.acls():
-        entry = {'owner': "%s:%s" % (acl.type, acl.name)}
-        for perm in PERMISSIONS:
-            entry[perm] = acl.has_perm(perm)
-        data['permissions'].append(entry)
-
-    return HttpResponse(json.dumps(data), content_type='application/json')
 
 
 @auth_required

@@ -34,12 +34,8 @@ from coconuts import views
 
 urlpatterns = [
     # files
-    url(r'^images/add_file/(?P<path>.*)$', views.add_file),
-    url(r'^images/add_folder/(?P<path>.*)$', views.add_folder),
     url(r'^images/contents/(?P<path>.*)$', views.content_list),
-    url(r'^images/delete/(?P<path>.*)$', views.delete),
     url(r'^images/download/(?P<path>.*)$', views.download),
-    url(r'^images/permissions/(?P<path>.*)$', views.permission_list),
     url(r'^images/render/(?P<path>.*)$', views.render_file),
 
     # folders
