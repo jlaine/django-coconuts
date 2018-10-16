@@ -34,9 +34,21 @@ class DownloadFileTest(BaseTest):
     files = ['test.jpg']
     fixtures = ['test_users.json']
 
-    def test_as_superuser(self):
+    def test_as_anonymous(self):
         """
-        Authenticated super-user can download a file.
+        Anonymous user cannot render a file.
+        """
+        # bad path
+        response = self.client.get('/images/download/notfound.jpg')
+        self.assertEquals(response.status_code, 302)
+
+        # good path
+        response = self.client.get('/images/download/test.jpg')
+        self.assertEquals(response.status_code, 302)
+
+    def test_as_user(self):
+        """
+        Authenticated user can download a file.
         """
         self.client.login(username="test_user_1", password="test")
 
@@ -51,17 +63,3 @@ class DownloadFileTest(BaseTest):
         self.assertEquals(response['Content-Disposition'], 'attachment; filename="test.jpg"')
         self.assertTrue('Expires' in response)
         self.assertTrue('Last-Modified' in response)
-
-    def test_as_user(self):
-        """
-        Authenticated user cannot download a file.
-        """
-        self.client.login(username="test_user_2", password="test")
-
-        # bad path
-        response = self.client.get('/images/download/notfound.jpg')
-        self.assertEquals(response.status_code, 403)
-
-        # good path
-        response = self.client.get('/images/download/test.jpg')
-        self.assertEquals(response.status_code, 403)

@@ -72,9 +72,9 @@ class RenderFileTest(BaseTest):
         response = self.client.get('/images/render/test.png?size=1024')
         self.assertEquals(response.status_code, 401)
 
-    def test_as_superuser(self):
+    def test_as_user_bad(self):
         """
-        Authenticated super-user can render a file.
+        Authenticated user can render a file.
         """
         self.client.login(username="test_user_1", password="test")
 
@@ -94,7 +94,7 @@ class RenderFileTest(BaseTest):
         response = self.client.get('/images/render/test.txt?size=1024')
         self.assertEquals(response.status_code, 400)
 
-    def test_as_superuser_good(self):
+    def test_as_user_good(self):
         self.client.login(username="test_user_1", password="test")
 
         response = self.client.get('/images/render/test.jpg?size=1024')
@@ -117,29 +117,3 @@ class RenderFileTest(BaseTest):
 
         response = self.client.get('/images/render/test.mp4?size=1024')
         self.assertImage(response, 'image/jpeg', (1024, 576))
-
-    def test_as_user(self):
-        """
-        Authenticated user cannot render a file.
-        """
-        self.client.login(username="test_user_2", password="test")
-
-        # no size
-        response = self.client.get('/images/render/test.jpg')
-        self.assertEquals(response.status_code, 400)
-
-        # bad size
-        response = self.client.get('/images/render/test.jpg?size=123')
-        self.assertEquals(response.status_code, 400)
-
-        # good size, bad path
-        response = self.client.get('/images/render/notfound.jpg?size=1024')
-        self.assertEquals(response.status_code, 403)
-
-        # good size, good path
-        response = self.client.get('/images/render/test.jpg?size=1024')
-        self.assertEquals(response.status_code, 403)
-
-        # good size, good path
-        response = self.client.get('/images/render/test.png?size=1024')
-        self.assertEquals(response.status_code, 403)

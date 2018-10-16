@@ -44,7 +44,7 @@ class HomeTest(BaseTest):
         """
         Authenticated user can browse home folder.
         """
-        self.client.login(username="test_user_2", password="test")
+        self.client.login(username="test_user_1", password="test")
         response = self.client.get('/')
         self.assertEquals(response.status_code, 200)
 
@@ -59,6 +59,6 @@ class HomeTest(BaseTest):
         """
         Authenticated user can browse other folder.
         """
-        self.client.login(username="test_user_2", password="test")
+        self.client.login(username="test_user_1", password="test")
         response = self.client.get('/other/')
         self.assertRedirects(response, '/#/other/')

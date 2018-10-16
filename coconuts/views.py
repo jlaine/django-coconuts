@@ -38,14 +38,12 @@ import django.views.static
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
-                         HttpResponseForbidden)
+from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.utils.http import http_date, urlquote
 from PIL import Image
 
 from coconuts.forms import PhotoForm
-from coconuts.models import Share
 
 try:
     from urllib.parse import unquote
@@ -209,18 +207,6 @@ def get_video_info(filepath):
             return info
 
 
-def has_permission(path, perm, user):
-    """
-    Checks whether a user has a given permission on a folder path.
-    """
-    sharepath = path.split("/")[0]
-    try:
-        share = Share.objects.get(path=sharepath)
-    except Share.DoesNotExist:
-        share = Share(path=sharepath)
-    return share.has_perm(perm, user)
-
-
 def url2path(url):
     return url.replace('/', os.path.sep)
 
@@ -243,10 +229,6 @@ def content_list(request, path):
     """
     path = clean_path(path)
 
-    # check permissions
-    if not has_permission(path, 'can_read', request.user):
-        return HttpResponseForbidden()
-
     # check folder exists
     folder_path = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
     if not os.path.isdir(folder_path):
@@ -264,13 +246,11 @@ def content_list(request, path):
         node_path = os.path.join(folder_path, entry)
         node_url = folder_url + entry
         if os.path.isdir(node_path):
-            # keep only the children the user is allowed to read. This is only useful in '/'
-            if has_permission(node_url[1:], 'can_read', request.user):
-                folders.append({
-                    'mimetype': 'inode/directory',
-                    'name': entry,
-                    'path': node_url + '/',
-                })
+            folders.append({
+                'mimetype': 'inode/directory',
+                'name': entry,
+                'path': node_url + '/',
+            })
         else:
             data = {
                 'mimetype': mimetypes.guess_type(node_path)[0],
@@ -285,8 +265,6 @@ def content_list(request, path):
             files.append(data)
 
     return HttpResponse(json.dumps({
-        'can_manage': has_permission(path, 'can_manage', request.user),
-        'can_write': has_permission(path, 'can_write', request.user),
         'files': files,
         'folders': folders,
         'name': os.path.basename(folder_path),
@@ -300,10 +278,6 @@ def download(request, path):
     Returns the raw file for the given photo.
     """
     path = clean_path(path)
-
-    # check permissions
-    if not has_permission(posixpath.dirname(path), 'can_read', request.user):
-        return HttpResponseForbidden()
 
     if hasattr(settings, 'COCONUTS_DATA_ACCEL'):
         response = HttpResponse()
@@ -330,10 +304,6 @@ def render_file(request, path):
     form = PhotoForm(request.GET)
     if not form.is_valid():
         return HttpResponseBadRequest()
-
-    # check permissions
-    if not has_permission(posixpath.dirname(path), 'can_read', request.user):
-        return HttpResponseForbidden()
 
     # check file exists
     filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
