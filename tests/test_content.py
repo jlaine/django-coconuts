@@ -55,7 +55,7 @@ class EmptyFolderContentTest(BaseTest):
 
 
 class FolderContentTest(BaseTest):
-    files = ['test.jpg', 'test.mp4', 'test.png', 'test.txt']
+    files = ['.test.txt', 'test.jpg', 'test.mp4', 'test.png', 'test.txt']
     fixtures = ['test_users.json']
     folders = ['Foo']
 
