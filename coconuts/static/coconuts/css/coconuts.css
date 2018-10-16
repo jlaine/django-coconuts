@@ -2,6 +2,22 @@ html {
     overflow-x: hidden;
 }
 
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    margin: 0;
+}
+
+a {
+    color: #428bca;
+    text-decoration: none;
+}
+
+a:hover, a:focus {
+    color: #2a6496;
+    text-decoration: underline;
+}
+
 h1 {
     font-size: 24px;
     line-height: 26px;
