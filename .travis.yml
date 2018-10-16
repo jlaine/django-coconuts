@@ -2,14 +2,14 @@ addons:
   apt:
     packages:
     - libav-tools
-after_success: coveralls --merge coconuts/static/coverage/coveralls.json
+after_success: bash <(curl -s https://codecov.io/bash)
 cache:
   directories:
     - coconuts/static/node_modules
   pip: true
 dist: trusty
 install:
-  - pip install python-coveralls tox
+  - pip install coverage tox
   - cd coconuts/static
   - npm install
   - cd ../..
