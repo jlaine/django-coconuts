@@ -19,8 +19,6 @@ describe('Providers', function() {
         it('should get folder', function() {
             // cache miss
             $httpBackend.expect('GET', 'images/contents/').respond({
-                can_manage: true,
-                can_write: true,
                 files: [],
                 folders: [],
                 name: '',
@@ -37,17 +35,6 @@ describe('Providers', function() {
             var folder2 = Folder.get('/');
             expect(folder2.name).toBe('');
             expect(folder2.path).toBe('/');
-        });
-    });
-
-    describe('FormData', function() {
-        var myFormData;
-        beforeEach(inject(['$injector', function($injector) {
-            myFormData = $injector.get('FormData');
-        }]));
-
-        it('should return native FormData', function() {
-            expect(myFormData).toBe(FormData);
         });
     });
 });

@@ -68,7 +68,7 @@ controller('CrumbCtrl', ['$location', '$rootScope', '$scope', 'settings', functi
         }
     };
 }]).
-controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$scope', '$timeout', 'Folder', 'FormData', 'settings', function($http, $location, $rootScope, $routeParams, $scope, $timeout, Folder, FormData, settings) {
+controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$scope', '$timeout', 'Folder', 'settings', function($http, $location, $rootScope, $routeParams, $scope, $timeout, Folder, settings) {
     $scope.settings = settings;
 
     // fetch folder contents
@@ -116,59 +116,6 @@ controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$
         }
     };
 
-    $scope.doAdd = function() {
-        var formData = new FormData();
-        formData.append('upload', $scope.addFile);
-        $http.post(settings.coconuts_root + 'add_file' + $scope.currentFolder.path, formData, {
-            headers: { 'Content-Type': undefined },
-            transformRequest: function(data) { return data; }
-        }).success(function(currentFolder) {
-            $scope.addPrompt = false;
-            angular.copy(currentFolder, $scope.currentFolder);
-        });
-    };
-
-    $scope.doCreate = function() {
-        var formData = new FormData();
-        formData.append('name', $scope.createName);
-        $http.post(settings.coconuts_root + 'add_folder' + $scope.currentFolder.path, formData, {
-            headers: { 'Content-Type': undefined },
-            transformRequest: function(data) { return data; }
-        }).success(function(currentFolder) {
-            $scope.createPrompt = false;
-            angular.copy(currentFolder, $scope.currentFolder);
-        });
-    };
-
-    $scope.promptDelete = function(obj) {
-        $scope.deleteTarget = obj;
-        $scope.deleteFolder = false;
-    };
-    $scope.doDelete = function() {
-        $http.post(settings.coconuts_root + 'delete' + $scope.deleteTarget.path).success(function(currentFolder) {
-            $scope.deleteTarget = undefined;
-            angular.copy(currentFolder, $scope.currentFolder);
-            $location.path(currentFolder.path);
-        });
-    };
-
-    $scope.promptManage = function() {
-        $scope.managePrompt = true;
-        $http.get(settings.coconuts_root + 'permissions' + $scope.currentFolder.path).success(function(data) {
-            $scope.description = data.description;
-            $scope.permissions = data.permissions;
-            $scope.owners = data.owners;
-        });
-    };
-    $scope.doManage = function() {
-        $http.post(settings.coconuts_root + 'permissions' + $scope.currentFolder.path, {
-            description: $scope.description,
-            permissions: $scope.permissions
-        }).success(function(data) {
-            $scope.managePrompt = false;
-        });
-    };
-
     // keyboard navigation
     function handleKeypress(evt) {
         switch (evt.keyCode) {
@@ -195,19 +142,6 @@ controller('FolderCtrl', ['$http', '$location', '$rootScope', '$routeParams', '$
     $timeout(function() {
         $rootScope.transitionClass = undefined;
     }, 600);
-}]).
-directive('coFile', ['$parse', function($parse) {
-    return {
-        restrict: 'A',
-        link: function(scope, elm, attrs) {
-            var model = $parse(attrs.coFile);
-            elm.bind('change', function(evt) {
-                scope.$apply(function() {
-                    model.assign(scope, evt.target.files[0]);
-                });
-            });
-        }
-    };
 }]).
 directive('coDisplay', ['settings', function(settings) {
     return {
@@ -256,9 +190,6 @@ factory('Folder', ['$cacheFactory', '$http', 'settings', function($cacheFactory,
         return folder;
     };
     return Folder;
-}]).
-factory('FormData', [function() {
-    return FormData;
 }]).
 factory('settings', ['$http', '$rootScope', function($http, $rootScope) {
     function getDisplayHeight() {

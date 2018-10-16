@@ -37,27 +37,11 @@
 <div class="folder-view" ng-if="!currentPhoto">
     <h1>{{ currentFolder.name || "Home" }}</h1>
 
-    <div class="btn-group object-tools" ng-show="currentFolder.can_write">
-        <a class="btn dropdown-toggle" data-toggle="dropdown" href="">
-            <span co-translate>Operations</span>
-            <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu pull-right">
-            <li ng-show="currentFolder.can_write"><a href="" ng-click="addPrompt = true"><i class="icon-picture"></i> <span co-translate>Add a file</span></a></li>
-            <li ng-show="currentFolder.can_write"><a href="" ng-click="createPrompt = true"><i class="icon-folder-close"></i> <span co-translate>Create a folder</span></a></li>
-            <li ng-show="currentFolder.can_manage"><a href="" ng-click="promptManage()"><i class="icon-key"></i> <span co-translate>Manage this share's permissions</span></a></li>
-            <li ng-show="currentFolder.can_manage"><a href="/admin/auth/user/"><i class="icon-user"></i> <span co-translate>Manage user accounts</span></a></li>
-        </ul>
-    </div>
-
     <p ng-show="currentFolder.files.length == 0 && currentFolder.folders.length == 0" co-translate>There are no files in this folder.</p>
 
     <div class="file" ng-repeat="folder in currentFolder.folders">
         <div class="filename"><a href="" ng-click="show(folder)"><img ng-src="{{ folder.mimetype | fileIcon }}"/>{{ folder.name }}</a></div>
         <div class="filesize"></div>
-        <div class="fileactions" ng-show="currentFolder.can_write">
-            <a href="" ng-click="promptDelete(folder)"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
-        </div>
     </div>
 
     <div ng-switch="showThumbnails">
@@ -65,9 +49,6 @@
             <div class="file" ng-repeat="file in currentFolder.files">
                 <div class="filename"><a ng-href="{{ file | fileDownload }}"><img ng-src="{{ file.mimetype | fileIcon }}"/>{{ file.name }}</a></div>
                 <div class="filesize">{{ file.size | fileSize }}</div>
-                <div class="fileactions" ng-show="currentFolder.can_write">
-                    <a href="" ng-click="promptDelete(file)"><i class="icon-remove"></i> <span co-translate>Delete</span></a>
-                </div>
             </div>
         </div>
         <div ng-switch-when="true">
@@ -96,96 +77,8 @@
             <li ng-if="currentPhoto.image.settings" title="The aperture and exposure time for this picture"><i class="icon-wrench"></i> {{ currentPhoto.image.settings }}</li>
         </ul>
         <div class="photo-actions">
-            <a class="btn btn-danger" href="" ng-click="promptDelete(currentPhoto)" ng-show="currentFolder.can_write"><i class="icon-remove"></i> <span co-translate>Delete</a>
             <a class="btn btn-default" ng-href="{{ currentPhoto | fileDownload }}"><i class="icon-download"></i> <span co-translate>Download</span></a>
         </div>
-    </div>
-</div>
-
-<div class="modal form-inline ng-cloak" ng-show="addPrompt">
-    <div class="modal-header">
-        <button type="button" class="close" aria-hidden="true" ng-click="addPrompt = false">&times;</button>
-        <h3><i class="icon-picture"></i> <span co-translate>Add a file</span></h3>
-    </div>
-    <div class="modal-body">
-        <label for="id_upload">Upload:</label>
-        <input id="id_upload" type="file" co-file="addFile">
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="doAdd()" co-translate>Save</button>
-    </div>
-</div>
-
-<div class="modal form-inline ng-cloak" ng-show="createPrompt">
-    <div class="modal-header">
-        <button type="button" class="close" aria-hidden="true" ng-click="createPrompt = false">&times;</button>
-        <h3><i class="icon-folder-close"></i> <span co-translate>Create a folder</span></h3>
-    </div>
-    <div class="modal-body">
-        <label for="id_name">Name:</label>
-        <input id="id_name" name="name" type="text" ng-model="createName">
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="doCreate()" co-translate>Save</button>
-    </div>
-</div>
-
-<div class="modal form-inline ng-cloak" ng-if="deleteTarget">
-    <div class="modal-header">
-        <button type="button" class="close" aria-hidden="true" ng-click="deleteTarget = undefined">&times;</button>
-        <h3 co-translate>Really delete "{{ deleteTarget.name }}"?</h3>
-    </div>
-    <div class="modal-body">
-        <div class="thumbnail" co-thumbnail="deleteTarget"></div>
-        <p co-translate ng-show="deleteFolder">Are you sure you want to delete the folder "{{ deleteTarget.name }}" and all its contents?</p>
-        <p co-translate ng-hide="deleteFolder">Are you sure you want to delete the file "{{ deleteTarget.name }}"?</p>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-danger" ng-click="doDelete()" co-translate>Yes, I'm sure</button>
-        <button class="btn btn-default" ng-click="deleteTarget = undefined" co-translate>No, I'm not sure</button>
-    </div>
-</div>
-
-<div class="modal form-inline ng-cloak" ng-show="managePrompt">
-    <div class="modal-header">
-        <button type="button" class="close" aria-hidden="true" ng-click="managePrompt = false">&times;</button>
-        <h3><i class="icon-folder-close"></i> <span co-translate>Manage a folder</span></h3>
-    </div>
-    <div class="modal-body">
-        <p>
-            <label for="id_description">Description:</label>
-            <input id="id_description" type="text" ng-model="description">
-        </p>
-        <label>Permissions</label>
-        <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Who?</th>
-            <th>Can read</th>
-            <th>Can write</th>
-            <th>Can manage</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="permission in permissions">
-            <td>
-                <select ng-model="permission.owner" ng-options="opt.value as opt.name group by opt.group for opt in owners" required></select>
-            </td>
-            <td>
-                <input type="checkbox" ng-model="permission.can_read"/>
-            </td>
-            <td>
-                <input type="checkbox" ng-model="permission.can_write"/>
-            </td>
-            <td>
-                <input type="checkbox" ng-model="permission.can_manage"/>
-            </td>
-        </tr>
-        </tbody>
-        </table>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="doManage()" co-translate>Save</button>
     </div>
 </div>
 </script>
