@@ -308,13 +308,10 @@ def render_file(request, path):
 
     def create_cache_dir(cachefile):
         cachedir = os.path.dirname(cachefile)
-        if not os.path.exists(cachedir):
-            try:
-                os.makedirs(cachedir)
-            except OSError:
-                # FIXME: checking then creating creates a race condition,
-                # the directory can be created between these two steps
-                pass
+        try:
+            os.makedirs(cachedir)
+        except FileExistsError:
+            pass
 
     mimetype = mimetypes.guess_type(filepath)[0]
     ratio = 0.75
