@@ -1,13 +1,13 @@
 addons:
   apt:
     packages:
-    - libav-tools
+    - ffmpeg
 after_success: bash <(curl -s https://codecov.io/bash)
 cache:
   directories:
     - coconuts/static/node_modules
   pip: true
-dist: trusty
+dist: xenial
 install:
   - pip install coverage tox
   - cd coconuts/static

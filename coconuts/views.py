@@ -198,7 +198,7 @@ def get_video_info(filepath):
     Gets a video's information.
     """
     data = json.loads(subprocess.check_output([
-        'avprobe', '-of', 'json', '-loglevel', 'quiet', '-show_streams', '-show_format', filepath]).decode('utf8'))
+        'ffprobe', '-of', 'json', '-loglevel', 'quiet', '-show_streams', '-show_format', filepath]).decode('utf8'))
     for stream in data['streams']:
         if stream['codec_type'] == 'video':
             info = {
@@ -557,7 +557,7 @@ def render_file(request, path):
                 width = cachesize[0]
                 height = int(cachesize[0] * pic_ratio)
             subprocess.check_call([
-                'avconv', '-loglevel', 'quiet', '-i', filepath,
+                'ffmpeg', '-loglevel', 'quiet', '-i', filepath,
                 '-s', '%sx%s' % (width, height), '-vframes', '1', cachefile])
     else:
         # unhandled file type
