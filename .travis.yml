@@ -9,13 +9,14 @@ cache:
   pip: true
 dist: xenial
 install:
-  - pip install coverage tox
+  - pip install -r requirements.txt coverage
   - cd coconuts/static
   - npm install
   - cd ../..
 language: python
+python: 3.5
 script:
-  - tox
+  - coverage run --branch ./manage.py test
   - cd coconuts/static
   - npm test -- --single-run
   - cd ../..

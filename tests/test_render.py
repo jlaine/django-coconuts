@@ -27,7 +27,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-import six
+import io
+
 from PIL import Image
 
 from tests import BaseTest
@@ -44,7 +45,7 @@ class RenderFileTest(BaseTest):
         self.assertTrue('Last-Modified' in response)
 
         # check size
-        fp = six.BytesIO(b''.join(response.streaming_content))
+        fp = io.BytesIO(b''.join(response.streaming_content))
         img = Image.open(fp)
         self.assertEqual(img.size, expected_size)
 

@@ -33,6 +33,7 @@ import os
 import posixpath
 import subprocess
 import time
+from urllib.parse import unquote
 
 import django.views.static
 from django.conf import settings
@@ -44,11 +45,6 @@ from django.utils.http import http_date, urlquote
 from PIL import Image
 
 from coconuts.forms import PhotoForm
-
-try:
-    from urllib.parse import unquote
-except ImportError:  # Python 2
-    from urllib import unquote
 
 
 EXIF_MAKE = 271
