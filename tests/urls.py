@@ -33,8 +33,8 @@ from django.contrib.auth import views
 
 urlpatterns = [
     # accounts
-    url(r'^accounts/login/$', views.login),
-    url(r'^accounts/logout/$', views.logout),
+    url(r'^accounts/login/$', views.LoginView.as_view()),
+    url(r'^accounts/logout/$', views.LogoutView.as_view()),
 
     # folders
     url(r'', include('coconuts.urls')),
