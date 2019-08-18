@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # django-coconuts
-# Copyright (c) 2008-2018, Jeremy Lainé
+# Copyright (c) 2008-2019, Jeremy Lainé
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
