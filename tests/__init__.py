@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # django-coconuts
 # Copyright (c) 2008-2019, Jeremy Lainé
