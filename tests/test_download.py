@@ -39,11 +39,11 @@ class DownloadFileTest(BaseTest):
         """
         # bad path
         response = self.client.get('/images/download/notfound.jpg')
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
 
         # good path
         response = self.client.get('/images/download/test.jpg')
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
 
     def test_as_user(self):
         """
@@ -53,12 +53,12 @@ class DownloadFileTest(BaseTest):
 
         # bad path
         response = self.client.get('/images/download/notfound.jpg')
-        self.assertEquals(response.status_code, 404)
+        self.assertEqual(response.status_code, 404)
 
         # good path
         response = self.client.get('/images/download/test.jpg')
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(response['Content-Type'], 'image/jpeg')
-        self.assertEquals(response['Content-Disposition'], 'attachment; filename="test.jpg"')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'image/jpeg')
+        self.assertEqual(response['Content-Disposition'], 'attachment; filename="test.jpg"')
         self.assertTrue('Expires' in response)
         self.assertTrue('Last-Modified' in response)

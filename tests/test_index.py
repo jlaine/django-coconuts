@@ -45,7 +45,7 @@ class HomeTest(BaseTest):
         """
         self.client.login(username="test_user_1", password="test")
         response = self.client.get('/')
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_other_as_anonymous(self):
         """

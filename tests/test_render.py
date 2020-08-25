@@ -38,8 +38,8 @@ class RenderFileTest(BaseTest):
     fixtures = ['test_users.json']
 
     def assertImage(self, response, content_type, expected_size):
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(response['Content-Type'], content_type)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], content_type)
         self.assertTrue('Expires' in response)
         self.assertTrue('Last-Modified' in response)
 
@@ -54,23 +54,23 @@ class RenderFileTest(BaseTest):
         """
         # no size
         response = self.client.get('/images/render/test.jpg')
-        self.assertEquals(response.status_code, 401)
+        self.assertEqual(response.status_code, 401)
 
         # bad size
         response = self.client.get('/images/render/test.jpg?size=123')
-        self.assertEquals(response.status_code, 401)
+        self.assertEqual(response.status_code, 401)
 
         # good size, bad type
         response = self.client.get('/images/render/test.txt?size=1024')
-        self.assertEquals(response.status_code, 401)
+        self.assertEqual(response.status_code, 401)
 
         # good size, good path
         response = self.client.get('/images/render/test.jpg?size=1024')
-        self.assertEquals(response.status_code, 401)
+        self.assertEqual(response.status_code, 401)
 
         # good size, good path
         response = self.client.get('/images/render/test.png?size=1024')
-        self.assertEquals(response.status_code, 401)
+        self.assertEqual(response.status_code, 401)
 
     def test_as_user_bad(self):
         """
@@ -80,19 +80,19 @@ class RenderFileTest(BaseTest):
 
         # no size
         response = self.client.get('/images/render/test.jpg')
-        self.assertEquals(response.status_code, 400)
+        self.assertEqual(response.status_code, 400)
 
         # bad size
         response = self.client.get('/images/render/test.jpg?size=123')
-        self.assertEquals(response.status_code, 400)
+        self.assertEqual(response.status_code, 400)
 
         # good size, bad path
         response = self.client.get('/images/render/notfound.jpg?size=1024')
-        self.assertEquals(response.status_code, 404)
+        self.assertEqual(response.status_code, 404)
 
         # good size, bad type
         response = self.client.get('/images/render/test.txt?size=1024')
-        self.assertEquals(response.status_code, 400)
+        self.assertEqual(response.status_code, 400)
 
     def test_as_user_good(self):
         self.client.login(username="test_user_1", password="test")
