@@ -54,8 +54,8 @@ class RenderFileTest(BaseTest):
 
         # check size
         fp = io.BytesIO(b"".join(response.streaming_content))
-        img = Image.open(fp)
-        self.assertEqual(img.size, expected_size)
+        with Image.open(fp) as img:
+            self.assertEqual(img.size, expected_size)
 
     def test_as_anonymous(self):
         """

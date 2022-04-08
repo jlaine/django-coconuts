@@ -32,7 +32,7 @@ import os
 import posixpath
 import subprocess
 import time
-from urllib.parse import unquote
+from urllib.parse import quote, unquote
 
 import django.views.static
 from django.conf import settings
@@ -40,7 +40,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.http import http_date, urlquote
+from django.utils.http import http_date
 from PIL import Image
 
 from coconuts.forms import PhotoForm
@@ -138,13 +138,12 @@ def get_image_info(filepath):
     """
     Gets an image's information.
     """
-    image = Image.open(filepath)
-    info = {
-        "width": image.size[0],
-        "height": image.size[1],
-    }
-
-    metadata = get_image_exif(image)
+    with Image.open(filepath) as img:
+        info = {
+            "width": img.size[0],
+            "height": img.size[1],
+        }
+        metadata = get_image_exif(img)
 
     # camera
     camera = None
@@ -219,7 +218,8 @@ def browse(request, path):
     template_path = os.path.join(
         os.path.dirname(__file__), "static", "coconuts", "index.html"
     )
-    return HttpResponse(open(template_path, "rb").read())
+    with open(template_path, "rb") as fp:
+        return HttpResponse(fp.read())
 
 
 @auth_required
@@ -295,7 +295,7 @@ def download(request, path):
         response = django.views.static.serve(
             request, path, document_root=settings.COCONUTS_DATA_ROOT
         )
-    response["Content-Disposition"] = 'attachment; filename="%s"' % urlquote(
+    response["Content-Disposition"] = 'attachment; filename="%s"' % quote(
         posixpath.basename(path)
     )
     response["Content-Type"] = mimetypes.guess_type(path)[0]
@@ -339,15 +339,16 @@ def render_file(request, path):
         )
         if not os.path.exists(cachefile):
             create_cache_dir(cachefile)
-            img = Image.open(filepath)
+            with Image.open(filepath) as img:
+                # rotate if needed
+                orientation = get_image_exif(img).get(EXIF_ORIENTATION)
+                if orientation:
+                    img = img.rotate(
+                        ORIENTATIONS[orientation][2], Image.Resampling.NEAREST, True
+                    )
 
-            # rotate if needed
-            orientation = get_image_exif(img).get(EXIF_ORIENTATION)
-            if orientation:
-                img = img.rotate(ORIENTATIONS[orientation][2], Image.NEAREST, True)
-
-            img.thumbnail(cachesize, Image.ANTIALIAS)
-            img.save(cachefile, quality=90)
+                img.thumbnail(cachesize, Image.Resampling.LANCZOS)
+                img.save(cachefile, quality=90)
     elif mimetype in VIDEO_TYPES:
         mimetype = "image/jpeg"
         path += ".jpg"
