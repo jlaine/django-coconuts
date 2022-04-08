@@ -98,7 +98,7 @@ class RenderFileTest(BaseTest):
         self.client.login(username="test_user_1", password="test")
 
         response = self.client.get('/images/render/test.jpg?size=1024')
-        self.assertImage(response, 'image/jpeg', (1024, 682))
+        self.assertImage(response, 'image/jpeg', (1024, 683))
 
         response = self.client.get('/images/render/test_portrait.jpg?size=1024')
         self.assertImage(response, 'image/jpeg', (512, 768))

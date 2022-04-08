@@ -26,11 +26,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+from PIL.TiffImagePlugin import IFDRational
+
 from tests import BaseTest
 from coconuts.views import format_rational
 
 
-class ExifOldPilTest(BaseTest):
+class ExifRationalTest(BaseTest):
     fixtures = ['test_users.json']
 
     def test_canon(self):
@@ -38,52 +40,24 @@ class ExifOldPilTest(BaseTest):
         IMG_8232.JPG
         """
         # fnumber
-        self.assertEqual(format_rational((4, 1)), '4')
+        self.assertEqual(format_rational(IFDRational(4, 1)), '4')
 
         # exposure time
-        self.assertEqual(format_rational((1, 80)), '1/80')
+        self.assertEqual(format_rational(IFDRational(1, 80)), '1/80')
 
     def test_canon_450d(self):
         # fnumber
-        self.assertEqual(format_rational((10, 1)), '10')
+        self.assertEqual(format_rational(IFDRational(10, 1)), '10')
 
         # exposure time
-        self.assertEqual(format_rational((1, 125)), '1/125')
+        self.assertEqual(format_rational(IFDRational(0.008)), '1/125')
 
     def test_fujifilm(self):
         """
         DSCF1900.JPG
         """
         # fnumber
-        self.assertEqual(format_rational((560, 100)), '5.6')
-
-        # exposure time
-        self.assertEqual(format_rational((10, 1400)), '1/140')
-
-
-class ExifNewPilTest(BaseTest):
-    fixtures = ['test_users.json']
-
-    def test_canon(self):
-        # fnumber
-        self.assertEqual(format_rational((4.0,)), '4')
-
-        # exposure time
-        self.assertEqual(format_rational((0.0125,)), '1/80')
-
-    def test_canon_450d(self):
-        # fnumber
-        self.assertEqual(format_rational((10.0,)), '10')
-
-        # exposure time
-        self.assertEqual(format_rational((0.008,)), '1/125')
-
-    def test_fujifilm(self):
-        """
-        DSCF1900.JPG
-        """
-        # fnumber
-        self.assertEqual(format_rational((5.6,)), '5.6')
+        self.assertEqual(format_rational(IFDRational(5.6)), '5.6')
 
         # FIXME: exposure time!
-        self.assertEqual(format_rational((0.007142857142857143,)), '1/140')
+        self.assertEqual(format_rational(IFDRational(0.007142857142857143)), '1/140')
