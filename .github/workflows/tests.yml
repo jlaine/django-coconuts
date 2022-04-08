@@ -1,0 +1,38 @@
+name: tests
+
+on: [push]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.9', '3.10']
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up FFmpeg
+      run: |
+        sudo apt-get -yq update
+        sudo apt-get -yq install ffmpeg
+    - uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python }}
+    - name: Run test suite
+      run: |
+        pip install -r requirements.txt coverage
+        coverage run --branch ./manage.py test
+    - uses: codecov/codecov-action@v1
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 16.X
+    - name: Run test suite
+      run: |
+        cd coconuts/static
+        npm install
+        npm test -- --single-run
+    - uses: codecov/codecov-action@v1
