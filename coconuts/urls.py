@@ -30,7 +30,6 @@ from django.conf.urls import url
 
 from coconuts import views
 
-
 urlpatterns = [
     # files
     url(r"^images/contents/(?P<path>.*)$", views.content_list),

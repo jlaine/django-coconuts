@@ -30,13 +30,13 @@ from tests import BaseTest
 
 
 class EmptyFolderContentTest(BaseTest):
-    fixtures = ['test_users.json']
+    fixtures = ["test_users.json"]
 
     def test_home_as_anonymous(self):
         """
         Anonymous users need to login.
         """
-        response = self.client.get('/images/contents/')
+        response = self.client.get("/images/contents/")
         self.assertEqual(response.status_code, 401)
 
     def test_home_as_user(self):
@@ -44,34 +44,37 @@ class EmptyFolderContentTest(BaseTest):
         Authenticated user can browse the home folder.
         """
         self.client.login(username="test_user_1", password="test")
-        response = self.client.get('/images/contents/')
-        self.assertJson(response, {
-            'files': [],
-            'folders': [],
-            'name': '',
-            'path': '/',
-        })
+        response = self.client.get("/images/contents/")
+        self.assertJson(
+            response,
+            {
+                "files": [],
+                "folders": [],
+                "name": "",
+                "path": "/",
+            },
+        )
 
 
 class FolderContentTest(BaseTest):
-    files = ['.test.txt', 'test.jpg', 'test.mp4', 'test.png', 'test.txt']
-    fixtures = ['test_users.json']
-    folders = ['Foo']
+    files = [".test.txt", "test.jpg", "test.mp4", "test.png", "test.txt"]
+    fixtures = ["test_users.json"]
+    folders = ["Foo"]
 
     def test_file_as_anonymous(self):
-        response = self.client.get('/images/contents/test.jpg')
+        response = self.client.get("/images/contents/test.jpg")
         self.assertEqual(response.status_code, 401)
 
     def test_file_as_user(self):
         self.client.login(username="test_user_1", password="test")
-        response = self.client.get('/images/contents/test.jpg')
+        response = self.client.get("/images/contents/test.jpg")
         self.assertEqual(response.status_code, 404)
 
     def test_home_as_anonymous(self):
         """
         Anonymous users need to login.
         """
-        response = self.client.get('/images/contents/')
+        response = self.client.get("/images/contents/")
         self.assertEqual(response.status_code, 401)
 
     def test_home_as_user(self):
@@ -79,56 +82,56 @@ class FolderContentTest(BaseTest):
         Authenticated user can browse the home folder.
         """
         self.client.login(username="test_user_1", password="test")
-        response = self.client.get('/images/contents/')
-        self.assertJson(response, {
-            'files': [
-                {
-                    'image': {
-                        'width': 4272,
-                        'height': 2848,
-                        'camera': 'Canon EOS 450D',
-                        'settings': u'f/10, 1/125\xa0sec, 48\xa0mm',
+        response = self.client.get("/images/contents/")
+        self.assertJson(
+            response,
+            {
+                "files": [
+                    {
+                        "image": {
+                            "width": 4272,
+                            "height": 2848,
+                            "camera": "Canon EOS 450D",
+                            "settings": "f/10, 1/125\xa0sec, 48\xa0mm",
+                        },
+                        "mimetype": "image/jpeg",
+                        "name": "test.jpg",
+                        "path": "/test.jpg",
+                        "size": 5370940,
                     },
-                    'mimetype': 'image/jpeg',
-                    'name': 'test.jpg',
-                    'path': '/test.jpg',
-                    'size': 5370940,
-                },
-                {
-                    'mimetype': 'video/mp4',
-                    'name': 'test.mp4',
-                    'path': '/test.mp4',
-                    'size': 1055736,
-                    'video': {
-                        'duration': 5.28,
-                        'height': 720,
-                        'width': 1280,
-                    }
-                },
-                {
-                    'image': {
-                        'width': 24,
-                        'height': 24
+                    {
+                        "mimetype": "video/mp4",
+                        "name": "test.mp4",
+                        "path": "/test.mp4",
+                        "size": 1055736,
+                        "video": {
+                            "duration": 5.28,
+                            "height": 720,
+                            "width": 1280,
+                        },
                     },
-                    'mimetype': 'image/png',
-                    'name': 'test.png',
-                    'path': '/test.png',
-                    'size': 548,
-                },
-                {
-                    'mimetype': 'text/plain',
-                    'name': 'test.txt',
-                    'path': '/test.txt',
-                    'size': 6,
-                }
-            ],
-            'folders': [
-                {
-                    'mimetype': 'inode/directory',
-                    'name': 'Foo',
-                    'path': '/Foo/',
-                },
-            ],
-            'name': '',
-            'path': '/',
-        })
+                    {
+                        "image": {"width": 24, "height": 24},
+                        "mimetype": "image/png",
+                        "name": "test.png",
+                        "path": "/test.png",
+                        "size": 548,
+                    },
+                    {
+                        "mimetype": "text/plain",
+                        "name": "test.txt",
+                        "path": "/test.txt",
+                        "size": 6,
+                    },
+                ],
+                "folders": [
+                    {
+                        "mimetype": "inode/directory",
+                        "name": "Foo",
+                        "path": "/Foo/",
+                    },
+                ],
+                "name": "",
+                "path": "/",
+            },
+        )

@@ -34,17 +34,26 @@ from tests import BaseTest
 
 
 class RenderFileTest(BaseTest):
-    files = ['test.jpg', 'test.mp4', 'test.png', 'test.txt', 'test_portrait.jpg', 'test_portrait.mp4', 'test_rotated.jpg', 'test_rotated.mp4']
-    fixtures = ['test_users.json']
+    files = [
+        "test.jpg",
+        "test.mp4",
+        "test.png",
+        "test.txt",
+        "test_portrait.jpg",
+        "test_portrait.mp4",
+        "test_rotated.jpg",
+        "test_rotated.mp4",
+    ]
+    fixtures = ["test_users.json"]
 
     def assertImage(self, response, content_type, expected_size):
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response['Content-Type'], content_type)
-        self.assertTrue('Expires' in response)
-        self.assertTrue('Last-Modified' in response)
+        self.assertEqual(response["Content-Type"], content_type)
+        self.assertTrue("Expires" in response)
+        self.assertTrue("Last-Modified" in response)
 
         # check size
-        fp = io.BytesIO(b''.join(response.streaming_content))
+        fp = io.BytesIO(b"".join(response.streaming_content))
         img = Image.open(fp)
         self.assertEqual(img.size, expected_size)
 
@@ -53,23 +62,23 @@ class RenderFileTest(BaseTest):
         Anonymous user cannot render a file.
         """
         # no size
-        response = self.client.get('/images/render/test.jpg')
+        response = self.client.get("/images/render/test.jpg")
         self.assertEqual(response.status_code, 401)
 
         # bad size
-        response = self.client.get('/images/render/test.jpg?size=123')
+        response = self.client.get("/images/render/test.jpg?size=123")
         self.assertEqual(response.status_code, 401)
 
         # good size, bad type
-        response = self.client.get('/images/render/test.txt?size=1024')
+        response = self.client.get("/images/render/test.txt?size=1024")
         self.assertEqual(response.status_code, 401)
 
         # good size, good path
-        response = self.client.get('/images/render/test.jpg?size=1024')
+        response = self.client.get("/images/render/test.jpg?size=1024")
         self.assertEqual(response.status_code, 401)
 
         # good size, good path
-        response = self.client.get('/images/render/test.png?size=1024')
+        response = self.client.get("/images/render/test.png?size=1024")
         self.assertEqual(response.status_code, 401)
 
     def test_as_user_bad(self):
@@ -79,41 +88,41 @@ class RenderFileTest(BaseTest):
         self.client.login(username="test_user_1", password="test")
 
         # no size
-        response = self.client.get('/images/render/test.jpg')
+        response = self.client.get("/images/render/test.jpg")
         self.assertEqual(response.status_code, 400)
 
         # bad size
-        response = self.client.get('/images/render/test.jpg?size=123')
+        response = self.client.get("/images/render/test.jpg?size=123")
         self.assertEqual(response.status_code, 400)
 
         # good size, bad path
-        response = self.client.get('/images/render/notfound.jpg?size=1024')
+        response = self.client.get("/images/render/notfound.jpg?size=1024")
         self.assertEqual(response.status_code, 404)
 
         # good size, bad type
-        response = self.client.get('/images/render/test.txt?size=1024')
+        response = self.client.get("/images/render/test.txt?size=1024")
         self.assertEqual(response.status_code, 400)
 
     def test_as_user_good(self):
         self.client.login(username="test_user_1", password="test")
 
-        response = self.client.get('/images/render/test.jpg?size=1024')
-        self.assertImage(response, 'image/jpeg', (1024, 683))
+        response = self.client.get("/images/render/test.jpg?size=1024")
+        self.assertImage(response, "image/jpeg", (1024, 683))
 
-        response = self.client.get('/images/render/test_portrait.jpg?size=1024')
-        self.assertImage(response, 'image/jpeg', (512, 768))
+        response = self.client.get("/images/render/test_portrait.jpg?size=1024")
+        self.assertImage(response, "image/jpeg", (512, 768))
 
-        response = self.client.get('/images/render/test_portrait.mp4?size=1024')
-        self.assertImage(response, 'image/jpeg', (432, 768))
+        response = self.client.get("/images/render/test_portrait.mp4?size=1024")
+        self.assertImage(response, "image/jpeg", (432, 768))
 
-        response = self.client.get('/images/render/test_rotated.jpg?size=1024')
-        self.assertImage(response, 'image/jpeg', (512, 768))
+        response = self.client.get("/images/render/test_rotated.jpg?size=1024")
+        self.assertImage(response, "image/jpeg", (512, 768))
 
-        response = self.client.get('/images/render/test_rotated.mp4?size=1024')
-        self.assertImage(response, 'image/jpeg', (432, 768))
+        response = self.client.get("/images/render/test_rotated.mp4?size=1024")
+        self.assertImage(response, "image/jpeg", (432, 768))
 
-        response = self.client.get('/images/render/test.png?size=1024')
-        self.assertImage(response, 'image/png', (24, 24))
+        response = self.client.get("/images/render/test.png?size=1024")
+        self.assertImage(response, "image/png", (24, 24))
 
-        response = self.client.get('/images/render/test.mp4?size=1024')
-        self.assertImage(response, 'image/jpeg', (1024, 576))
+        response = self.client.get("/images/render/test.mp4?size=1024")
+        self.assertImage(response, "image/jpeg", (1024, 576))

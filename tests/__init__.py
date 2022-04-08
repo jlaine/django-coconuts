@@ -44,14 +44,14 @@ class BaseTest(TestCase):
         Checks that a response represents the given data as JSON.
         """
         self.assertEqual(response.status_code, status_code)
-        self.assertEqual(response['Content-Type'], 'application/json')
-        self.assertEqual(json.loads(response.content.decode('utf8')), data)
+        self.assertEqual(response["Content-Type"], "application/json")
+        self.assertEqual(json.loads(response.content.decode("utf8")), data)
 
     def postJson(self, url, data):
         """
         Posts data as JSON.
         """
-        return self.client.post(url, json.dumps(data), content_type='application/json')
+        return self.client.post(url, json.dumps(data), content_type="application/json")
 
     def setUp(self):
         """

@@ -30,19 +30,19 @@ from tests import BaseTest
 
 
 class DownloadFileTest(BaseTest):
-    files = ['test.jpg']
-    fixtures = ['test_users.json']
+    files = ["test.jpg"]
+    fixtures = ["test_users.json"]
 
     def test_as_anonymous(self):
         """
         Anonymous user cannot render a file.
         """
         # bad path
-        response = self.client.get('/images/download/notfound.jpg')
+        response = self.client.get("/images/download/notfound.jpg")
         self.assertEqual(response.status_code, 302)
 
         # good path
-        response = self.client.get('/images/download/test.jpg')
+        response = self.client.get("/images/download/test.jpg")
         self.assertEqual(response.status_code, 302)
 
     def test_as_user(self):
@@ -52,13 +52,15 @@ class DownloadFileTest(BaseTest):
         self.client.login(username="test_user_1", password="test")
 
         # bad path
-        response = self.client.get('/images/download/notfound.jpg')
+        response = self.client.get("/images/download/notfound.jpg")
         self.assertEqual(response.status_code, 404)
 
         # good path
-        response = self.client.get('/images/download/test.jpg')
+        response = self.client.get("/images/download/test.jpg")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response['Content-Type'], 'image/jpeg')
-        self.assertEqual(response['Content-Disposition'], 'attachment; filename="test.jpg"')
-        self.assertTrue('Expires' in response)
-        self.assertTrue('Last-Modified' in response)
+        self.assertEqual(response["Content-Type"], "image/jpeg")
+        self.assertEqual(
+            response["Content-Disposition"], 'attachment; filename="test.jpg"'
+        )
+        self.assertTrue("Expires" in response)
+        self.assertTrue("Last-Modified" in response)

@@ -30,34 +30,34 @@ from tests import BaseTest
 
 
 class HomeTest(BaseTest):
-    fixtures = ['test_users.json']
+    fixtures = ["test_users.json"]
 
     def test_home_as_anonymous(self):
         """
         Anonymous user needs to login.
         """
-        response = self.client.get('/')
-        self.assertRedirects(response, '/accounts/login/?next=/')
+        response = self.client.get("/")
+        self.assertRedirects(response, "/accounts/login/?next=/")
 
     def test_home_as_user(self):
         """
         Authenticated user can browse home folder.
         """
         self.client.login(username="test_user_1", password="test")
-        response = self.client.get('/')
+        response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
 
     def test_other_as_anonymous(self):
         """
         Anonymous user needs to login.
         """
-        response = self.client.get('/other/')
-        self.assertRedirects(response, '/accounts/login/?next=/other/')
+        response = self.client.get("/other/")
+        self.assertRedirects(response, "/accounts/login/?next=/other/")
 
     def test_other_as_user(self):
         """
         Authenticated user can browse other folder.
         """
         self.client.login(username="test_user_1", password="test")
-        response = self.client.get('/other/')
-        self.assertRedirects(response, '/#/other/')
+        response = self.client.get("/other/")
+        self.assertRedirects(response, "/#/other/")

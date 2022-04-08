@@ -45,7 +45,6 @@ from PIL import Image
 
 from coconuts.forms import PhotoForm
 
-
 EXIF_MAKE = 271
 EXIF_MODEL = 272
 EXIF_ORIENTATION = 274
@@ -165,9 +164,9 @@ def get_image_info(filepath):
     if EXIF_FNUMBER in metadata:
         bits.append("f/%s" % format_rational(metadata[EXIF_FNUMBER]))
     if EXIF_EXPOSURETIME in metadata:
-        bits.append(u"%s sec" % format_rational(metadata[EXIF_EXPOSURETIME]))
+        bits.append("%s sec" % format_rational(metadata[EXIF_EXPOSURETIME]))
     if EXIF_FOCALLENGTH in metadata:
-        bits.append(u"%s mm" % format_rational(metadata[EXIF_FOCALLENGTH]))
+        bits.append("%s mm" % format_rational(metadata[EXIF_FOCALLENGTH]))
     if bits:
         info["settings"] = ", ".join(bits)
 
@@ -248,7 +247,11 @@ def content_list(request, path):
         node_url = folder_url + entry
         if os.path.isdir(node_path):
             folders.append(
-                {"mimetype": "inode/directory", "name": entry, "path": node_url + "/",}
+                {
+                    "mimetype": "inode/directory",
+                    "name": entry,
+                    "path": node_url + "/",
+                }
             )
         else:
             data = {
