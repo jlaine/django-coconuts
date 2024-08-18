@@ -200,7 +200,7 @@ factory('settings', ['$http', '$rootScope', function($http, $rootScope) {
         var screenSize = Math.max(
             document.documentElement.clientWidth,
             document.documentElement.clientHeight);
-        var sizes = [800, 1024, 1280, 1600];
+        var sizes = [800, 1024, 1280, 1600, 2048, 2560];
         for (var i = 0; i < sizes.length; i++) {
             if (screenSize <= sizes[i]) {
                 return sizes[i];
@@ -242,7 +242,7 @@ filter('fileIcon', ['settings', function(settings) {
             return mime_root + 'application-pdf.png';
         } else if (mimetype === 'application/zip') {
             return mime_root + 'application-zip.png';
-        } else if (mimetype.indexOf('text/') === 0) {
+        } else if (mimetype.indexOf('text/') === 0) {
             return mime_root + 'text-x-generic.png';
         } else if (mimetype.indexOf('video/') === 0) {
             return mime_root + 'video-x-generic.png';
