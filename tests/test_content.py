@@ -1,6 +1,6 @@
 #
 # django-coconuts
-# Copyright (c) 2008-2022, Jeremy Lainé
+# Copyright (c) 2008-2024, Jeremy Lainé
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
