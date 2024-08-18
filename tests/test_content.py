@@ -57,7 +57,14 @@ class EmptyFolderContentTest(BaseTest):
 
 
 class FolderContentTest(BaseTest):
-    files = [".test.txt", "test.jpg", "test.mp4", "test.png", "test.txt"]
+    files = [
+        ".test.txt",
+        "test.jpg",
+        "test_finepix.jpg",
+        "test.mp4",
+        "test.png",
+        "test.txt",
+    ]
     fixtures = ["test_users.json"]
     folders = ["Foo"]
 
@@ -122,6 +129,18 @@ class FolderContentTest(BaseTest):
                         "name": "test.txt",
                         "path": "/test.txt",
                         "size": 6,
+                    },
+                    {
+                        "image": {
+                            "camera": "FUJIFILM FinePix F810",
+                            "height": 3040,
+                            "settings": "f/5, 1/420\xa0sec, 7.2\xa0mm",
+                            "width": 4048,
+                        },
+                        "mimetype": "image/jpeg",
+                        "name": "test_finepix.jpg",
+                        "path": "/test_finepix.jpg",
+                        "size": 2548043,
                     },
                 ],
                 "folders": [

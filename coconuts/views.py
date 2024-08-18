@@ -146,17 +146,16 @@ def get_image_info(filepath):
         metadata = get_image_exif(img)
 
     # camera
-    camera = None
+    bits = []
     if EXIF_MODEL in metadata:
-        camera = metadata[EXIF_MODEL]
+        bits.append(metadata[EXIF_MODEL].strip())
     if EXIF_MAKE in metadata:
-        make = metadata[EXIF_MAKE]
-        if not camera:
-            camera = make
-        elif not camera.startswith(make):
-            camera = "%s %s" % (make, camera)
-    if camera:
-        info["camera"] = camera
+        make = metadata[EXIF_MAKE].strip()
+        # Do not include the make if it's already in the model.
+        if not bits or not bits[0].startswith(make):
+            bits.insert(0, make)
+    if bits:
+        info["camera"] = " ".join(bits)
 
     # settings
     bits = []
