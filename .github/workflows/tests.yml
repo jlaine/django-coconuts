@@ -37,12 +37,12 @@ jobs:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
-        node-version: 16.X
+        node-version: 18.X
     - name: Run test suite
       run: |
-        cd coconuts/static
+        cd frontend
         npm install
-        npm test -- --single-run
+        npm test -- --browsers=ChromeHeadless --code-coverage --watch=false
     - uses: codecov/codecov-action@v4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
