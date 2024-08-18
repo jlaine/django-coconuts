@@ -286,6 +286,11 @@ def download(request, path):
     """
     path = clean_path(path)
 
+    # check file exists
+    filepath = os.path.join(settings.COCONUTS_DATA_ROOT, url2path(path))
+    if not os.path.exists(filepath):
+        raise Http404
+
     if hasattr(settings, "COCONUTS_DATA_ACCEL"):
         response = HttpResponse()
         response["X-Accel-Redirect"] = posixpath.join(
