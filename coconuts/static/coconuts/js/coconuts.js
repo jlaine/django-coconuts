@@ -164,7 +164,7 @@ directive('coThumbnail', ['$window', function($window) {
             file: '=coThumbnail'
         },
         link: function(scope, elm, attrs) {
-            if (angular.isNumber($window.devicePixelRatio) && $window.devicePixelRatio > 1) {
+            if ($window.devicePixelRatio > 1) {
                 scope.resolution = 256;
             } else {
                 scope.resolution = 128;
@@ -191,7 +191,7 @@ factory('Folder', ['$cacheFactory', '$http', 'settings', function($cacheFactory,
     };
     return Folder;
 }]).
-factory('settings', ['$http', '$rootScope', function($http, $rootScope) {
+factory('settings', ['$http', '$rootScope', '$window', function($http, $rootScope, $window) {
     function getDisplayHeight() {
         var foot = document.body.classList.contains('photo-info-visible') ? 96 : 0;
         return document.documentElement.clientHeight - 32 - foot;
@@ -199,7 +199,8 @@ factory('settings', ['$http', '$rootScope', function($http, $rootScope) {
     function getImageSize() {
         var screenSize = Math.max(
             document.documentElement.clientWidth,
-            document.documentElement.clientHeight);
+            document.documentElement.clientHeight
+        ) * $window.devicePixelRatio;
         var sizes = [800, 1024, 1280, 1600, 2048, 2560];
         for (var i = 0; i < sizes.length; i++) {
             if (screenSize <= sizes[i]) {
@@ -242,7 +243,7 @@ filter('fileIcon', ['settings', function(settings) {
             return mime_root + 'application-pdf.png';
         } else if (mimetype === 'application/zip') {
             return mime_root + 'application-zip.png';
-        } else if (mimetype.indexOf('text/') === 0) {
+        }   else if (mimetype.indexOf('text/') === 0) {
             return mime_root + 'text-x-generic.png';
         } else if (mimetype.indexOf('video/') === 0) {
             return mime_root + 'video-x-generic.png';
