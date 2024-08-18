@@ -9,25 +9,25 @@ jobs:
       matrix:
         python: ['3.9', '3.10']
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up FFmpeg
       run: |
         sudo apt-get -yq update
         sudo apt-get -yq install ffmpeg
-    - uses: actions/setup-python@v1
+    - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python }}
     - name: Run test suite
       run: |
         pip install -r requirements.txt coverage
         coverage run --branch ./manage.py test
-    - uses: codecov/codecov-action@v1
+    - uses: codecov/codecov-action@v4
 
   frontend:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
       with:
         node-version: 16.X
     - name: Run test suite
@@ -35,4 +35,4 @@ jobs:
         cd coconuts/static
         npm install
         npm test -- --single-run
-    - uses: codecov/codecov-action@v1
+    - uses: codecov/codecov-action@v4
