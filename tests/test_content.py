@@ -77,6 +77,21 @@ class FolderContentTest(BaseTest):
         response = self.client.get("/images/contents/test.jpg")
         self.assertEqual(response.status_code, 404)
 
+    def test_folder_as_user(self):
+        self.client.login(username="test_user_1", password="test")
+
+        with self.subTest("No trailing slash"):
+            response = self.client.get("/images/contents/Foo")
+            self.assertJson(
+                response, {"files": [], "folders": [], "name": "Foo", "path": "/Foo/"}
+            )
+
+        with self.subTest("With trailing slash"):
+            response = self.client.get("/images/contents/Foo/")
+            self.assertJson(
+                response, {"files": [], "folders": [], "name": "Foo", "path": "/Foo/"}
+            )
+
     def test_home_as_anonymous(self):
         """
         Anonymous users need to login.
