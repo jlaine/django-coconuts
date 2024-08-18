@@ -26,9 +26,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-import io
-
-from PIL import Image
+from django.test import override_settings
 
 from tests import BaseTest
 
@@ -45,17 +43,6 @@ class RenderFileTest(BaseTest):
         "test_rotated.mp4",
     ]
     fixtures = ["test_users.json"]
-
-    def assertImage(self, response, content_type, expected_size):
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response["Content-Type"], content_type)
-        self.assertTrue("Expires" in response)
-        self.assertTrue("Last-Modified" in response)
-
-        # check size
-        fp = io.BytesIO(b"".join(response.streaming_content))
-        with Image.open(fp) as img:
-            self.assertEqual(img.size, expected_size)
 
     def test_as_anonymous(self):
         """
@@ -103,26 +90,93 @@ class RenderFileTest(BaseTest):
         response = self.client.get("/images/render/test.txt?size=1024")
         self.assertEqual(response.status_code, 400)
 
-    def test_as_user_good(self):
+    def test_as_user_good_image(self):
+        self.client.login(username="test_user_1", password="test")
+
+        with self.subTest("landscape - jpeg"):
+            # cache miss
+            response = self.client.get("/images/render/test.jpg?size=1024")
+            self.assertImage(
+                response,
+                content_type="image/jpeg",
+                image_size=(1024, 683),
+            )
+
+            # cache hit
+            response = self.client.get("/images/render/test.jpg?size=1024")
+            self.assertImage(
+                response,
+                content_type="image/jpeg",
+                image_size=(1024, 683),
+            )
+
+        with self.subTest("landscape - png"):
+            response = self.client.get("/images/render/test.png?size=1024")
+            self.assertImage(
+                response,
+                content_type="image/png",
+                image_size=(24, 24),
+            )
+
+        with self.subTest("portrait - jpeg"):
+            response = self.client.get("/images/render/test_portrait.jpg?size=1024")
+            self.assertImage(
+                response,
+                content_type="image/jpeg",
+                image_size=(512, 768),
+            )
+
+        with self.subTest("rotated - jpeg"):
+            response = self.client.get("/images/render/test_rotated.jpg?size=1024")
+            self.assertImage(
+                response,
+                content_type="image/jpeg",
+                image_size=(512, 768),
+            )
+
+    @override_settings(COCONUTS_CACHE_ACCEL="/coconuts-cache/")
+    def test_as_user_good_image_accel(self):
         self.client.login(username="test_user_1", password="test")
 
         response = self.client.get("/images/render/test.jpg?size=1024")
-        self.assertImage(response, "image/jpeg", (1024, 683))
+        self.assertImageAccel(
+            response,
+            content_type="image/jpeg",
+            x_accel_redirect="/coconuts-cache/1024/test.jpg",
+        )
 
-        response = self.client.get("/images/render/test_portrait.jpg?size=1024")
-        self.assertImage(response, "image/jpeg", (512, 768))
+    def test_as_user_good_video(self):
+        self.client.login(username="test_user_1", password="test")
 
-        response = self.client.get("/images/render/test_portrait.mp4?size=1024")
-        self.assertImage(response, "image/jpeg", (432, 768))
+        with self.subTest("landscape"):
+            # cache miss
+            response = self.client.get("/images/render/test.mp4?size=1024")
+            self.assertImage(
+                response,
+                content_type="image/jpeg",
+                image_size=(1024, 576),
+            )
 
-        response = self.client.get("/images/render/test_rotated.jpg?size=1024")
-        self.assertImage(response, "image/jpeg", (512, 768))
+            # cache hit
+            response = self.client.get("/images/render/test.mp4?size=1024")
+            self.assertImage(
+                response,
+                content_type="image/jpeg",
+                image_size=(1024, 576),
+            )
 
-        response = self.client.get("/images/render/test_rotated.mp4?size=1024")
-        self.assertImage(response, "image/jpeg", (432, 768))
+        with self.subTest("portrait"):
+            response = self.client.get("/images/render/test_portrait.mp4?size=1024")
+            self.assertImage(
+                response,
+                content_type="image/jpeg",
+                image_size=(432, 768),
+            )
 
-        response = self.client.get("/images/render/test.png?size=1024")
-        self.assertImage(response, "image/png", (24, 24))
-
-        response = self.client.get("/images/render/test.mp4?size=1024")
-        self.assertImage(response, "image/jpeg", (1024, 576))
+        with self.subTest("rotated"):
+            response = self.client.get("/images/render/test_rotated.mp4?size=1024")
+            self.assertImage(
+                response,
+                content_type="image/jpeg",
+                image_size=(432, 768),
+            )
