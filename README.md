@@ -1,5 +1,5 @@
 django-coconuts  
-Copyright (C) 2008-2019 Jeremy Lainé
+Copyright (C) 2008-2024 Jeremy Lainé
 
 [![Build Status](https://travis-ci.org/jlaine/django-coconuts.png)](https://travis-ci.org/jlaine/django-coconuts)
 
@@ -35,4 +35,4 @@ You need to define the following settings:
 
 Finally you need to include somewhere in your urls.py:
 
-    url(r'somepath$', include('coconuts.urls')),
+    path("somepath/", include("coconuts.urls")),
