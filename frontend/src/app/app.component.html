@@ -1,0 +1,81 @@
+<div class="folder-view" *ngIf="currentFolder && !mediaCurrent">
+  <nav class="crumbs">
+    <a class="crumb" [routerLink]="crumb.path" *ngFor="let crumb of (crumbs$ | async)">{{ crumb.name }}</a>
+  </nav>
+
+  <main>
+    <h1>{{ currentFolder.name || "Home" }}</h1>
+
+    <p *ngIf="currentFolder.files.length === 0 && currentFolder.folders.length === 0">
+      There are no files in this folder.
+    </p>
+
+    <div class="file" *ngFor="let folder of currentFolder.folders">
+      <div class="filename">
+        <a class="text-with-icon" [routerLink]="folder.path">
+          <span class="button material-symbols-outlined">{{ folder.mimetype | fileIcon }}</span>
+          {{ folder.name }}
+        </a>
+      </div>
+      <div class="filesize"></div>
+    </div>
+
+    <ng-container *ngIf="!showThumbnails">
+      <div class="file" *ngFor="let file of currentFolder.files">
+        <div class="filename">
+          <a class="text-with-icon" [href]="fileDownload(file)">
+            <span class="button material-symbols-outlined">{{ file.mimetype | fileIcon }}</span>
+            {{ file.name }}
+          </a>
+        </div>
+        <div class="filesize">{{ file.size | fileSize }}</div>
+      </div>
+    </ng-container>
+
+    <div class="thumbnails" *ngIf="showThumbnails">
+      <div class="file" (click)="mediaOpen(file)" *ngFor="let file of currentFolder.files">
+        <img [src]="fileThumbnail(file)">
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="photo-view" *ngIf="mediaCurrent">
+  <div class="photo-display">
+    <div class="photo-image">
+      <img [src]="fileRender(mediaCurrent)">
+    </div>
+    <img [src]="fileRender(mediaNext)" style="display: none" *ngIf="mediaNext && mediaNext.image" />
+    <img [src]="fileRender(mediaPrevious)" style="display: none" *ngIf="mediaPrevious && mediaPrevious.image" />
+    <div class="photo-control left" (click)="showPrevious()" *ngIf="mediaPrevious">
+      <span class="material-symbols-outlined">chevron_left</span>
+    </div>
+    <div class="photo-control right" (click)="showNext()" *ngIf="mediaNext">
+      <span class="material-symbols-outlined">chevron_right</span>
+    </div>
+  </div>
+
+  <div class="photo-nav">
+    <div class="button material-symbols-outlined" (click)="mediaClose()">close</div>
+    <div class="spacer"></div>
+    <a class="button material-symbols-outlined" [href]="fileDownload(mediaCurrent)">download</a>
+    <div class="button material-symbols-outlined" (click)="toggleInformation()">info</div>
+    <div class="button material-symbols-outlined" (click)="toggleFullscreen()">fullscreen</div>
+  </div>
+
+  <div class="photo-info" *ngIf="showInformation && mediaCurrent.image">
+    <div class="text-with-icon" title="The size of the original picture">
+      <span class="material-symbols-outlined">aspect_ratio</span>
+      {{ mediaCurrent.image.width }} x {{ mediaCurrent.image.height }} pixels - {{ mediaCurrent.size | fileSize }}
+    </div>
+    <div class="text-with-icon" title="The camera used to take this picture" *ngIf="mediaCurrent.image.camera">
+      <span class="material-symbols-outlined">photo_camera</span>
+      {{ mediaCurrent.image.camera }}
+    </div>
+    <div class="text-with-icon" title="The aperture and exposure time for this picture"
+      *ngIf="mediaCurrent.image.settings">
+      <span class="material-symbols-outlined">settings</span>
+      {{ mediaCurrent.image.settings }}
+    </div>
+  </div>
+</div>
