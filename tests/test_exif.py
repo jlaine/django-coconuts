@@ -57,7 +57,7 @@ class ExifRationalTest(BaseTest):
         DSCF1900.JPG
         """
         # fnumber
-        self.assertEqual(format_rational(IFDRational(5.6)), "5.6")
+        self.assertEqual(format_rational(IFDRational(560, 100)), "5.6")
 
         # FIXME: exposure time!
         self.assertEqual(format_rational(IFDRational(0.007142857142857143)), "1/140")
