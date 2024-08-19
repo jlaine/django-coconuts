@@ -1,0 +1,14 @@
+[project]
+requires-python = ">=3.9"
+
+[tool.coverage.run]
+include = ["coconuts/*"]
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle
+    "F",  # Pyflakes
+    "W",  # pycodestyle
+    "I",  # isort
+    "T20",  # flake8-print
+]

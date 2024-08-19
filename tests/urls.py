@@ -26,8 +26,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from django.urls import include, path
 from django.contrib.auth import views
+from django.urls import include, path
 
 urlpatterns = [
     # accounts
