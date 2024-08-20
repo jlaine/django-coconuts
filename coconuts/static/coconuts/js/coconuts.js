@@ -51,7 +51,7 @@ controller('CrumbCtrl', ['$location', '$rootScope', '$scope', 'settings', functi
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen();
         } else {
-            document.cancelFullScreen();
+            document.exitFullscreen();
         }
     };
 }]).
