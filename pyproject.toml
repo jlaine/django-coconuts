@@ -1,5 +1,17 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
 [project]
+name = "coconuts"
+description = "A simple photo sharing web application"
+readme = "README.rst"
 requires-python = ">=3.9"
+license = { text = "BSD" }
+authors = [
+    { name = "Jeremy Lainé", email = "jeremy.laine@m4x.org" },
+]
+version = "0.4.0"
 
 [tool.coverage.run]
 include = ["coconuts/*"]
@@ -12,3 +24,6 @@ select = [
     "I",  # isort
     "T20",  # flake8-print
 ]
+
+[tool.setuptools]
+packages = ["coconuts"]
