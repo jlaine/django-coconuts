@@ -13,7 +13,7 @@
     <div class="file" *ngFor="let folder of currentFolder.folders">
       <div class="filename">
         <a class="text-with-icon" [routerLink]="folder.path">
-          <span class="button material-symbols-outlined">{{ folder.mimetype | fileIcon }}</span>
+          <span class="material-symbols-outlined">{{ folder.mimetype | fileIcon }}</span>
           {{ folder.name }}
         </a>
       </div>
@@ -24,7 +24,7 @@
       <div class="file" *ngFor="let file of currentFolder.files">
         <div class="filename">
           <a class="text-with-icon" [href]="fileDownload(file)">
-            <span class="button material-symbols-outlined">{{ file.mimetype | fileIcon }}</span>
+            <span class="material-symbols-outlined">{{ file.mimetype | fileIcon }}</span>
             {{ file.name }}
           </a>
         </div>

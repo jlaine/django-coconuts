@@ -14,6 +14,7 @@
 
         .crumb {
             color: #428bca;
+            text-wrap: nowrap;
 
             &::after {
                 content: " \203a";
