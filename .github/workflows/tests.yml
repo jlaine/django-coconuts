@@ -19,7 +19,7 @@ jobs:
         python-version: ${{ matrix.python }}
     - name: Install packages
       run: |
-        pip install -r requirements.txt coverage ruff
+        pip install -r requirements.txt coverage[toml] ruff
     - name: Run linters
       run: |
         ruff check .
