@@ -13,11 +13,11 @@ interface Crumb {
     path: string;
 }
 
-const getImageSize = () => {
+export const getImageSize = (documentElement: HTMLElement, window: Window) => {
     const sizes = [800, 1024, 1280, 1600, 2048, 2560];
     const screenSize = Math.max(
-        document.documentElement.clientWidth,
-        document.documentElement.clientHeight
+        documentElement.clientWidth,
+        documentElement.clientHeight
     ) * window.devicePixelRatio;
     for (var i = 0; i < sizes.length; i++) {
         if (screenSize <= sizes[i]) {
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
     crumbs$: Observable<Crumb[]>;
     currentFolder: FolderContents | null = null;
     showInformation = false;
-    showThumbnails = true;
+    showThumbnails = false;
 
     mediaCurrent: FolderFile | null = null;
     mediaNext: FolderFile | null = null;
@@ -67,7 +67,7 @@ export class AppComponent implements OnInit {
 
     @HostListener('window:resize')
     handleResize() {
-        this.mediaSize = getImageSize();
+        this.mediaSize = getImageSize(document.documentElement, window);
     }
 
     constructor(
@@ -125,8 +125,8 @@ export class AppComponent implements OnInit {
     mediaOpen(file: FolderFile) {
         const idx = this.mediaFiles.indexOf(file);
         this.mediaCurrent = file;
-        this.mediaPrevious = this.mediaFiles[idx - 1];
-        this.mediaNext = this.mediaFiles[idx + 1];
+        this.mediaPrevious = this.mediaFiles[idx - 1] || null;
+        this.mediaNext = this.mediaFiles[idx + 1] || null;
     }
 
     showNext() {

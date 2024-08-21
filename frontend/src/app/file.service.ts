@@ -32,7 +32,6 @@ export interface FolderContents {
         path: string;
     }[];
     name: string;
-    path: string;
 }
 
 @Injectable({
@@ -57,6 +56,6 @@ export class FileService {
     }
 
     folderContents(path: string) {
-        return this.http.get<FolderContents>(this.apiRoot + '/contents/' + path);
+        return this.http.get<FolderContents>(this.apiRoot + '/contents' + path);
     }
 }
