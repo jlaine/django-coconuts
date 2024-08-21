@@ -13,7 +13,7 @@ export class FileIconPipe implements PipeTransform {
         } else if (mimetype.indexOf('text/') === 0) {
             return 'description';
         } else if (mimetype.indexOf('video/') === 0) {
-            return 'video';
+            return 'video_file';
         } else {
             return 'draft';
         }
