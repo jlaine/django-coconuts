@@ -28,9 +28,12 @@ You need to define the following settings:
 
 * ``INSTALLED_APPS``: add `"coconuts"` to the list of installed applications
 
-* ``COCONUTS_DATA_ROOT``: absolute path to the directory that holds photos
+* ``COCONUTS_DATA_ROOT``: absolute path to the directory that holds photos.
 
-* ``COCONUTS_CACHE_ROOT``: absolute path to the directory that holds cache
+* ``COCONUTS_CACHE_ROOT``: absolute path to the directory that holds cache.
+
+* ``COCONUTS_FRONTEND_ROOT``: absolute path to the directory that holds the
+  compiled frontend.
 
 Finally you need to include somewhere in your ``urls.py``:
 
