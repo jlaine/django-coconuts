@@ -203,6 +203,21 @@ def get_video_info(filepath):
             return info
 
 
+def serve_static(request, path, *, document_root, accel_root=None):
+    """
+    Serve a static document.
+
+    If `accel_root` is set, the file will be served by the reverse proxy,
+    otherwise Django's static files code is used.
+    """
+    if accel_root:
+        response = HttpResponse()
+        response["X-Accel-Redirect"] = posixpath.join(accel_root, path)
+    else:
+        response = django.views.static.serve(request, path, document_root=document_root)
+    return response
+
+
 def url2path(url):
     return url.replace("/", os.path.sep)
 
@@ -214,11 +229,11 @@ def browse(request, path):
     """
     if path:
         return redirect(reverse(browse, args=[""]) + "#/" + path)
-    template_path = os.path.join(
-        os.path.dirname(__file__), "static", "coconuts", "index.html"
+    return serve_static(
+        request,
+        "index.html",
+        document_root=os.path.join(os.path.dirname(__file__), "static", "coconuts"),
     )
-    with open(template_path, "rb") as fp:
-        return HttpResponse(fp.read())
 
 
 @auth_required
@@ -290,15 +305,12 @@ def download(request, path):
     if not os.path.exists(filepath):
         raise Http404
 
-    if hasattr(settings, "COCONUTS_DATA_ACCEL"):
-        response = HttpResponse()
-        response["X-Accel-Redirect"] = posixpath.join(
-            settings.COCONUTS_DATA_ACCEL, path
-        )
-    else:
-        response = django.views.static.serve(
-            request, path, document_root=settings.COCONUTS_DATA_ROOT
-        )
+    response = serve_static(
+        request,
+        path,
+        accel_root=getattr(settings, "COCONUTS_DATA_ACCEL", None),
+        document_root=settings.COCONUTS_DATA_ROOT,
+    )
     response["Content-Disposition"] = 'attachment; filename="%s"' % quote(
         posixpath.basename(path)
     )
@@ -388,17 +400,12 @@ def render_file(request, path):
         return HttpResponseBadRequest()
 
     # serve the photo
-    if hasattr(settings, "COCONUTS_CACHE_ACCEL"):
-        response = HttpResponse()
-        response["X-Accel-Redirect"] = posixpath.join(
-            settings.COCONUTS_CACHE_ACCEL, str(size), path
-        )
-    else:
-        response = django.views.static.serve(
-            request,
-            posixpath.join(str(size), path),
-            document_root=settings.COCONUTS_CACHE_ROOT,
-        )
+    response = serve_static(
+        request,
+        posixpath.join(str(size), path),
+        accel_root=getattr(settings, "COCONUTS_CACHE_ACCEL", None),
+        document_root=settings.COCONUTS_CACHE_ROOT,
+    )
     response["Content-Type"] = mimetype
     response["Expires"] = http_date(time.time() + 3600 * 24 * 365)
     return response
