@@ -6,8 +6,8 @@ What is ``Coconuts``?
 ---------------------
 
 Coconuts is a simple photo sharing web application. The backend is written in
-Python, using the Django framework. The frontend is written in Javascript
-using the AngularJS framework.
+Python, using the Django framework. The frontend is written in TypeScript
+using the Angular framework.
 
 Some of Coconuts' features:
 
