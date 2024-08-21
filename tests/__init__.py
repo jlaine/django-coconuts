@@ -92,8 +92,14 @@ class BaseTest(TestCase):
         """
         Creates temporary directories.
         """
-        for path in [settings.COCONUTS_CACHE_ROOT, settings.COCONUTS_DATA_ROOT]:
+        for path in [
+            settings.COCONUTS_CACHE_ROOT,
+            settings.COCONUTS_DATA_ROOT,
+            settings.COCONUTS_FRONTEND_ROOT,
+        ]:
             os.makedirs(path)
+
+        # Populate data directory.
         for name in self.folders:
             dest_path = os.path.join(settings.COCONUTS_DATA_ROOT, name)
             os.makedirs(dest_path)
@@ -102,9 +108,19 @@ class BaseTest(TestCase):
             dest_path = os.path.join(settings.COCONUTS_DATA_ROOT, name)
             shutil.copyfile(source_path, dest_path)
 
+        # Populate frontend directory.
+        for name in ["index.html", "test.css"]:
+            dest_path = os.path.join(settings.COCONUTS_FRONTEND_ROOT, name)
+            with open(dest_path, "w") as fp:
+                fp.write("test")
+
     def tearDown(self):
         """
         Removes temporary directories.
         """
-        for path in [settings.COCONUTS_CACHE_ROOT, settings.COCONUTS_DATA_ROOT]:
+        for path in [
+            settings.COCONUTS_CACHE_ROOT,
+            settings.COCONUTS_DATA_ROOT,
+            settings.COCONUTS_FRONTEND_ROOT,
+        ]:
             shutil.rmtree(path)

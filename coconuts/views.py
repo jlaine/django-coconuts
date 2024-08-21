@@ -39,12 +39,19 @@ import django.views.static
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseBadRequest
-from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.http import http_date
 from PIL import Image
 
 from coconuts.forms import PhotoForm
+
+COCONUTS_FRONTEND_ROOT = getattr(
+    settings,
+    "COCONUTS_FRONTEND_ROOT",
+    os.path.join(
+        os.path.dirname(__file__), "..", "frontend", "dist", "frontend", "browser"
+    ),
+)
 
 EXIF_MAKE = 271
 EXIF_MODEL = 272
@@ -234,13 +241,21 @@ def browse(request: HttpRequest, path: str) -> HttpResponse:
     """
     Serves the static homepage.
     """
-    if path:
-        return redirect(reverse(browse, args=[""]) + "#/" + path)
-    return serve_static(
-        request,
-        "index.html",
-        document_root=os.path.join(os.path.dirname(__file__), "static", "coconuts"),
-    )
+    if path.endswith(".css") or path.endswith(".js") or path.endswith(".woff2"):
+        # Serve static assets.
+        return serve_static(
+            request,
+            path,
+            document_root=COCONUTS_FRONTEND_ROOT,
+        )
+    else:
+        # Serve index.
+        base_href = reverse(browse, args=[""])
+        with open(os.path.join(COCONUTS_FRONTEND_ROOT, "index.html"), "r") as fp:
+            html = fp.read()
+        return HttpResponse(
+            html.replace('<base href="/">', f'<base href="{base_href}">')
+        )
 
 
 @auth_required

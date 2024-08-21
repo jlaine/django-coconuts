@@ -114,3 +114,4 @@ INSTALLED_APPS = (
 tmp_dir = "/tmp/coconuts.test.%s" % getpass.getuser()
 COCONUTS_CACHE_ROOT = os.path.join(tmp_dir, "cache")
 COCONUTS_DATA_ROOT = os.path.join(tmp_dir, "data")
+COCONUTS_FRONTEND_ROOT = os.path.join(tmp_dir, "frontend")
