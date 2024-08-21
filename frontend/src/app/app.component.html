@@ -43,7 +43,10 @@
 <div class="photo-view" *ngIf="mediaCurrent">
   <div class="photo-display">
     <div class="photo-image">
-      <img [src]="fileRender(mediaCurrent)">
+      <img [src]="fileRender(mediaCurrent)" *ngIf="mediaCurrent.image">
+      <video controls *ngIf="mediaCurrent.video">
+        <source [src]="fileDownload(mediaCurrent)" type="video/mp4">
+      </video>'
     </div>
     <img [src]="fileRender(mediaNext)" style="display: none" *ngIf="mediaNext && mediaNext.image" />
     <img [src]="fileRender(mediaPrevious)" style="display: none" *ngIf="mediaPrevious && mediaPrevious.image" />
