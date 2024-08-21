@@ -26,7 +26,6 @@ describe('FileIconPipe', () => {
     });
 
     it('should return video icon', () => {
-        expect(pipe.transform('video/mp4')).toBe('video');
+        expect(pipe.transform('video/mp4')).toBe('video_file');
     });
-
 });
