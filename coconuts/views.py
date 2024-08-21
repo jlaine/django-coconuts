@@ -32,12 +32,13 @@ import os
 import posixpath
 import subprocess
 import time
+import typing
 from urllib.parse import quote, unquote
 
 import django.views.static
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponse, HttpResponseBadRequest
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.http import http_date
@@ -86,7 +87,7 @@ def auth_required(function):
     return wrap
 
 
-def clean_path(path):
+def clean_path(path: str) -> str:
     """
     Returns the canonical version of a path
     or raises ValueError if the path is invalid.
@@ -111,7 +112,7 @@ def clean_path(path):
     return newpath
 
 
-def get_image_exif(image):
+def get_image_exif(image) -> typing.Dict:
     """
     Gets an image's EXIF tags as a dict.
     """
@@ -125,7 +126,7 @@ def get_image_exif(image):
     return metadata
 
 
-def format_rational(x):
+def format_rational(x) -> str:
     if x < 1:
         return "1/%d" % round(1 / x)
     elif int(x) == x:
@@ -134,7 +135,7 @@ def format_rational(x):
         return "%.1f" % x
 
 
-def get_image_info(filepath):
+def get_image_info(filepath: str) -> typing.Dict:
     """
     Gets an image's information.
     """
@@ -171,7 +172,7 @@ def get_image_info(filepath):
     return info
 
 
-def get_video_info(filepath):
+def get_video_info(filepath: str) -> typing.Dict:
     """
     Gets a video's information.
     """
@@ -203,7 +204,13 @@ def get_video_info(filepath):
             return info
 
 
-def serve_static(request, path, *, document_root, accel_root=None):
+def serve_static(
+    request: HttpRequest,
+    path: str,
+    *,
+    document_root: str,
+    accel_root: typing.Optional[str] = None,
+) -> HttpResponse:
     """
     Serve a static document.
 
@@ -218,12 +225,12 @@ def serve_static(request, path, *, document_root, accel_root=None):
     return response
 
 
-def url2path(url):
+def url2path(url: str) -> str:
     return url.replace("/", os.path.sep)
 
 
 @login_required
-def browse(request, path):
+def browse(request: HttpRequest, path: str) -> HttpResponse:
     """
     Serves the static homepage.
     """
@@ -237,7 +244,7 @@ def browse(request, path):
 
 
 @auth_required
-def content_list(request, path):
+def content_list(request: HttpRequest, path: str) -> HttpResponse:
     """
     Returns the contents of the given folder.
     """
@@ -294,7 +301,7 @@ def content_list(request, path):
 
 
 @login_required
-def download(request, path):
+def download(request: HttpRequest, path: str) -> HttpResponse:
     """
     Returns the raw file for the given photo.
     """
@@ -320,7 +327,7 @@ def download(request, path):
 
 
 @auth_required
-def render_file(request, path):
+def render_file(request: HttpRequest, path: str) -> HttpResponse:
     """
     Returns a resized version of the given photo.
     """
