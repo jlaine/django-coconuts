@@ -29,7 +29,6 @@ export const getImageSize = (documentElement: HTMLElement, window: Window) => {
 
 @Component({
     selector: 'app-root',
-    standalone: true,
     imports: [
         CommonModule,
         FileSizePipe,
