@@ -8,8 +8,7 @@ import { RouterService } from './router.service';
 
 @Component({
     imports: [RouterLinkDirective],
-    standalone: true,
-    template: `<a routerLink="/2024/">2024<a>`,
+    template: `<a routerLink="/2024/">2024<a>`
 })
 class RouterLinkTestComponent { }
 
