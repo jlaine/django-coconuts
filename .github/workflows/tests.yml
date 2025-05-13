@@ -31,7 +31,7 @@ jobs:
         ruff format --check --diff .
     - name: Run test suite
       run: |
-        coverage run --branch ./manage.py test
+        coverage run ./manage.py test
     - uses: codecov/codecov-action@v4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
