@@ -174,7 +174,13 @@ def get_video_info(filepath: str) -> typing.Dict:
             info = {
                 "duration": float(stream["duration"]),
             }
-            if stream["tags"].get("rotate") in ["90", "270"]:
+            # FFmpeg 4.x.
+            rotated = stream["tags"].get("rotate") in ["90", "270"]
+            # Recent FFmpeg.
+            for side_data in stream.get("side_data_list", []):
+                if side_data.get("rotation") in [90, 270]:
+                    rotated = True
+            if rotated:
                 info["height"] = stream["width"]
                 info["width"] = stream["height"]
             else:
