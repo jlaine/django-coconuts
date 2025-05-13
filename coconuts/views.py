@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseBadRequest
 from django.urls import reverse
 from django.utils.http import http_date
-from PIL import Image
+from PIL import ExifTags, Image
 
 from coconuts.forms import PhotoForm
 
@@ -25,11 +25,6 @@ COCONUTS_FRONTEND_ROOT = getattr(
     ),
 )
 
-EXIF_MAKE = 271
-EXIF_MODEL = 272
-EXIF_ORIENTATION = 274
-EXIF_FOCALLENGTH = 37386
-EXIF_EXPOSURETIME = 33434
 EXIF_FNUMBER = 33437
 
 ORIENTATIONS = {
@@ -95,13 +90,8 @@ def get_image_exif(image) -> typing.Dict:
     """
     Gets an image's EXIF tags as a dict.
     """
-    if not hasattr(image, "_getexif"):
-        return {}
-
-    metadata = image._getexif()
-    if metadata is None:
-        return {}
-
+    metadata = dict(image.getexif())
+    metadata.update(image.getexif().get_ifd(ExifTags.IFD.Exif))
     return metadata
 
 
@@ -127,10 +117,10 @@ def get_image_info(filepath: str) -> typing.Dict:
 
     # camera
     bits = []
-    if EXIF_MODEL in metadata:
-        bits.append(metadata[EXIF_MODEL].strip())
-    if EXIF_MAKE in metadata:
-        make = metadata[EXIF_MAKE].strip()
+    if ExifTags.Base.Model in metadata:
+        bits.append(metadata[ExifTags.Base.Model].strip())
+    if ExifTags.Base.Make in metadata:
+        make = metadata[ExifTags.Base.Make].strip()
         # Do not include the make if it's already in the model.
         if not bits or not bits[0].startswith(make):
             bits.insert(0, make)
@@ -139,12 +129,12 @@ def get_image_info(filepath: str) -> typing.Dict:
 
     # settings
     bits = []
-    if EXIF_FNUMBER in metadata:
-        bits.append("f/%s" % format_rational(metadata[EXIF_FNUMBER]))
-    if EXIF_EXPOSURETIME in metadata:
-        bits.append("%s sec" % format_rational(metadata[EXIF_EXPOSURETIME]))
-    if EXIF_FOCALLENGTH in metadata:
-        bits.append("%s mm" % format_rational(metadata[EXIF_FOCALLENGTH]))
+    if ExifTags.Base.FNumber in metadata:
+        bits.append("f/%s" % format_rational(metadata[ExifTags.Base.FNumber]))
+    if ExifTags.Base.ExposureTime in metadata:
+        bits.append("%s sec" % format_rational(metadata[ExifTags.Base.ExposureTime]))
+    if ExifTags.Base.FocalLength in metadata:
+        bits.append("%s mm" % format_rational(metadata[ExifTags.Base.FocalLength]))
     if bits:
         info["settings"] = ", ".join(bits)
 
@@ -357,7 +347,7 @@ def render_file(request: HttpRequest, path: str) -> HttpResponse:
             create_cache_dir(cachefile)
             with Image.open(filepath) as img:
                 # rotate if needed
-                orientation = get_image_exif(img).get(EXIF_ORIENTATION)
+                orientation = get_image_exif(img).get(ExifTags.Base.Orientation)
                 if orientation:
                     img = img.rotate(
                         ORIENTATIONS[orientation][2], Image.Resampling.NEAREST, True
