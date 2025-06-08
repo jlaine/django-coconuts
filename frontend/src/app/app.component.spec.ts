@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { DOCUMENT } from '@angular/core';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 import { AppComponent, getImageSize } from './app.component';
 import { FolderContents } from './file.service';
@@ -65,6 +66,7 @@ export class RouterMock {
 
 describe('AppComponent', () => {
     let component: AppComponent;
+    let document: Document;
     let fixture: ComponentFixture<AppComponent>;
     let httpMock: HttpTestingController;
     let router: RouterService;
@@ -82,6 +84,7 @@ describe('AppComponent', () => {
             ]
         }).compileComponents();
 
+        document = TestBed.inject(DOCUMENT);
         fixture = TestBed.createComponent(AppComponent);
         httpMock = TestBed.inject(HttpTestingController);
         router = TestBed.inject(RouterService);
@@ -168,6 +171,28 @@ describe('AppComponent', () => {
 
             // Close media.
             component.mediaClose();
+        });
+
+        it('should toggle fullscreen', () => {
+            let fullscreenElement: HTMLElement | null = null;
+
+            spyOnProperty(document, 'fullscreenElement', 'get').and.callFake(() => fullscreenElement);
+            spyOn(document, 'exitFullscreen').and.callFake(() => {
+                fullscreenElement = null;
+                return Promise.resolve(void 0);
+            });
+            spyOn(document.documentElement, 'requestFullscreen').and.callFake(() => {
+                fullscreenElement = document.documentElement;
+                return Promise.resolve(void 0);
+            });
+
+            // Enter fullscreen.
+            component.toggleFullscreen();
+            expect(fullscreenElement).not.toBeNull();
+
+            // Exit fullscreen.
+            component.toggleFullscreen();
+            expect(fullscreenElement).toBeNull();
         });
     });
 
