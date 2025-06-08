@@ -2,6 +2,10 @@
    :target: https://github.com/jlaine/django-coconuts/actions
    :alt: Tests
 
+.. image:: https://img.shields.io/codecov/c/github/jlaine/django-coconuts.svg
+   :target: https://codecov.io/github/jlaine/django-coconuts
+   :alt: Coverage
+
 What is ``Coconuts``?
 ---------------------
 

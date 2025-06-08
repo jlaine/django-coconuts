@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, DOCUMENT, HostListener, Inject, OnInit } from '@angular/core';
 import { map, Observable, switchMap, tap } from 'rxjs';
 
 import { FileService, FolderContents, FolderFile } from './file.service';
@@ -70,6 +70,7 @@ export class AppComponent implements OnInit {
     }
 
     constructor(
+        @Inject(DOCUMENT) private document: Document,
         private fileService: FileService,
         router: RouterService,
     ) {
@@ -145,10 +146,10 @@ export class AppComponent implements OnInit {
     }
 
     toggleFullscreen() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen();
+        if (!this.document.fullscreenElement) {
+            this.document.documentElement.requestFullscreen();
         } else {
-            document.exitFullscreen();
+            this.document.exitFullscreen();
         }
     }
 }
