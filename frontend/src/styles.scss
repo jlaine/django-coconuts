@@ -1,4 +1,6 @@
-@import 'material-symbols/outlined';
+@use 'sass:meta';
+
+@include meta.load-css('material-symbols/outlined');
 
 body,
 html {
