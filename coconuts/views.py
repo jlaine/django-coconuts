@@ -25,8 +25,6 @@ COCONUTS_FRONTEND_ROOT = getattr(
     ),
 )
 
-EXIF_FNUMBER = 33437
-
 ORIENTATIONS = {
     1: [False, False, 0],  # Horizontal (normal)
     2: [True, False, 0],  # Mirrored horizontal
