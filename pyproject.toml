@@ -7,7 +7,7 @@ name = "coconuts"
 description = "A simple photo sharing web application"
 readme = "README.rst"
 requires-python = ">=3.9"
-license = { text = "BSD" }
+license = "BSD-2-Clause"
 authors = [
     { name = "Jeremy Lainé", email = "jeremy.laine@m4x.org" },
 ]
