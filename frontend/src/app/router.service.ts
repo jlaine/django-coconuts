@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 
-const stripBasePath = (basePath: string, url: string): string => {
+export const stripBasePath = (basePath: string, url: string): string => {
     if (url.startsWith(basePath)) {
         return url.substring(basePath.length);
     } else {
@@ -9,7 +9,7 @@ const stripBasePath = (basePath: string, url: string): string => {
     }
 }
 
-const stripTrailingSlash = (url: string): string => {
+export const stripTrailingSlash = (url: string): string => {
     if (url.endsWith('/')) {
         return url.substring(0, url.length - 1);
     } else {
