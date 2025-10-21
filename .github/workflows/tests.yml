@@ -14,12 +14,12 @@ jobs:
           - '3.11'
           - '3.10'
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Set up FFmpeg
       run: |
         sudo apt-get -yq update
         sudo apt-get -yq install ffmpeg
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python }}
     - name: Install packages
@@ -39,8 +39,8 @@ jobs:
   frontend:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v5
+    - uses: actions/setup-node@v6
       with:
         node-version: 20
     - name: Run test suite
